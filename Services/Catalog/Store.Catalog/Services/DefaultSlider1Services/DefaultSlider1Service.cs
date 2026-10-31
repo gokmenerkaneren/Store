@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using Microsoft.Extensions.Logging;
 using Store.Catalog.Dtos.DefaultSlider1Dtos;
 using Store.Catalog.Entities;
+using Store.Catalog.Services.CacheServices;
 using Store.Catalog.Settings;
 using Store.Shared.Entities;
 
@@ -13,31 +14,44 @@ namespace Store.Catalog.Services.DefaultSlider1Services
         private readonly IMongoCollection<DefaultSlider1> _collection;
         private readonly IMapper _mapper;
         private readonly ILogger<DefaultSlider1Service> _logger;
+        private readonly ICatalogCacheService _cacheService;
 
-        public DefaultSlider1Service(IMapper mapper, IDatabaseSettings databaseSettings, IMongoDatabase database, ILogger<DefaultSlider1Service> logger)
+        private const string CachePrefix = "catalog:sliders:";
+        private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
+
+        public DefaultSlider1Service(IMapper mapper, IDatabaseSettings databaseSettings, IMongoDatabase database, ILogger<DefaultSlider1Service> logger, ICatalogCacheService cacheService)
         {
             _collection = database.GetCollection<DefaultSlider1>(databaseSettings.DefaultSlider1CollectionName);
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         public async Task<List<ResultDefaultSlider1Dto>> GetAllAsync(bool showDeleted = false)
         {
-            var filter = showDeleted
-                ? FilterDefinition<DefaultSlider1>.Empty
-                : Builders<DefaultSlider1>.Filter.Eq(x => x.IsDeleted, false);
+            var result = await _cacheService.GetOrSetAsync($"{CachePrefix}all:{showDeleted}", async () =>
+            {
+                var filter = showDeleted
+                    ? FilterDefinition<DefaultSlider1>.Empty
+                    : Builders<DefaultSlider1>.Filter.Eq(x => x.IsDeleted, false);
 
-            var values = await _collection.Find(filter)
-                .SortBy(x => x.Sirano)
-                .ToListAsync();
+                var values = await _collection.Find(filter)
+                    .SortBy(x => x.Sirano)
+                    .ToListAsync();
 
-            return _mapper.Map<List<ResultDefaultSlider1Dto>>(values);
+                return _mapper.Map<List<ResultDefaultSlider1Dto>>(values);
+            }, CacheDuration);
+
+            return result ?? new List<ResultDefaultSlider1Dto>();
         }
 
         public async Task<GetByIdDefaultSlider1Dto?> GetByIdAsync(Guid id)
         {
-            var entity = await _collection.Find(x => x.Id == id && !x.IsDeleted).FirstOrDefaultAsync();
-            return _mapper.Map<GetByIdDefaultSlider1Dto?>(entity);
+            return await _cacheService.GetOrSetAsync($"{CachePrefix}id:{id}", async () =>
+            {
+                var entity = await _collection.Find(x => x.Id == id && !x.IsDeleted).FirstOrDefaultAsync();
+                return _mapper.Map<GetByIdDefaultSlider1Dto?>(entity);
+            }, CacheDuration);
         }
 
         public async Task<Store.Shared.Dtos.DataTablesResponse<ResultDefaultSlider1Dto>> GetForDataTablesAsync(Store.Shared.Dtos.DataTablesRequest request, bool showDeleted = false)
@@ -63,6 +77,7 @@ namespace Store.Catalog.Services.DefaultSlider1Services
         {
             var entity = _mapper.Map<DefaultSlider1>(dto);
             await _collection.InsertOneAsync(entity);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task UpdateAsync(UpdateDefaultSlider1Dto dto)
@@ -75,6 +90,7 @@ namespace Store.Catalog.Services.DefaultSlider1Services
             existing.UpdateDate = BaseEntity.GetLocalTime();
 
             await _collection.ReplaceOneAsync(x => x.Id == existing.Id, existing);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -86,6 +102,7 @@ namespace Store.Catalog.Services.DefaultSlider1Services
                 .Set(x => x.DeleteDate, BaseEntity.GetLocalTime());
 
             await _collection.UpdateOneAsync(x => x.Id == id, update);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task RestoreAsync(Guid id)
@@ -97,6 +114,7 @@ namespace Store.Catalog.Services.DefaultSlider1Services
                 .Set(x => x.UpdateDate, BaseEntity.GetLocalTime());
 
             await _collection.UpdateOneAsync(x => x.Id == id, update);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
     }
 }

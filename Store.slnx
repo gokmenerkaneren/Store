@@ -39,6 +39,9 @@
   <Folder Name="/Services/Catalog/">
     <Project Path="Services/Catalog/Store.Catalog/Store.Catalog.csproj" />
   </Folder>
+  <Folder Name="/Services/Catalog/Tests/">
+    <Project Path="Services/Catalog/Tests/Store.Catalog.Tests/Store.Catalog.Tests.csproj" />
+  </Folder>
   <Folder Name="/Services/Discount/">
     <Project Path="Services/Discount/Store.Discount/Store.Discount.csproj" Id="21c92a03-a650-47a5-80e5-6ea589cdc718" />
   </Folder>

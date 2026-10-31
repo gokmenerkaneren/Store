@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
 using Store.Catalog.Services;
 using Store.Catalog.Services.BrandServices;
+using Store.Catalog.Services.CacheServices;
 using Store.Catalog.Services.CategoryServices;
 using Store.Catalog.Services.CurrencyServices;
 using Store.Catalog.Services.MeasurementServices;
@@ -29,6 +30,7 @@ using Store.Catalog.Services.ProductPriceServices;
 using Store.Catalog.Services.ProductServices;
 using Store.Catalog.Settings;
 using Store.Catalog.Services.PricingServices;
+using StackExchange.Redis;
 
 
 MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
@@ -102,11 +104,18 @@ builder.Services.AddScoped<Store.Catalog.Services.NewProductServices.INewProduct
 builder.Services.AddScoped<Store.Catalog.Services.InstagramPostServices.IInstagramPostService, Store.Catalog.Services.InstagramPostServices.InstagramPostService>();
 // Pricing Service ve Redis
 builder.Services.AddScoped<IPricingService, PricingService>();
+var redisConn = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+var redisOptions = ConfigurationOptions.Parse(redisConn);
+redisOptions.AbortOnConnectFail = false;
+// Bağlantı yokken komutlar kuyrukta zaman aşımı beklemesin: her önbellekli okuma ~12 sn gecikiyordu.
+redisOptions.BacklogPolicy = BacklogPolicy.FailFast;
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisOptions));
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
-    options.InstanceName = "CatalogCache_";
+    options.ConfigurationOptions = redisOptions;
+    options.InstanceName = CatalogCacheService.InstanceName;
 });
+builder.Services.AddScoped<ICatalogCacheService, CatalogCacheService>();
 
 // Serilog Configuration
 Log.Logger = new LoggerConfiguration()

@@ -40,7 +40,7 @@
 |:--|:---|:---|:---|:---|:---|:---|
 | 0 | **Store.Gateway** | 7000 | — | — | YARP Reverse Proxy | ✅ Aktif |
 | 1 | **Store.WebUI** | 5079 | — | — | MVC Frontend | ✅ Aktif |
-| 2 | **Store.Catalog** | `7301` | `StoreMD` | MongoDB 7.x | Monolitik | ✅ Aktif |
+| 2 | **Store.Catalog** | `7301` | `StoreMD` | MongoDB 7.x & Redis (Cache) | Monolitik | ✅ Aktif |
 | 3 | **Store.Discount** | `7302` | `StoreDiscountDb` | PostgreSQL 16.x | Monolitik (Dapper+EF) | ✅ Aktif |
 | 4 | **Store.Location** | `7303` | `StoreLocationDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
 | 5 | **Store.Order** | `7304` | `StoreOrderDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
@@ -90,18 +90,16 @@ Store.<Servis>/
 
 ---
 
-## 4. SERVİSLER ARASI İLETİŞİM
+## 4. SERVİSLER ARASI İLETİŞİM & ALTYAPI
 
-### 4.1 Mevcut Durum
-- **Protokol:** HTTP/REST (senkron)
-- **İstemci:** Refit + HttpClientFactory
-- **Yön:** WebUI → Mikroservisler (tek yönlü)
-- **Gateway:** YOK (WebUI her servise doğrudan bağlanıyor)
-
-### 4.2 Planlanan İyileştirmeler
-- **API Gateway:** YARP veya Ocelot ile merkezi yönlendirme
-- **Asenkron Mesajlaşma:** RabbitMQ / MassTransit (sipariş → stok düşme olayı vb.)
-- **Önbellekleme:** Redis cache (sık erişilen katalog verileri)
+### 4.1 İletişim Protokolleri
+- **Senkron İletişim:** HTTP/REST, Refit arayüzleri ve Microsoft YARP API Gateway (Port 7000). WebUI tüm downstream servislere Gateway üzerinden erişir.
+- **Asenkron Mesajlaşma:** RabbitMQ 3.13 + MassTransit 8.2.5 üzerinden Publish/Subscribe ve Choreography.
+  - Dağıtık güvenilirlik için PostgreSQL EF Core Outbox Pattern uygulanmıştır.
+  - Event'ler: OrderCreatedIntegrationEvent, StockReservedIntegrationEvent, StockReservationFailedIntegrationEvent, PaymentCompletedIntegrationEvent, PaymentFailedIntegrationEvent.
+- **Önbellekleme (Distributed Caching):**
+  - **Store.Basket:** Kullanıcı sepet verileri Redis üzerinde (30 günlük TTL).
+  - **Store.Catalog:** Kategori, Marka, Slider ve Trend listelemelerinde IDistributedCache ve StackExchange.Redis tabanlı Cache-Aside (1 saatlik TTL) ve Create/Update/Delete/Restore operasyonlarında anında RemoveByPrefixAsync grup geçersiz kılma (Invalidation). BacklogPolicy.FailFast ile Redis kesintilerinde MongoDB'ye düşme (graceful degradation).
 
 ---
 

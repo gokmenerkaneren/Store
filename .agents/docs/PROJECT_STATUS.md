@@ -9,9 +9,9 @@
 
 ## 1. GÜNCEL FAZ
 
-**Aktif Faz:** Faz 3 — Altyapı, Dağıtık Dayanıklılık ve DevOps Olgunlaşması (Paket 10 YARP Gateway & Paket 11 Dockerization tamamlandı)
+**Aktif Faz:** Faz 3 — Altyapı, Dağıtık Dayanıklılık ve DevOps Olgunlaşması (Paket 10 YARP Gateway, Paket 11 Dockerization & Paket 12 Redis Cache tamamlandı)
 
-Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 (RabbitMQ Outbox, Stok Koreografisi, Kupon Motoru, B2B İskonto/Kredi Limiti, Ödeme & Dağıtık Rollback) tamamlandı. Faz 3 kapsamında Paket 10 (YARP API Gateway) ve Paket 11 (Dockerization & Full Container Orchestration) 119 test ile başarıyla devreye alındı.
+Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 (RabbitMQ Outbox, Stok Koreografisi, Kupon Motoru, B2B İskonto/Kredi Limiti, Ödeme & Dağıtık Rollback) tamamlandı. Faz 3 kapsamında Paket 10 (YARP API Gateway), Paket 11 (Dockerization & Full Container Orchestration) ve Paket 12 (Redis Cache & Invalidation) 227 test ile başarıyla devreye alındı.
 
 ---
 
@@ -26,7 +26,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 | 5 | 🟡 YÜKSEK | Rental İş Akışı | `PriceType.Rental(3)` ve `WholeRental(5)` tanımlı ama iş akışı kodlanmadı | ✅ ÇÖZÜLDÜ |
 | 6 | 🟡 YÜKSEK | API Gateway Eksikliği | Microsoft YARP Reverse Proxy (Store.Gateway, port 7000) kuruldu; WebUI tek kapıya bağlandı | ✅ ÇÖZÜLDÜ |
 | 7 | 🟡 YÜKSEK | Mesajlaşma Yok | RabbitMQ, MassTransit ve PostgreSQL EF Core Outbox Pattern entegre edildi | ✅ ÇÖZÜLDÜ |
-| 8 | 🔵 ORTA | Birim Test Kapsamı | Order (89), Location (21), Rental (9) olmak üzere 119 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
+| 8 | 🔵 ORTA | Birim Test Kapsamı | Catalog (108), Order (89), Location (21), Rental (9) olmak üzere 227 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
 | 9 | 🔵 ORTA | Discount Coupon İndeksi | `Code` alanı `NVARCHAR(MAX)`, `IsActive` üzerinde index yok | ✅ ÇÖZÜLDÜ |
 | 10 | 🔵 ORTA | Order Namespace Hatası | `Entitties` (çift t) namespace/klasör adı | ✅ ÇÖZÜLDÜ |
 | 11 | ✅ ÇÖZÜLDÜ | Catalog → Location Bağımlılığı | `Store.Shared.Enums` kullanımıyla çözüldü (15.09.2026) | ✅ KAPALI |
@@ -47,6 +47,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 
 | İş | Tarih | Detay |
 |:---|:---|:---|
+| Redis Cache & Invalidation (Paket 12) | 01.11.2026 | Store.Catalog'da ICatalogCacheService, StackExchange.Redis IConnectionMultiplexer pattern temizleme (catalog:categories:*, brands, sliders, trends), FailFast resilience, Category/Brand/Slider/Trend Cache-Aside ve anında invalidation; 108 yeni test ile toplam 227 test yeşil. |
 | Dockerization & Full Container Stack (Paket 11) | 01.11.2026 | 12 multi-stage Dockerfile (.NET 8 SDK/aspnet), Redis altyapısı, docker-compose.yml (17 servis), store-network ağı, healthcheck/depends_on orkestrasyonu, .env şablonu ve 119 test yeşil. |
 | YARP API Gateway (Paket 10) | 01.11.2026 | ApiGateways/Store.Gateway (port 7000) YARP 2.2.0 ile kuruldu, 9 mikroservis için route/cluster tanımlandı, WebUI Refit istemcileri tek kapıya yönlendirildi ve 119 test yeşil. |
 | Ödeme & Dağıtık Rollback (Paket 9) | 01.11.2026 | Store.Payment mikroservisi (port 7309), MockPaymentGateway, PaymentCompleted/Failed event'leri, Catalog stok rollback ($inc), B2B kredi limiti rollback (stok/ödeme hatalarında), Order durum makinesi ve 119 test yeşil. |
@@ -92,9 +93,9 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 ### 🔵 Faz 3 — Altyapı & DevOps Olgunlaşması
 1. ✅ YARP API Gateway (Store.Gateway, port 7000)
 2. ✅ RabbitMQ / MassTransit asenkron mesajlaşma & Outbox Pattern
-3. ❌ Redis Cache (sık erişilen katalog verileri)
+3. ✅ Redis Cache (Store.Catalog Kategori, Marka, Slider, Trend Cache-Aside & Invalidation)
 4. ✅ Docker & Container (tüm 17 servisin docker-compose ile orkestre edilmesi)
-5. ❌ Test kapsamı artırma (xUnit, Testcontainers)
+5. 🔄 Test kapsamı artırma (227 test aktif, 4 test projesi)
 
 ---
 

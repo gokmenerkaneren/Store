@@ -20,6 +20,17 @@
 
 ---
 
+## [v3.1.0] - 2026-11-01
+### Added
+- **Paket 12: Redis Cache Entegrasyonu & Sık Erişilen Katalog Önbelleği (Store.Catalog):**
+  - `ICatalogCacheService` ve `CatalogCacheService` (`StackExchange.Redis` ve `IDistributedCache` tabanlı) oluşturuldu.
+  - Sık erişilen katalog varlıkları (`Category`, `Brand`, `DefaultSlider1`, `DefaultTrend`) için Cache-Aside deseni ve 1 saatlik varsayılan TTL uygulandı (`catalog:categories:*`, `catalog:brands:*`, `catalog:sliders:*`, `catalog:trends:*`).
+  - Yazma operasyonlarında (Create, Update, Delete, Restore) anında grup önbellek geçersiz kılma (Cache Invalidation) sağlandı; `IConnectionMultiplexer` üzerinden `InstanceName` uyumlu sunucu anahtar taraması (`server.KeysAsync`) ve `KeyDeleteAsync` uygulandı.
+  - Redis bağlantı kopmaları ve kesintilerine karşı *graceful degradation* ve `BacklogPolicy.FailFast` dayanıklılığı eklendi (Redis erişilemez olduğunda sistem hata fırlatmaz, MongoDB'ye düşer).
+  - `Store.Catalog.Tests` test projesi kurularak (108 yeni test) Cache Hit, Cache Miss, Invalidation, Redis hata toleransı ve mock servis entegrasyonları doğrulandı; toplam test sayısı 227'ye yükseltildi (%100 yeşil).
+
+---
+
 ## [v3.0.0] - 2026-11-01
 ### Added
 - **Paket 11: Dockerization & Full Container Orchestration:**

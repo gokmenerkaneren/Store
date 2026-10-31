@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using Microsoft.Extensions.Logging;
 using Store.Catalog.Dtos.CategoryDtos;
 using Store.Catalog.Entities;
+using Store.Catalog.Services.CacheServices;
 using Store.Catalog.Settings;
 using Store.Shared.Entities;
 using Store.Shared.Enums;
@@ -17,13 +18,18 @@ namespace Store.Catalog.Services.CategoryServices
         private readonly IMongoCollection<Product> _productCollection;
         private readonly IMapper _mapper;
         private readonly ILogger<CategoryService> _logger;
+        private readonly ICatalogCacheService _cacheService;
 
-        public CategoryService(IMapper mapper, IDatabaseSettings _databaseSettings, IMongoDatabase database, ILogger<CategoryService> logger)
+        private const string CachePrefix = "catalog:categories:";
+        private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
+
+        public CategoryService(IMapper mapper, IDatabaseSettings _databaseSettings, IMongoDatabase database, ILogger<CategoryService> logger, ICatalogCacheService cacheService)
         {        
             _categoryCollection = database.GetCollection<Category>(_databaseSettings.CategoryCollectionName);
             _productCollection = database.GetCollection<Product>(_databaseSettings.ProductCollectionName);
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         private FilterDefinition<Category>? BuildDuplicateFilter(string name, string code, Guid? excludeId = null)
@@ -164,6 +170,7 @@ namespace Store.Catalog.Services.CategoryServices
 
             var value = _mapper.Map<Category>(createCategoryDto);
             await _categoryCollection.InsertOneAsync(value);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task DeleteCategoryAsync(Guid id)
@@ -188,6 +195,7 @@ namespace Store.Catalog.Services.CategoryServices
                 .Set(x => x.DeleteDate, BaseEntity.GetLocalTime());
 
             await _categoryCollection.UpdateOneAsync(x => x.Id == guidId, update);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task RestoreCategoryAsync(Guid id)
@@ -215,20 +223,29 @@ namespace Store.Catalog.Services.CategoryServices
                 .Set(x => x.UpdateDate, BaseEntity.GetLocalTime());
 
             await _categoryCollection.UpdateOneAsync(x => x.Id == guidId, update);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
 
         public async Task<List<ResultCategoryDto>> GetAllCategoryAsync(bool showDeleted = false)
         {
-            var filter = showDeleted ? FilterDefinition<Category>.Empty : Builders<Category>.Filter.Eq(x => x.IsDeleted, false);
-            var values = await _categoryCollection.Find(filter).ToListAsync();
-            return _mapper.Map<List<ResultCategoryDto>>(values);
+            var result = await _cacheService.GetOrSetAsync($"{CachePrefix}all:{showDeleted}", async () =>
+            {
+                var filter = showDeleted ? FilterDefinition<Category>.Empty : Builders<Category>.Filter.Eq(x => x.IsDeleted, false);
+                var values = await _categoryCollection.Find(filter).ToListAsync();
+                return _mapper.Map<List<ResultCategoryDto>>(values);
+            }, CacheDuration);
+
+            return result ?? new List<ResultCategoryDto>();
         }
 
         public async Task<GetByIdCategoryDto?> GetByIdCategoryAsync(Guid id)
         {
             var guidId = id;
-            var entity = await _categoryCollection.Find<Category>(x => x.Id == guidId && !x.IsDeleted).FirstOrDefaultAsync();
-            return _mapper.Map<GetByIdCategoryDto?>(entity);
+            return await _cacheService.GetOrSetAsync($"{CachePrefix}id:{id}", async () =>
+            {
+                var entity = await _categoryCollection.Find<Category>(x => x.Id == guidId && !x.IsDeleted).FirstOrDefaultAsync();
+                return _mapper.Map<GetByIdCategoryDto?>(entity);
+            }, CacheDuration);
         }
 
         public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
@@ -295,6 +312,7 @@ namespace Store.Catalog.Services.CategoryServices
             existing.UpdateDate = BaseEntity.GetLocalTime();
 
             await _categoryCollection.ReplaceOneAsync(x => x.Id == existing.Id, existing);
+            await _cacheService.RemoveByPrefixAsync(CachePrefix);
         }
     }
 }
