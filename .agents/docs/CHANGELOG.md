@@ -22,6 +22,13 @@
 
 ## [v3.0.0] - 2026-11-01
 ### Added
+- **Paket 11: Dockerization & Full Container Orchestration:**
+  - 12 uygulama projesinin tümü için (Gateway, Catalog, Discount, Location, Order, B2B, Basket, Favorite, Rental, Payment, WebUI, IdentityServer) multi-stage, minimal ve `net8.0` uyumlu `Dockerfile`'lar repo kök dizini (build context) odaklı olarak oluşturuldu.
+  - Gereksiz dosyaların ve `bin`/`obj` çıktılarının imajlara girmesini engelleyen `.dockerignore` eklendi.
+  - Kök dizindeki `docker-compose.yml` dosyası; 5 altyapı (MongoDB `catalogdb`, `mongo-init`, PostgreSQL `postgresdb`, RabbitMQ `rabbitmq`, Redis `redis`) ve 12 uygulama servisini içerecek şekilde genişletildi.
+  - Tüm servisler bağımsız `store-network` köprü ağına bağlandı; veritabanı, broker ve gateway adresleri konteyner isimleri üzerinden environment değişkenleriyle yapılandırıldı.
+  - Postgres ve RabbitMQ için sağlık kontrolleri (`healthcheck`) ve servislerin sağlıklı kalkmasını sağlayan `depends_on: condition: service_healthy` orkestrasyonu kuruldu.
+  - Açık metin sırları compose dosyasından ayırmak için `.env.example` şablonu oluşturuldu ve `.env` dosyası `.gitignore`'a dahil edildi.
 - **Paket 10: YARP (Yet Another Reverse Proxy) API Gateway Entegrasyonu:**
   - `ApiGateways/Store.Gateway` projesi Microsoft YARP 2.2.0 kütüphanesiyle kuruldu (port 7000) ve `Store.slnx`'e dahil edildi.
   - 9 mikroservis için (Catalog, Discount, Location, Order, B2B, Basket, Favorite, Rental, Payment) hem doğrudan varlık rotaları (`/api/Products`, `/api/Orderings` vb.) hem de prefix rotaları (`/api/catalog/`, `/api/order/` vb. PathRemovePrefix & PathPrefix) dinamik olarak yapılandırıldı.

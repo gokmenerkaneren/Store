@@ -1,4 +1,27 @@
-version: '3.8'
+# Secrets come from a git-ignored .env file; see .env.example.
+
+x-app-base: &app-base
+  restart: on-failure
+  networks:
+    - store-network
+
+x-aspnet-env: &aspnet-env
+  ASPNETCORE_ENVIRONMENT: Docker
+  ASPNETCORE_HTTP_PORTS: "8080"
+
+x-identity-env: &identity-env
+  IdentityServerURL: http://store.identityserver:8080
+
+x-rabbitmq-env: &rabbitmq-env
+  RabbitMQ__Host: rabbitmq
+  RabbitMQ__Username: ${RABBITMQ_USER:-guest}
+  RabbitMQ__Password: ${RABBITMQ_PASSWORD:?Set RABBITMQ_PASSWORD in .env}
+
+x-infra-depends: &infra-depends
+  postgresdb:
+    condition: service_healthy
+  rabbitmq:
+    condition: service_healthy
 
 services:
   # -----------------------------------------------------
@@ -7,19 +30,30 @@ services:
   catalogdb:
     image: mongo:latest
     container_name: store_catalogdb
-    ports: 
+    ports:
       - "27018:27017"
     # Replica Set 'rs0' olarak başlatılır. Multi-Document Transaction için zorunludur.
     command: ["--replSet", "rs0", "--bind_ip_all"]
     volumes:
       - catalogdb_data:/data/db
+    networks:
+      - store-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     restart: always
 
   # MongoDB Replica Set'i (rs0) ilk ayağa kalktığında otomatik olarak başlatan (init) geçici servis.
   mongo-init:
     image: mongo:latest
     depends_on:
-      - catalogdb
+      catalogdb:
+        condition: service_healthy
+    networks:
+      - store-network
     restart: "no"
     command: >
       bash -c "
@@ -34,13 +68,21 @@ services:
     image: postgres:16
     container_name: store_postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: sa435558
-    ports: 
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
       - "5434:5432"
     volumes:
       - postgresdb_data:/var/lib/postgresql/data
       - ./Scripts/PostgreSQL:/docker-entrypoint-initdb.d
+    networks:
+      - store-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     restart: always
 
   # -----------------------------------------------------
@@ -50,16 +92,258 @@ services:
     image: rabbitmq:3-management
     container_name: store_rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Set RABBITMQ_PASSWORD in .env}
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - store-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
     restart: always
+
+  # -----------------------------------------------------
+  # 4. CACHE (Redis)
+  # -----------------------------------------------------
+  redis:
+    image: redis:alpine
+    container_name: store_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - store-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: always
+
+  # -----------------------------------------------------
+  # 5. APPLICATION SERVICES
+  # -----------------------------------------------------
+  store.identityserver:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: IdentityServer/Store.IdentityServer/Dockerfile
+    environment:
+      <<: *aspnet-env
+      ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=StoreIdentityDB;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+      STORE_AES_KEY: ${STORE_AES_KEY:?Set STORE_AES_KEY in .env}
+    ports:
+      - "5001:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.catalog:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Catalog/Store.Catalog/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env, *rabbitmq-env]
+      DatabaseSettings__ConnectionString: mongodb://catalogdb:27017/?replicaSet=rs0
+      ConnectionStrings__Redis: redis:6379
+    ports:
+      - "7301:8080"
+    depends_on:
+      <<: *infra-depends
+      catalogdb:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  store.discount:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Discount/Store.Discount/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env]
+      ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=StoreDiscountDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+    ports:
+      - "7302:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.location:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Location/Presentation/Store.Location.WebApi/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env]
+      ConnectionStrings__PostgreSqlConnection: Host=postgresdb;Port=5432;Database=StoreLocationDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+      STORE_AES_KEY: ${STORE_AES_KEY:?Set STORE_AES_KEY in .env}
+    ports:
+      - "7303:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.order:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Order/Presentation/Store.Order.WebApi/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env, *rabbitmq-env]
+      ConnectionStrings__OrderDatabase: Host=postgresdb;Port=5432;Database=StoreOrderDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+    ports:
+      - "7304:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.b2b:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/B2B/Presentation/Store.B2B.WebApi/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env, *rabbitmq-env]
+      ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=StoreB2BDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+    ports:
+      - "7305:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.basket:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Basket/Store.Basket/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env]
+      RedisSettings__Host: redis
+      RedisSettings__Port: "6379"
+    ports:
+      - "7306:8080"
+    depends_on:
+      <<: *infra-depends
+      redis:
+        condition: service_healthy
+
+  store.favorite:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Favorite/Presentation/Store.Favorite.WebApi/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env]
+      ConnectionStrings__FavoriteDatabase: Host=postgresdb;Port=5432;Database=StoreFavoriteDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+    ports:
+      - "7307:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.rental:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Rental/Presentation/Store.Rental.WebApi/Dockerfile
+    environment:
+      <<: [*aspnet-env, *identity-env]
+      ConnectionStrings__RentalDatabase: Host=postgresdb;Port=5432;Database=StoreRentalDb;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env};
+    ports:
+      - "7308:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.payment:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: Services/Payment/Store.Payment/Dockerfile
+    environment:
+      <<: [*aspnet-env, *rabbitmq-env]
+    ports:
+      - "7309:8080"
+    depends_on:
+      <<: *infra-depends
+
+  store.gateway:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: ApiGateways/Store.Gateway/Dockerfile
+    environment:
+      <<: *aspnet-env
+      ReverseProxy__Clusters__catalog-cluster__Destinations__destination1__Address: http://store.catalog:8080
+      ReverseProxy__Clusters__discount-cluster__Destinations__destination1__Address: http://store.discount:8080
+      ReverseProxy__Clusters__location-cluster__Destinations__destination1__Address: http://store.location:8080
+      ReverseProxy__Clusters__order-cluster__Destinations__destination1__Address: http://store.order:8080
+      ReverseProxy__Clusters__b2b-cluster__Destinations__destination1__Address: http://store.b2b:8080
+      ReverseProxy__Clusters__basket-cluster__Destinations__destination1__Address: http://store.basket:8080
+      ReverseProxy__Clusters__favorite-cluster__Destinations__destination1__Address: http://store.favorite:8080
+      ReverseProxy__Clusters__rental-cluster__Destinations__destination1__Address: http://store.rental:8080
+      ReverseProxy__Clusters__payment-cluster__Destinations__destination1__Address: http://store.payment:8080
+    ports:
+      - "7000:8080"
+    depends_on:
+      <<: *infra-depends
+      store.catalog:
+        condition: service_started
+      store.discount:
+        condition: service_started
+      store.location:
+        condition: service_started
+      store.order:
+        condition: service_started
+      store.b2b:
+        condition: service_started
+      store.basket:
+        condition: service_started
+      store.favorite:
+        condition: service_started
+      store.rental:
+        condition: service_started
+      store.payment:
+        condition: service_started
+
+  store.webui:
+    <<: *app-base
+    build:
+      context: .
+      dockerfile: FrontEnds/Store.WebUI/Dockerfile
+    environment:
+      <<: *aspnet-env
+      ApiSettings__IdentityServerUrl: http://store.identityserver:8080
+      ApiSettings__GatewayUrl: http://store.gateway:8080
+      ApiSettings__CatalogBaseUrl: http://store.gateway:8080
+      ApiSettings__DiscountBaseUrl: http://store.gateway:8080
+      ApiSettings__LocationBaseUrl: http://store.gateway:8080
+      ApiSettings__OrderBaseUrl: http://store.gateway:8080
+      ApiSettings__B2BBaseUrl: http://store.gateway:8080
+      ApiSettings__BasketBaseUrl: http://store.gateway:8080
+      ApiSettings__FavoriteBaseUrl: http://store.gateway:8080
+      ApiSettings__RentalBaseUrl: http://store.gateway:8080
+      ApiSettings__PaymentBaseUrl: http://store.gateway:8080
+    ports:
+      - "5079:8080"
+    depends_on:
+      <<: *infra-depends
+      store.gateway:
+        condition: service_started
+      store.identityserver:
+        condition: service_started
+
+networks:
+  store-network:
+    driver: bridge
 
 volumes:
   catalogdb_data:
   postgresdb_data:
   rabbitmq_data:
+  redis_data:

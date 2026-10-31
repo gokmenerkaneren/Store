@@ -3,3 +3,5 @@ CREATE DATABASE "StoreLocationDb";
 CREATE DATABASE "StoreB2BDb";
 CREATE DATABASE "StoreDiscountDb";
 CREATE DATABASE "StoreOrderDb";
+CREATE DATABASE "StoreFavoriteDb";
+CREATE DATABASE "StoreRentalDb";

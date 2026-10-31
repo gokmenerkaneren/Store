@@ -9,9 +9,9 @@
 
 ## 1. GÜNCEL FAZ
 
-**Aktif Faz:** Faz 3 — Altyapı, Dağıtık Dayanıklılık ve DevOps Olgunlaşması (Aktif: Paket 10 YARP API Gateway)
+**Aktif Faz:** Faz 3 — Altyapı, Dağıtık Dayanıklılık ve DevOps Olgunlaşması (Paket 10 YARP Gateway & Paket 11 Dockerization tamamlandı)
 
-Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 (RabbitMQ Outbox, Stok Koreografisi, Kupon Motoru, B2B İskonto/Kredi Limiti, Ödeme & Dağıtık Rollback) tamamlandı. Faz 3 kapsamında Paket 10 (YARP API Gateway) 119 test ile başarıyla devreye alındı.
+Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 (RabbitMQ Outbox, Stok Koreografisi, Kupon Motoru, B2B İskonto/Kredi Limiti, Ödeme & Dağıtık Rollback) tamamlandı. Faz 3 kapsamında Paket 10 (YARP API Gateway) ve Paket 11 (Dockerization & Full Container Orchestration) 119 test ile başarıyla devreye alındı.
 
 ---
 
@@ -47,6 +47,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 
 | İş | Tarih | Detay |
 |:---|:---|:---|
+| Dockerization & Full Container Stack (Paket 11) | 01.11.2026 | 12 multi-stage Dockerfile (.NET 8 SDK/aspnet), Redis altyapısı, docker-compose.yml (17 servis), store-network ağı, healthcheck/depends_on orkestrasyonu, .env şablonu ve 119 test yeşil. |
 | YARP API Gateway (Paket 10) | 01.11.2026 | ApiGateways/Store.Gateway (port 7000) YARP 2.2.0 ile kuruldu, 9 mikroservis için route/cluster tanımlandı, WebUI Refit istemcileri tek kapıya yönlendirildi ve 119 test yeşil. |
 | Ödeme & Dağıtık Rollback (Paket 9) | 01.11.2026 | Store.Payment mikroservisi (port 7309), MockPaymentGateway, PaymentCompleted/Failed event'leri, Catalog stok rollback ($inc), B2B kredi limiti rollback (stok/ödeme hatalarında), Order durum makinesi ve 119 test yeşil. |
 | B2B Bayi İskonto & Kredi Limiti (Paket 8) | 01.11.2026 | Store.B2B CQRS bayi sorgusu, DealerPricing motoru, MassTransit OrderCreatedB2BConsumer ile cari borç artırımı, WebUI Checkout guard clause ve 114 test yeşil. |
@@ -89,10 +90,10 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 6. ✅ **IdentityServer Login Entegrasyonu** — WebUI'da `UyelikController.Login` içerisinden token alınarak oturum açılması (TAMAMLANDI)
 
 ### 🔵 Faz 3 — Altyapı & DevOps Olgunlaşması
-1. ❌ YARP / Ocelot API Gateway
-2. ❌ RabbitMQ / MassTransit asenkron mesajlaşma
+1. ✅ YARP API Gateway (Store.Gateway, port 7000)
+2. ✅ RabbitMQ / MassTransit asenkron mesajlaşma & Outbox Pattern
 3. ❌ Redis Cache (sık erişilen katalog verileri)
-4. ❌ Docker & Container (tüm servislerin container'da çalışması)
+4. ✅ Docker & Container (tüm 17 servisin docker-compose ile orkestre edilmesi)
 5. ❌ Test kapsamı artırma (xUnit, Testcontainers)
 
 ---
