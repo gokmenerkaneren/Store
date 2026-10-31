@@ -171,3 +171,22 @@
 ---
 
 > **Güncelleme Kuralı:** Yeni bir iş kuralı keşfedildiğinde, mevcut bir kural değiştiğinde veya planlanan bir kural implemente edildiğinde bu doküman güncellenir.
+
+### 4.3 Sipariş Durum Makinesi (Order State Machine)
+- `Ordering` durumu `OrderStatus` enum'u ile yönetilir ve domain seviyesinde `CanTransitionTo` kuralına tabidir:
+  - `Pending` (Beklemede) → Yalnızca `Processing` veya `Cancelled` olabilir.
+  - `Processing` (Hazırlanıyor) → `Shipped` veya `Cancelled` olabilir.
+  - `Shipped` (Kargoda) → `Delivered` veya `Returned` olabilir.
+  - `Delivered` (Teslim Edildi) → `Completed` veya `Returned` olabilir.
+  - `Cancelled` (İptal Edildi) & `Completed` (Tamamlandı) → Terminal durumdur, değiştirilemez.
+- Geçersiz bir geçiş talebinde `InvalidOperationException` fırlatılır.
+- Kargolanmış veya işleme alınmış siparişler müşteri tarafından doğrudan silinemez (`RemoveOrdering` engeli).
+
+### 4.4 Dağıtık Stok Rezervasyonu ve Kompansasyon (Choreography)
+- Sipariş başarıyla veritabanına yazıldığında `OrderCreatedIntegrationEvent` fırlatılır.
+- Catalog servisi `OrderCreatedConsumer` üzerinden sipariş kalemlerini inceler:
+  - Varyant stoğu sipariş miktarını karşılıyorsa stok düşülür ve `StockReservedIntegrationEvent` fırlatılır (Sipariş statüsü `Processing` yapılır).
+  - Herhangi bir kalemde yetersiz stok varsa veya iyimser eşzamanlılık çakışması olursa daha önce düşülen kalemler `$inc` ile iade edilir ve `StockReservationFailedIntegrationEvent` fırlatılır (Sipariş statüsü `Cancelled` yapılır ve iptal sebebi kaydedilir).
+
+### 4.5 Kiralama Çakışma ve GiST EXCLUDE Koruması
+- `Store.Rental` mikroservisinde, aynı ürünün aynı tarih aralığında mükerrer kiralanmasını önlemek için PostgreSQL motoru seviyesinde GiST `EXCLUDE` kısıtı (`btree_gist`) devrededir. Uygulama seviyesindeki race conditions bu kısıt ile %100 engellenir.

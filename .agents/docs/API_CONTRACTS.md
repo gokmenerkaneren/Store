@@ -26,3 +26,19 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
 - `DELETE /api/[EntityPlural]/{id}` -> Kaydı (soft delete) siler
 
 > **Güncelleme Kuralı:** Servislere özgü kritik yeni endpoint'ler eklendikçe burada belgelendirilmelidir.
+
+
+---
+
+## 3. MASSTRANSIT ENTEGRASYON OLAYLARI (EVENTS)
+
+| Olay Adı | Yayınlayan | Dinleyen | Alanlar | Amacı |
+|:---|:---|:---|:---|:---|
+| `OrderCreatedIntegrationEvent` | `Store.Order` | `Store.Catalog` | OrderId, UserId, TotalPrice, OrderDate, Items[] | Siparişin kaydedildiğini bildirir, stok düşümünü tetikler |
+| `StockReservedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, TotalPrice, ReservedDate, Items[] | Stok başarıyla rezerve edildi, sipariş durumunu `Processing` yapar |
+| `StockReservationFailedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, Reason, FailedDate, Items[] | Yetersiz stok; siparişi `Cancelled` yapar ve telafi notu düşer |
+
+## 4. GÜVENLİK VE ROL STANDARTLARI
+- **Yönetimsel Uçlar:** Tüm Create/Update/Delete ve admin paneli veri işlemleri `[Authorize(Roles = "Admin")]` ile korunur.
+- **Katalog & Lokasyon Genel Okuma:** Şehir, ilçe, mahalle ve ürün listeleme GET uçları `[AllowAnonymous]` ile vitrine açıktır.
+- **IDOR Koruması:** `UserAddressController`, `FavoritesController` ve `OrderingsController` müşteri kimliğini kesinlikle istemci gövdesinden almaz; JWT `sub` / `ClaimTypes.NameIdentifier` üzerinden çözümler.

@@ -157,3 +157,43 @@ services:
 ---
 
 > **Güncelleme Kuralı:** Yeni bir servis eklendiğinde, port numarası değiştiğinde veya mimari karar alındığında bu doküman güncellenir.
+
+---
+
+## 4. ASENKRON İLETİŞİM VE OUTBOX MİMARİSİ
+
+```
+   ┌────────────────────────────────────────────────────────┐
+   │                    Store.Order (PostgreSQL)            │
+   │  ┌──────────────────┐         ┌─────────────────────┐  │
+   │  │ Order & Details  │  Atomik │ MassTransit Outbox  │  │
+   │  │ DbContext Save   │◄───────►│ (Inbox/OutboxState) │  │
+   │  └──────────────────┘         └──────────┬──────────┘  │
+   └──────────────────────────────────────────┼─────────────┘
+                                              │ Background Bus Outbox
+                                              ▼
+                                 ┌─────────────────────────┐
+                                 │   RabbitMQ (MessageBus) │
+                                 │   Port: 5672 / 15672    │
+                                 └────────────┬────────────┘
+                                              │ Event Delivery
+                                              ▼
+   ┌────────────────────────────────────────────────────────┐
+   │                    Store.Catalog (MongoDB)             │
+   │  ┌──────────────────────────────────────────────────┐  │
+   │  │ OrderCreatedConsumer                             │  │
+   │  │ -> Variant Stock Check (Optimistic Concurrency)  │  │
+   │  │ -> $inc Rollback on Failure                      │  │
+   │  │ -> Publish StockReserved / Failed Event          │  │
+   │  └──────────────────────────────────────────────────┘  │
+   └────────────────────────────────────────────────────────┘
+```
+
+- **Broker:** RabbitMQ 3.x (Management Dashboard: 15672).
+- **Transport:** MassTransit 8.2.5.
+- **Kritik Desen (Outbox):** `Store.Order` mikroservisinde EntityFramework Core Outbox aktiftir. Sipariş ile mesaj aynı PostgreSQL transaction'ında commit edilir (Dual-Write problemi çözüldü).
+- **Koreografi Tabanlı Kompansasyon:** Merkezi Saga yerine hafif ve ölçeklenebilir koreografi modeli uygulanır:
+  1. `OrderCreatedIntegrationEvent` (Order -> Catalog)
+  2. `StockReservedIntegrationEvent` (Catalog -> Order: Durum `Processing` olur)
+  3. `StockReservationFailedIntegrationEvent` (Catalog -> Order: Durum `Cancelled` olur ve iptal sebebi notlara işlenir)
+

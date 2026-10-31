@@ -183,3 +183,13 @@ dotnet ef migrations add <MigrationAdi> \
 >  
 > Veritabanı şemasında (Migration), veri modellerinde veya tabloların yapısında yapılan **TÜM DEĞİŞİKLİKLER (Update/Migration)** her iki ortamda da **BİREBİR AYNI (Senkron)** olmak zorundadır.  
 > Herhangi bir serviste veritabanı güncellemesi (`dotnet ef database update`) yapıldığında, işlem mutlaka her iki port/ortam hedef alınarak tekrarlanmalıdır. Bu kural, ortamlar arası tutarsızlığı (schema mismatch) kesin olarak engellemek içindir.
+
+
+### MassTransit EF Core Outbox Tabloları (StoreOrderDb)
+- `InboxState`: Gelen mesajların tekillik (idempotency) takibi.
+- `OutboxMessage`: Transaction içinde kaydedilen ve RabbitMQ'ya iletilecek mesaj kuyruğu.
+- `OutboxState`: Outbox kuyruk işleyicisinin durum bilgisi.
+
+
+### Özel Kısıtlar (Constraints)
+- `EXCLUDE_RentalOrderItems_ProductId_DateRange`: PostgreSQL GiST EXCLUDE constraint (`ProductId` WITH =, `tstzrange(StartDate, EndDate)` WITH &&). Çakışan kiralama tarihlerini engeller.
