@@ -9,9 +9,9 @@
 
 ## 1. GÜNCEL FAZ
 
-**Aktif Faz:** Faz 2 — İş Mantığı Tamamlama
+**Aktif Faz:** Faz 2 — Temel İş Akışları, Asenkron Mesajlaşma ve Dağıtık Altyapı
 
-Faz 1 (Acil Güvenlik) henüz tam tamamlanmadı; güvenlik borçları devam ederken Faz 2 işleri paralel yürütülüyor.
+Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 kapsamında Paket 5 (RabbitMQ, MassTransit, EF Core Outbox) tamamlandı, Paket 6 (Koreografi Tabanlı Stok Rezervasyonu ve Kompansasyon) 104 test ile tamamlandı.
 
 ---
 
@@ -25,8 +25,8 @@ Faz 1 (Acil Güvenlik) henüz tam tamamlanmadı; güvenlik borçları devam eder
 | 4 | 🔴 KRİTİK | tempkey.jwk | IdentityServer token imzalama anahtarı `.gitignore`'da olmalı | ✅ ÇÖZÜLDÜ |
 | 5 | 🟡 YÜKSEK | Rental İş Akışı | `PriceType.Rental(3)` ve `WholeRental(5)` tanımlı ama iş akışı kodlanmadı | ✅ ÇÖZÜLDÜ |
 | 6 | 🟡 YÜKSEK | API Gateway Eksikliği | YARP/Ocelot yok; WebUI her servise doğrudan HTTP yapıyor | ❌ AÇIK |
-| 7 | 🟡 YÜKSEK | Mesajlaşma Yok | Servisler arası asenkron iletişim (RabbitMQ/MassTransit) yok | ❌ AÇIK |
-| 8 | 🔵 ORTA | Birim Test Kapsamı | `Store.Location.Tests` (14 test) ve `Store.Order.Tests` (2 test) olmak üzere 16 test aktif | ✅ İYİLEŞTİRİLDİ |
+| 7 | 🟡 YÜKSEK | Mesajlaşma Yok | RabbitMQ, MassTransit ve PostgreSQL EF Core Outbox Pattern entegre edildi | ✅ ÇÖZÜLDÜ |
+| 8 | 🔵 ORTA | Birim Test Kapsamı | Order (74), Location (21), Rental (9) olmak üzere 104 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
 | 9 | 🔵 ORTA | Discount Coupon İndeksi | `Code` alanı `NVARCHAR(MAX)`, `IsActive` üzerinde index yok | ✅ ÇÖZÜLDÜ |
 | 10 | 🔵 ORTA | Order Namespace Hatası | `Entitties` (çift t) namespace/klasör adı | ✅ ÇÖZÜLDÜ |
 | 11 | ✅ ÇÖZÜLDÜ | Catalog → Location Bağımlılığı | `Store.Shared.Enums` kullanımıyla çözüldü (15.09.2026) | ✅ KAPALI |

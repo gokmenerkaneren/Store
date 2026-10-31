@@ -20,6 +20,39 @@
 
 ---
 
+## [v2.0.0] - 2026-11-01
+### Added
+- **Paket 6: Koreografi Tabanlı Stok Rezervasyonu ve Dağıtık İşlemler:**
+  - `Store.Shared` altında `StockReservedIntegrationEvent` ve `StockReservationFailedIntegrationEvent` sözleşmeleri eklendi.
+  - `Store.Catalog` servisi `OrderCreatedConsumer` içine varyant stok düşüm mantığı entegre edildi. Çoklu kalemlerde kısmi hata durumunda stok iadesi (rollback) ve `UpdateDate` ile iyimser eşzamanlılık (Optimistic Concurrency) sağlandı.
+  - `Store.Order.WebApi` içerisine `StockReservedConsumer` (`OrderStatus.Processing`) ve `StockReservationFailedConsumer` (`OrderStatus.Cancelled` + hata telafi notu) tüketicileri eklenip MassTransit RabbitMQ dinleyicisine kaydedildi.
+  - 2 yeni dağıtık tüketici birim testi (`OrderStockConsumersTests.cs`) yazılarak toplam test sayısı 104'e yükseltildi.
+- **Paket 5: RabbitMQ & MassTransit EF Core Outbox Altyapısı:**
+  - `docker-compose.yml` içerisine `rabbitmq:3-management` ve `rabbitmq_data` volume eklendi.
+  - `Store.Shared` altında `OrderCreatedIntegrationEvent` ve `OrderItemMessageDto` sözleşmesi oluşturuldu.
+  - `Store.Order` servisine MassTransit PostgreSQL EF Core Outbox entegre edildi (`AddOutboxMessageEntity`, `AddOutboxStateEntity`, `AddInboxStateEntity`) ve `AddMassTransitOutbox` migration'ı üretildi.
+  - `Store.Catalog` servisine MassTransit dinleyicisi ve `OrderCreatedConsumer` iskeleti eklendi.
+  - Dual-write koruması sağlandı; sipariş ve Outbox kaydı tek transaction içinde atomik kaydedilmektedir.
+- **Paket 4: Rental Concurrency & EF Core Migration'ları:**
+  - PostgreSQL GiST `EXCLUDE` kısıtı eklendi (`btree_gist`), aynı ürünün çakışan tarihlerde kiralanması DB motoru seviyesinde engellendi.
+  - Rental servisine `InitialCreateRentalDb` initial migration'ı eklendi.
+  - Order servisine `AddOrderStatusAndOrderDetails` migration'ı üretildi.
+  - Catalog servisine anonim `CheckStock/{id}` uç noktası ve WebUI Checkout öncesi temel stok doğrulaması eklendi.
+- **Faz 1 Sertleştirme & Order Durum Makinesi:**
+  - `Ordering` entity'si içine `CanTransitionTo` ve `ChangeStatus` domain metodları entegre edildi; geçersiz durum geçişleri engellendi.
+  - 56 yeni durum makinesi birim testi (`OrderingStateMachineTests.cs`) yazıldı.
+
+### Security
+- **K1: UsersController Yetkilendirme:** `[Authorize(Roles = "Admin")]` uygulanarak anonim erişim tamamen engellendi.
+- **K2: Location API Koruma:** Global fallback authorization politikası kuruldu; yönetimsel uçlar `[Authorize(Roles = "Admin")]` ile kilitlendi; `UserAddressController` müşteri kimliğini JWT token'dan bağlayarak IDOR açığını kapattı.
+- **K3: AES-256 GCM Şifreleme:** `AesEncryptionHelper` ortam değişkeni desteği, katı UTF-8 denetimi ve AES-GCM geçiş altyapısıyla güçlendirildi.
+- **K5: Identity Client Ayrımı:** `UyelikController` ve sosyal login bağlantıları `StoreAdminId` yerine `StoreWebClientId`'ye bağlandı.
+- **K6: Catalog API Koruma:** `Products`, `Categories`, `ProductPrices`, `ProductImages` vb. controller'ların tüm yazma uçları `[Authorize(Roles = "Admin")]` ile sınırlandırıldı.
+- **K7: Order & OrderDetails IDOR Koruması:** `OrderDetailsController` Admin rolüne bağlandı; `OrderingsController.UpdateOrdering` ucunda durum, fiyat ve kullanıcı manipülasyonu engellendi; işleme alınmış siparişlerin silinmesi (`RemoveOrdering`) yasaklandı.
+- **K8 & İ9: Checkout Fiyat & Adres Koruması:** `DiscountAmount` sıfırlanarak indirim manipülasyonu engellendi; güvenli guard clause ve `Uyelik` yönlendirmeleri sağlandı.
+
+---
+
 ## [v1.3.0] - 2026-10-13
 ### Added
 - **KVKK AES-256 Şifreleme (RV-004):** `AesEncryptionHelper` (Store.Shared), `EncryptedStringConverter` (EF ValueConverter) ve migration ile `UserAddress.IdentityNumber` veritabanında şifrelendi. xUnit testleri yazıldı.

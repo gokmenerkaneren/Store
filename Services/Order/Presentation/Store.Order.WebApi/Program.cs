@@ -9,6 +9,7 @@ using Store.Order.Persistence.Context;
 using Store.Order.Persistence.Repositories;
 using Store.Shared.Middlewares;
 using Store.Order.Presentation.WebApi.Services;
+using Store.Order.WebApi.Consumers;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -54,6 +55,9 @@ builder.Services.AddApplicationServices(builder.Configuration);
 // MassTransit + EF Core Bus Outbox: olaylar sipariş ile aynı transaction'da OutboxMessage tablosuna yazılır
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<StockReservedConsumer>();
+    x.AddConsumer<StockReservationFailedConsumer>();
+
     x.AddEntityFrameworkOutbox<OrderContext>(o =>
     {
         o.UsePostgres();
