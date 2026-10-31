@@ -38,16 +38,18 @@
 
 | # | Servis | Port | Veritabanı | DBMS | Mimari | Durum |
 |:--|:---|:---|:---|:---|:---|:---|
-| 1 | **Store.WebUI** | `5079` | — | — | MVC Frontend | ✅ Aktif |
+| 0 | **Store.Gateway** | 7000 | — | — | YARP Reverse Proxy | ✅ Aktif |
+| 1 | **Store.WebUI** | 5079 | — | — | MVC Frontend | ✅ Aktif |
 | 2 | **Store.Catalog** | `7301` | `StoreMD` | MongoDB 7.x | Monolitik | ✅ Aktif |
 | 3 | **Store.Discount** | `7302` | `StoreDiscountDb` | PostgreSQL 16.x | Monolitik (Dapper+EF) | ✅ Aktif |
 | 4 | **Store.Location** | `7303` | `StoreLocationDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
 | 5 | **Store.Order** | `7304` | `StoreOrderDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
 | 6 | **Store.Basket** | `7306` | — | Redis | Monolitik | ✅ Aktif |
 | 7 | **Store.IdentityServer** | `5001` | `StoreIdentityDB` | PostgreSQL 16.x | IdentityServer4 | ✅ Aktif |
-| 8 | **Store.B2B** | `5173` | `StoreB2BDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
+| 8 | **Store.B2B** | 7305 | StoreB2BDb | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
 | 9 | **Store.Favorite** | `7307` | `StoreFavoriteDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
 | 10 | **Store.Rental** | `7308` | `StoreRentalDb` | PostgreSQL 16.x | Clean Architecture | ✅ Aktif |
+| 11 | **Store.Payment** | 7309 | — | In-Memory / Mock | Microservice | ✅ Aktif |
 
 > **Mimari Sınır Notu (ADR-004):** Sistem endüstriyel MRP/üretim planlama kapsamını içermez. Stok yönetimi depo bazlı ürün giriş/çıkış ve kiralama rezervasyonu sınırlarıyla yönetilir.
 

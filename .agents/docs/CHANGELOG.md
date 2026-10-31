@@ -20,6 +20,14 @@
 
 ---
 
+## [v3.0.0] - 2026-11-01
+### Added
+- **Paket 10: YARP (Yet Another Reverse Proxy) API Gateway Entegrasyonu:**
+  - `ApiGateways/Store.Gateway` projesi Microsoft YARP 2.2.0 kütüphanesiyle kuruldu (port 7000) ve `Store.slnx`'e dahil edildi.
+  - 9 mikroservis için (Catalog, Discount, Location, Order, B2B, Basket, Favorite, Rental, Payment) hem doğrudan varlık rotaları (`/api/Products`, `/api/Orderings` vb.) hem de prefix rotaları (`/api/catalog/`, `/api/order/` vb. PathRemovePrefix & PathPrefix) dinamik olarak yapılandırıldı.
+  - `Store.WebUI` `appsettings.json` ve `appsettings.Development.json` dosyalarındaki dağınık mikroservis portları merkezi `http://localhost:7000` Gateway URL'ine yönlendirilerek ağ spagettisi ortadan kaldırıldı.
+  - Geliştirme ortamı SSL bypass (`DangerousAcceptAnyServerCertificateValidator`) ve CORS desteği eklendi.
+
 ## [v2.0.0] - 2026-11-01
 ### Added
 - **Paket 9: Ödeme (Payment) Mikroservisi Entegrasyonu, Mock Gateway ve Dağıtık Kompansasyon (Rollback):**

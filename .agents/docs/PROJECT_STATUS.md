@@ -9,9 +9,9 @@
 
 ## 1. GÜNCEL FAZ
 
-**Aktif Faz:** Faz 2 — Temel İş Akışları, Asenkron Mesajlaşma ve Dağıtık Altyapı
+**Aktif Faz:** Faz 3 — Altyapı, Dağıtık Dayanıklılık ve DevOps Olgunlaşması (Aktif: Paket 10 YARP API Gateway)
 
-Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 kapsamında Paket 5 (RabbitMQ, MassTransit, EF Core Outbox), Paket 6 (Koreografi Tabanlı Stok Rezervasyonu), Paket 7 (Kupon & Sunucu Checkout), Paket 8 (B2B Bayi İskonto Motoru & Kredi Limiti) ve Paket 9 (Ödeme Entegrasyonu & Dağıtık Kompansasyon / Rollback) 119 test ile başarıyla tamamlandı.
+Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 (RabbitMQ Outbox, Stok Koreografisi, Kupon Motoru, B2B İskonto/Kredi Limiti, Ödeme & Dağıtık Rollback) tamamlandı. Faz 3 kapsamında Paket 10 (YARP API Gateway) 119 test ile başarıyla devreye alındı.
 
 ---
 
@@ -24,7 +24,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 | 3 | 🔴 KRİTİK | KVKK — IdentityNumber | `IdentityNumber` (T.C. Kimlik No) AES-256 ile veritabanı seviyesinde şifrelendi (Migration + ValueConverter) | ✅ ÇÖZÜLDÜ |
 | 4 | 🔴 KRİTİK | tempkey.jwk | IdentityServer token imzalama anahtarı `.gitignore`'da olmalı | ✅ ÇÖZÜLDÜ |
 | 5 | 🟡 YÜKSEK | Rental İş Akışı | `PriceType.Rental(3)` ve `WholeRental(5)` tanımlı ama iş akışı kodlanmadı | ✅ ÇÖZÜLDÜ |
-| 6 | 🟡 YÜKSEK | API Gateway Eksikliği | YARP/Ocelot yok; WebUI her servise doğrudan HTTP yapıyor | ❌ AÇIK |
+| 6 | 🟡 YÜKSEK | API Gateway Eksikliği | Microsoft YARP Reverse Proxy (Store.Gateway, port 7000) kuruldu; WebUI tek kapıya bağlandı | ✅ ÇÖZÜLDÜ |
 | 7 | 🟡 YÜKSEK | Mesajlaşma Yok | RabbitMQ, MassTransit ve PostgreSQL EF Core Outbox Pattern entegre edildi | ✅ ÇÖZÜLDÜ |
 | 8 | 🔵 ORTA | Birim Test Kapsamı | Order (89), Location (21), Rental (9) olmak üzere 119 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
 | 9 | 🔵 ORTA | Discount Coupon İndeksi | `Code` alanı `NVARCHAR(MAX)`, `IsActive` üzerinde index yok | ✅ ÇÖZÜLDÜ |
@@ -47,6 +47,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 
 | İş | Tarih | Detay |
 |:---|:---|:---|
+| YARP API Gateway (Paket 10) | 01.11.2026 | ApiGateways/Store.Gateway (port 7000) YARP 2.2.0 ile kuruldu, 9 mikroservis için route/cluster tanımlandı, WebUI Refit istemcileri tek kapıya yönlendirildi ve 119 test yeşil. |
 | Ödeme & Dağıtık Rollback (Paket 9) | 01.11.2026 | Store.Payment mikroservisi (port 7309), MockPaymentGateway, PaymentCompleted/Failed event'leri, Catalog stok rollback ($inc), B2B kredi limiti rollback (stok/ödeme hatalarında), Order durum makinesi ve 119 test yeşil. |
 | B2B Bayi İskonto & Kredi Limiti (Paket 8) | 01.11.2026 | Store.B2B CQRS bayi sorgusu, DealerPricing motoru, MassTransit OrderCreatedB2BConsumer ile cari borç artırımı, WebUI Checkout guard clause ve 114 test yeşil. |
 | Kupon & Sunucu Checkout (Paket 7) | 01.11.2026 | Store.Discount Dapper get-by-code sorgusu, Store.Shared Pricing motoru, WebUI Refit IDiscountApiService ve CheckoutController sunucu taraflı fiyat güvencesi uygulandı; 108 test yeşil. |

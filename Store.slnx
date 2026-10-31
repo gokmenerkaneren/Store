@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/ApiGateways/">
+    <Project Path="ApiGateways/Store.Gateway/Store.Gateway.csproj" />
+  </Folder>
   <Folder Name="/FrontEnds/">
     <Project Path="FrontEnds/Store.WebUI/Store.WebUI.csproj" Id="bff8122c-1842-4391-8456-67c540b1f1dd" />
   </Folder>

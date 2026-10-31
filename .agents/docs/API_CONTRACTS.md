@@ -67,3 +67,11 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
   - Request: `{ orderId, userId, amount, cardNumber }`
   - Response: `{ isSuccess, transactionId, errorMessage }`
 - `StockReservedPaymentConsumer`: `StockReservedIntegrationEvent`'i dinleyerek mock ödeme yürütür ve sonuca göre `PaymentCompletedIntegrationEvent` veya `PaymentFailedIntegrationEvent` yayınlar.
+
+## 8. API GATEWAY SÖZLEŞMELERİ (YARP)
+- Port: `7000` (`http://localhost:7000`)
+- **Tersine Dizin (Reverse Proxy) Standartları:**
+  - `Store.WebUI` ve dış istemciler tüm mikroservis çağrılarını `http://localhost:7000` üzerinden yapar.
+  - Varlık bazlı doğrudan yollar (`/api/Products`, `/api/Orderings`, `/api/DealerFinancials` vb.) ilgili mikroservis cluster'ına iletilir.
+  - Servis bazlı prefix yolları (`/api/catalog/{**catch-all}`, `/api/order/{**catch-all}` vb.) `PathRemovePrefix` ve `PathPrefix` transformları ile ilgili cluster'a yönlendirilir.
+  - Sağlık ve durum uç noktası: `GET /health` -> `{ status: "Healthy", timestamp: ... }`.
