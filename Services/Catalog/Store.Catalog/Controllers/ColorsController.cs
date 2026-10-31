@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.ColorDtos;
 using Store.Catalog.Services.ColorServices;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ColorsController : ControllerBase
@@ -15,6 +19,7 @@ namespace Store.Catalog.Controllers
             _colorService = colorService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> ColorList(bool showDeleted = false)
         {
@@ -22,6 +27,7 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetColorById(Guid id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.MesajlarCommands;
 using Store.Location.Application.Features.CQRS.Handlers.MesajlarHandlers;
@@ -46,6 +47,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateMessage(CreateMesajlarCommand command)
         {

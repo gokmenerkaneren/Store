@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.CountryCommands;
@@ -33,6 +34,7 @@ namespace Store.Location.WebApi.Controllers
             _restoreCountryCommandHandler = restoreCountryCommandHandler;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> CountryList([FromQuery] bool showDeleted = false)
         {
@@ -40,6 +42,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> CountryListById(Guid id)
         {

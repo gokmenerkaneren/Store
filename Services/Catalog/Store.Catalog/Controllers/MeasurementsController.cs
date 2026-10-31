@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.MeasurementDtos;
 using Store.Catalog.Services.MeasurementServices;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class MeasurementsController : ControllerBase
@@ -15,6 +19,7 @@ namespace Store.Catalog.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> MeasurementList(bool showDeleted = false)
         {
@@ -22,6 +27,7 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMeasurementById(Guid id)
         {
@@ -74,4 +80,3 @@ namespace Store.Catalog.Controllers
         }
     }
 }
-

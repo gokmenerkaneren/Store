@@ -4,6 +4,8 @@ using Store.Location.Application.Features.CQRS.Commands.UserAddressCommands;
 using Store.Location.Application.Features.CQRS.Handlers.UserAddressHandlers;
 using Store.Location.Application.Features.CQRS.Queries.UserAddressQueries;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Store.Location.WebApi.Controllers
@@ -44,23 +46,61 @@ namespace Store.Location.WebApi.Controllers
             _setDefaultUserAddressCommandHandler = setDefaultUserAddressCommandHandler;
         }
 
+        private Guid? GetCurrentUserId()
+        {
+            var claimVal = User.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+                        ?? User.FindFirst("sub")?.Value;
+            if (Guid.TryParse(claimVal, out var guid))
+            {
+                return guid;
+            }
+            return null;
+        }
+
         [HttpGet]
         public async Task<IActionResult> UserAddressList([FromQuery] bool showDeleted = false)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
             var values = await _getUserAddressesQueryHandler.Handle(showDeleted);
+
+            // IDOR koruması: Admin hariç kullanıcı yalnızca kendi adreslerini görebilir
+            if (!User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                values = values.Where(x => x.CustomerId == currentUserId.Value).ToList();
+            }
+
             return Ok(values);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> UserAddressListById(Guid id)
         {
-            var values = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
-            return Ok(values);
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var value = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
+            if (value == null) return NotFound();
+
+            // IDOR koruması: Kullanıcı yalnızca kendi adresini görüntüleyebilir
+            if (value.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
+            return Ok(value);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateUserAddress(CreateUserAddressCommand command)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            // IDOR koruması: CustomerId istemci verisinden değil token'dan atanır
+            command.CustomerId = currentUserId.Value;
+
             try
             {
                 await _createUserAddressCommandHandler.Handle(command);
@@ -76,6 +116,21 @@ namespace Store.Location.WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUserAddress(UpdateUserAddressCommand command)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var existing = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(command.Id));
+            if (existing == null) return NotFound();
+
+            // IDOR koruması: Başka kullanıcının adresi güncellenemez
+            if (existing.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
+            // CustomerId token'dan güvenceye alınır
+            command.CustomerId = currentUserId.Value;
+
             try
             {
                 await _updateUserAddressCommandHandler.Handle(command);
@@ -91,9 +146,22 @@ namespace Store.Location.WebApi.Controllers
         [HttpPost("set-default/{id}")]
         public async Task<IActionResult> SetDefaultUserAddress(Guid id, [FromQuery] Guid customerId)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var existing = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
+            if (existing == null) return NotFound();
+
+            // IDOR koruması: Başka kullanıcının adresi varsayılan yapılamaz
+            if (existing.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
             try
             {
-                await _setDefaultUserAddressCommandHandler.Handle(new SetDefaultUserAddressCommand(id, customerId));
+                // Query string'deki customerId manipülasyonuna karşı token'daki kimlik kullanılır
+                await _setDefaultUserAddressCommandHandler.Handle(new SetDefaultUserAddressCommand(id, currentUserId.Value));
                 return Ok("Varsayılan teslimat adresi başarıyla güncellendi.");
             }
             catch (InvalidOperationException ex)
@@ -110,6 +178,17 @@ namespace Store.Location.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveUserAddress(Guid id)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var existing = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
+            if (existing == null) return NotFound();
+
+            if (existing.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
             await _deleteUserAddressCommandHandler.Handle(new RemoveUserAddressCommand(id));
             return Ok("UserAddress bilgisi başarılı bir şekilde silindi");
         }
@@ -117,6 +196,17 @@ namespace Store.Location.WebApi.Controllers
         [HttpDelete("soft-delete/{id}")]
         public async Task<IActionResult> SoftDeleteUserAddress(Guid id)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var existing = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
+            if (existing == null) return NotFound();
+
+            if (existing.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
             await _softDeleteUserAddressCommandHandler.Handle(new SoftDeleteUserAddressCommand(id));
             return Ok("UserAddress bilgisi başarılı bir şekilde silinerek arşivlendi (Soft Delete).");
         }
@@ -124,6 +214,17 @@ namespace Store.Location.WebApi.Controllers
         [HttpPost("anonymize/{id}")]
         public async Task<IActionResult> AnonymizeUserAddress(Guid id)
         {
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized("Geçersiz kullanıcı oturumu.");
+
+            var existing = await _getUserAddressByIdQueryHandler.Handle(new GetUserAddressByIdQuery(id));
+            if (existing == null) return NotFound();
+
+            if (existing.CustomerId != currentUserId.Value && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+            {
+                return Forbid();
+            }
+
             await _anonymizeUserAddressCommandHandler.Handle(new AnonymizeUserAddressCommand(id));
             return Ok("UserAddress bilgisi başarılı bir şekilde anonimleştirildi.");
         }

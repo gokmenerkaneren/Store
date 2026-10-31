@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.NewProductDtos;
 using Store.Catalog.Services.NewProductServices;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class NewProductsController : ControllerBase
@@ -17,6 +19,7 @@ namespace Store.Catalog.Controllers
             _newProductService = newProductService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> NewProductList()
         {
@@ -45,6 +48,7 @@ namespace Store.Catalog.Controllers
             return Ok("Yeni Ürün başarıyla güncellendi");
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNewProductById(Guid id)
         {

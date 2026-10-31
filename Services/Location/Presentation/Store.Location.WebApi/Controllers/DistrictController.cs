@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.DistrictCommands;
@@ -39,6 +40,7 @@ namespace Store.Location.WebApi.Controllers
             _restoreDistrictCommandHandler = restoreDistrictCommandHandler;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> DistrictList([FromQuery] bool showDeleted = false)
         {
@@ -46,6 +48,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> DistrictListById(Guid id)
         {

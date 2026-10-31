@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.BrandDtos;
 using Store.Catalog.Services.BrandServices;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BrandsController : ControllerBase
@@ -15,6 +19,7 @@ namespace Store.Catalog.Controllers
             _brandService = brandService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> BrandList(bool showDeleted = false)
         {
@@ -22,6 +27,7 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBrandById(Guid id)
         {
@@ -64,4 +70,3 @@ namespace Store.Catalog.Controllers
         }
     }
 }
-

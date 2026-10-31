@@ -57,12 +57,18 @@ namespace Store.WebUI.Controllers
                 DiscountAmount = 0.00m
             };
 
+            // Oturum kontrolü ve Guard Clause
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userIdString, out Guid userId) || userId == Guid.Empty)
+            {
+                TempData["CartWarning"] = "Siparişi tamamlamak için lütfen giriş yapınız.";
+                return RedirectToAction("Index", "Login", new { returnUrl = "/Checkout" });
+            }
+
             // Giriş yapmış kullanıcının bilgilerini form alanlarına doldur
             var email = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue("email");
             var name = User.FindFirstValue(ClaimTypes.Name) ?? User.Identity?.Name;
             var phone = User.FindFirstValue(ClaimTypes.MobilePhone) ?? User.FindFirstValue("phone_number") ?? User.FindFirstValue("phone");
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-            Guid.TryParse(userIdString, out Guid userId);
 
             if (!string.IsNullOrWhiteSpace(email))
             {
@@ -88,74 +94,41 @@ namespace Store.WebUI.Controllers
                 model.Phone = phone;
             }
 
-            // Kayıtlı adres varsa getirip forma ön tanımlı yerleştir
+            // K8 Koruması: Yalnızca giriş yapmış kullanıcıya ait kayıtlı adresi getir (Asla başkasının adresine fallback yapma)
             try
             {
                 var addresses = await _locationApiService.GetUserAddressesAsync(false);
-                var defaultAddr = addresses?.FirstOrDefault(x => x.CustomerId == userId) ?? addresses?.FirstOrDefault();
-                if (defaultAddr != null)
+                var userAddr = addresses?.FirstOrDefault(x => x.CustomerId == userId && x.IsDefault) 
+                            ?? addresses?.FirstOrDefault(x => x.CustomerId == userId);
+
+                if (userAddr != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(defaultAddr.AddressDetail))
+                    if (!string.IsNullOrWhiteSpace(userAddr.AddressDetail))
                     {
-                        model.AddressLine = defaultAddr.AddressDetail;
+                        model.AddressLine = userAddr.AddressDetail;
                     }
-                    if (!string.IsNullOrWhiteSpace(defaultAddr.PhoneNumber))
+                    if (!string.IsNullOrWhiteSpace(userAddr.PhoneNumber))
                     {
-                        model.Phone = defaultAddr.PhoneNumber;
+                        model.Phone = userAddr.PhoneNumber;
                     }
-                    if (defaultAddr.CityId == Guid.Parse("4fb31183-992a-47aa-babe-9fce890ef0c7") || defaultAddr.AddressDetail?.Contains("İzmir") == true)
+                    if (!string.IsNullOrWhiteSpace(userAddr.ContactFullName) && string.IsNullOrWhiteSpace(model.FirstName) && string.IsNullOrWhiteSpace(model.LastName))
                     {
-                        model.City = "İzmir";
-                    }
-                    if (defaultAddr.DistrictId == Guid.Parse("140de20d-9b98-49db-b263-204ecff3cc3a") || defaultAddr.AddressDetail?.Contains("Konak") == true)
-                    {
-                        model.District = "Konak";
-                    }
-                    if (defaultAddr.AddressDetail?.Contains("35250") == true)
-                    {
-                        model.PostalCode = "35250";
+                        var parts = userAddr.ContactFullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        if (parts.Length > 1)
+                        {
+                            model.FirstName = string.Join(" ", parts.Take(parts.Length - 1));
+                            model.LastName = parts.Last();
+                        }
+                        else
+                        {
+                            model.LastName = userAddr.ContactFullName;
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Kullanıcı adresleri getirilirken hata oluştu, form varsayılan bilgilerle doldurulacak.");
-            }
-
-            // Gökmen kullanıcısı veya adresi boş kalmış kullanıcı için adres tamamlama
-            bool isGokmen = (email?.IndexOf("gokmen", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                            (name?.IndexOf("gökmen", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                            (userId == Guid.Parse("6209fa94-bdd8-4e98-a02d-e0331b5b597f"));
-
-            if (isGokmen && string.IsNullOrWhiteSpace(model.AddressLine))
-            {
-                model.Country = "Türkiye";
-                model.City = "İzmir";
-                model.District = "Konak";
-                model.PostalCode = "35250";
-                model.AddressLine = "Kemeraltı Çarşısı, 863. Sk. No:35/37";
-                model.Apartment = "No:35/37";
-                model.Phone = "0-535-545.55.55";
-            }
-            else if (!string.IsNullOrWhiteSpace(model.AddressLine))
-            {
-                if (string.IsNullOrWhiteSpace(model.City) && model.AddressLine.Contains("İzmir"))
-                {
-                    model.City = "İzmir";
-                }
-                if (string.IsNullOrWhiteSpace(model.District) && model.AddressLine.Contains("Konak"))
-                {
-                    model.District = "Konak";
-                }
-                if (string.IsNullOrWhiteSpace(model.PostalCode) && model.AddressLine.Contains("35250"))
-                {
-                    model.PostalCode = "35250";
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(model.Phone) && isGokmen)
-            {
-                model.Phone = "0-535-545.55.55";
             }
 
             return View(model);
@@ -184,7 +157,11 @@ namespace Store.WebUI.Controllers
             }
 
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-            Guid.TryParse(userIdString, out Guid userId);
+            if (!Guid.TryParse(userIdString, out Guid userId) || userId == Guid.Empty)
+            {
+                TempData["CartWarning"] = "Siparişi tamamlamak için lütfen giriş yapınız.";
+                return RedirectToAction("Index", "Login", new { returnUrl = "/Checkout" });
+            }
 
             // Sipariş kodu oluştur
             var orderCode = $"SZR-{DateTime.Now:yyMMdd}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";

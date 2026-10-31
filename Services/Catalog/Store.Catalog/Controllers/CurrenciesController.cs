@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.CurrencyDtos;
 using Store.Catalog.Services.CurrencyServices;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CurrenciesController : ControllerBase
@@ -15,6 +19,7 @@ namespace Store.Catalog.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> CurrencyList(bool showDeleted = false)
         {
@@ -22,6 +27,7 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCurrencyById(Guid id)
         {
@@ -74,4 +80,3 @@ namespace Store.Catalog.Controllers
         }
     }
 }
-

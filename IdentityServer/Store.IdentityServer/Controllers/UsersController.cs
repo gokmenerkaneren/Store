@@ -1,3 +1,4 @@
+using IdentityServer4;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Store.IdentityServer.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(IdentityServerConstants.LocalApi.PolicyName, Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.NeighborhoodCommands;
@@ -42,6 +43,7 @@ namespace Store.Location.WebApi.Controllers
             _restoreNeighborhoodCommandHandler = restoreNeighborhoodCommandHandler;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> NeighborhoodList([FromQuery] bool showDeleted = false)
         {
@@ -49,6 +51,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> NeighborhoodListById(Guid id)
         {
@@ -56,6 +59,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("ByDistrictId/{districtId}")]
         public async Task<IActionResult> NeighborhoodsByDistrictId(Guid districtId, [FromQuery] bool showDeleted = false)
         {

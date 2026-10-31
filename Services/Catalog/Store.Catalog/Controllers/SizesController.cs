@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.SizeDtos;
 using Store.Catalog.Services.SizeServices;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class SizesController : ControllerBase
@@ -15,6 +19,7 @@ namespace Store.Catalog.Controllers
             _sizeService = sizeService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> SizeList(bool showDeleted = false)
         {
@@ -22,6 +27,7 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSizeById(Guid id)
         {

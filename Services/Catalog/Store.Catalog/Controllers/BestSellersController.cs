@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Catalog.Dtos.BestSellerDtos;
 using Store.Catalog.Services.BestSellerServices;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BestSellersController : ControllerBase
@@ -17,6 +19,7 @@ namespace Store.Catalog.Controllers
             _bestSellerService = bestSellerService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> BestSellerList()
         {
@@ -45,6 +48,7 @@ namespace Store.Catalog.Controllers
             return Ok("En Çok Satan Ürün başarıyla güncellendi");
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBestSellerById(Guid id)
         {

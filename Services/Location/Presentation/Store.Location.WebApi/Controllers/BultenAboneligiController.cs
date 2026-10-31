@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.BultenAboneligiCommands;
@@ -43,6 +44,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("Check")]
         public async Task<IActionResult> CheckSubscriber([FromQuery] string email)
         {
@@ -57,6 +59,7 @@ namespace Store.Location.WebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Subscribe(CreateBultenAboneligiCommand command)
         {
