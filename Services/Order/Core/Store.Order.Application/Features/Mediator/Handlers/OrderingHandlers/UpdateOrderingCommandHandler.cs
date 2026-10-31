@@ -2,10 +2,7 @@ using MediatR;
 using Store.Order.Application.Features.Mediator.Commands.OrderingCommands;
 using Store.Order.Application.Interfaces;
 using Store.Order.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
@@ -13,6 +10,7 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
     public class UpdateOrderingCommandHandler : IRequestHandler<UpdateOrderingCommand>
     {
         private readonly IRepository<Ordering> _repository;
+
         public UpdateOrderingCommandHandler(IRepository<Ordering> repository)
         {
             _repository = repository;
@@ -26,9 +24,9 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
                 values.OrderDate = request.OrderDate;
                 values.TotalPrice = request.TotalPrice;
                 values.UserId = request.UserId;
+                values.Status = request.Status;
                 await _repository.UpdateAsync(values);
             }
         }
     }
 }
-

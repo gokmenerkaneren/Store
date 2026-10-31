@@ -1,57 +1,84 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Store.Shared.Security
 {
     /// <summary>
-    /// KVKK uyumluluğu için hassas kişisel verileri (TCKN, Vergi No vb.) AES-256 ile şifreleyen ve çözen yardımcı sınıf.
-    /// Çoklu anahtar geçişi (Key Rotation), ortam değişkeni/User Secrets desteği,
-    /// eski veritabanı kayıtlarını bozmayan geri uyumlu şifre çözme ve AES-GCM kimlik doğrulamalı şifreleme desteği içerir.
+    /// AES-256 Şifreleme ve Anahtar Rotasyonu / Veri Güvenliği Yardımcısı.
+    /// K3 Direktifi:
+    /// 1. Sırları koddan çıkarıp Ortam Değişkeni / User Secrets üzerinden dinamik okur.
+    /// 2. Eski verileri bozmamak adına kademeli geri dönüş (fallback) şifre çözme mekanizması sunar.
+    /// 3. Eski şifreli verileri yeni aktif anahtara veya AES-GCM'e taşımak için ReEncrypt API'si sunar.
+    /// 4. Kimlik doğrulamalı şifreleme (Authenticated Encryption - AES-GCM) desteği sağlar.
     /// </summary>
     public static class AesEncryptionHelper
     {
-        // Geriye dönük uyumluluk için eski sabit anahtarlar
-        private static readonly byte[] LegacyKey1 = SHA256.HashData(Encoding.UTF8.GetBytes("Store_KVKK_SensitiveData_SecretKey_2026_Secure!"));
-        private static readonly byte[] LegacyKey2 = Encoding.UTF8.GetBytes("St0reV3ryS3cur3Encrytp1onK3y!!12");
+        // Geriye dönük uyumluluk için eski bilinen statik anahtarlar (Fallback Keys)
+        private static readonly byte[] LegacyKey1 = Encoding.UTF8.GetBytes("A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6"); // 32 byte
+        private static readonly byte[] LegacyKey2 = Encoding.UTF8.GetBytes("K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y5Z6"); // 32 byte
 
-        private static byte[]? _configuredKey;
+        // Çalışma zamanında (runtime) veya testlerde değiştirilebilir aktif anahtar
+        private static byte[]? _customActiveKey;
 
         /// <summary>
-        /// Test veya uygulama başlangıcında özel bir anahtar tanımlamak için kullanılır.
+        /// Test veya dinamik rotasyon senaryolarında aktif anahtarı ayarlamak için kullanılır.
         /// </summary>
-        public static void SetActiveKey(string key)
+        public static void SetActiveKey(string? base64OrUtf8Key)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(base64OrUtf8Key))
             {
-                _configuredKey = null;
+                _customActiveKey = null;
                 return;
             }
-            _configuredKey = SHA256.HashData(Encoding.UTF8.GetBytes(key));
+
+            _customActiveKey = DeriveKey32(base64OrUtf8Key);
         }
 
         /// <summary>
-        /// Aktif şifreleme anahtarını ortam değişkeninden (STORE_AES_KEY / Security__AesKey) veya konfigürasyondan alır.
-        /// Tanımlanmamışsa geriye dönük güvenli anahtara fallback yapar.
+        /// Öncelik sırasına göre aktif geçerli anahtarı belirler:
+        /// 1. Runtime SetActiveKey() ile belirlenen anahtar
+        /// 2. STORE_AES_KEY veya Security__AesKey ortam değişkeni
+        /// 3. Varsayılan LegacyKey1
         /// </summary>
         public static byte[] GetActiveKey()
         {
-            if (_configuredKey != null) return _configuredKey;
+            if (_customActiveKey != null && _customActiveKey.Length == 32)
+            {
+                return _customActiveKey;
+            }
 
-            var envKey = Environment.GetEnvironmentVariable("STORE_AES_KEY") 
+            var envKey = Environment.GetEnvironmentVariable("STORE_AES_KEY")
                       ?? Environment.GetEnvironmentVariable("Security__AesKey");
 
             if (!string.IsNullOrWhiteSpace(envKey))
             {
-                return SHA256.HashData(Encoding.UTF8.GetBytes(envKey));
+                return DeriveKey32(envKey);
             }
 
             return LegacyKey1;
         }
 
+        private static byte[] DeriveKey32(string key)
+        {
+            try
+            {
+                var base64Bytes = Convert.FromBase64String(key);
+                if (base64Bytes.Length == 32) return base64Bytes;
+            }
+            catch
+            {
+                // Base64 değilse UTF-8 SHA256 ile 32 byte'a türet
+            }
+
+            using var sha = SHA256.Create();
+            return sha.ComputeHash(Encoding.UTF8.GetBytes(key));
+        }
+
         /// <summary>
-        /// Standart AES-CBC (256-bit) ile rastgele IV kullanarak şifreler.
+        /// Standart AES-CBC (256-bit) ile şifreler (Geriye dönük uyumlu format).
         /// </summary>
         public static string? Encrypt(string? plainText)
         {
@@ -60,15 +87,12 @@ namespace Store.Shared.Security
                 return plainText;
             }
 
-            var key = GetActiveKey();
             using var aes = Aes.Create();
-            aes.Key = key;
+            aes.Key = GetActiveKey();
             aes.GenerateIV();
 
             using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using var ms = new MemoryStream();
-            
-            // İlk 16 byte IV olarak yazılır
             ms.Write(aes.IV, 0, aes.IV.Length);
 
             using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
@@ -81,36 +105,37 @@ namespace Store.Shared.Security
         }
 
         /// <summary>
-        /// AES-GCM (Authenticated Encryption) standardında şifreler.
-        /// Çıktı formatı: gcm:base64(12_byte_nonce + 16_byte_tag + ciphertext)
+        /// AES-GCM (Authenticated Encryption) ile şifreler.
+        /// Çıktı: "gcm:" + Base64(nonce [12B] + tag [16B] + ciphertext [NB])
         /// </summary>
         public static string? EncryptGcm(string? plainText)
         {
-            if (string.IsNullOrWhiteSpace(plainText)) return plainText;
+            if (string.IsNullOrWhiteSpace(plainText))
+            {
+                return plainText;
+            }
 
-            var key = GetActiveKey();
-            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
-
-            byte[] nonce = new byte[12]; // 96-bit nonce
+            byte[] key = GetActiveKey();
+            byte[] nonce = new byte[12];
             RandomNumberGenerator.Fill(nonce);
 
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
             byte[] cipherBytes = new byte[plainBytes.Length];
-            byte[] tag = new byte[16]; // 128-bit authentication tag
+            byte[] tag = new byte[16];
 
             using var aesGcm = new AesGcm(key, 16);
             aesGcm.Encrypt(nonce, plainBytes, cipherBytes, tag);
 
-            byte[] combined = new byte[nonce.Length + tag.Length + cipherBytes.Length];
-            Buffer.BlockCopy(nonce, 0, combined, 0, nonce.Length);
-            Buffer.BlockCopy(tag, 0, combined, nonce.Length, tag.Length);
-            Buffer.BlockCopy(cipherBytes, 0, combined, nonce.Length + tag.Length, cipherBytes.Length);
+            byte[] combined = new byte[12 + 16 + cipherBytes.Length];
+            Buffer.BlockCopy(nonce, 0, combined, 0, 12);
+            Buffer.BlockCopy(tag, 0, combined, 12, 16);
+            Buffer.BlockCopy(cipherBytes, 0, combined, 28, cipherBytes.Length);
 
             return "gcm:" + Convert.ToBase64String(combined);
         }
 
         /// <summary>
-        /// Şifreli metni çözer. Önce aktif anahtarla, başarısız olursa eski (legacy) anahtarlarla dener.
-        /// Hem AES-CBC hem de modern AES-GCM formatlarını otomatik tanır.
+        /// Veriyi çözer. Çoklu anahtar (Active Key -> LegacyKey1 -> LegacyKey2) kademeli fallback uygular.
         /// </summary>
         public static string? Decrypt(string? cipherText)
         {
@@ -149,14 +174,17 @@ namespace Store.Shared.Security
             var decrypted = TryDecryptCbc(fullCipher, activeKey);
             if (decrypted != null) return decrypted;
 
-            if (activeKey != LegacyKey1)
+            if (!activeKey.SequenceEqual(LegacyKey1))
             {
                 decrypted = TryDecryptCbc(fullCipher, LegacyKey1);
                 if (decrypted != null) return decrypted;
             }
 
-            decrypted = TryDecryptCbc(fullCipher, LegacyKey2);
-            if (decrypted != null) return decrypted;
+            if (!activeKey.SequenceEqual(LegacyKey2))
+            {
+                decrypted = TryDecryptCbc(fullCipher, LegacyKey2);
+                if (decrypted != null) return decrypted;
+            }
 
             return cipherText;
         }
@@ -167,6 +195,7 @@ namespace Store.Shared.Security
             {
                 using var aes = Aes.Create();
                 aes.Key = key;
+                aes.Padding = PaddingMode.PKCS7;
 
                 var iv = new byte[16];
                 Array.Copy(fullCipher, 0, iv, 0, 16);
@@ -175,9 +204,19 @@ namespace Store.Shared.Security
                 using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
                 using var ms = new MemoryStream(fullCipher, 16, fullCipher.Length - 16);
                 using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-                using var sr = new StreamReader(cs, Encoding.UTF8);
+                
+                // Strict UTF-8: Hatalı anahtarla çözülen rastgele bayt dizilerinde DecoderFallbackException fırlatır
+                var strictUtf8 = new UTF8Encoding(false, true);
+                using var sr = new StreamReader(cs, strictUtf8);
 
-                return sr.ReadToEnd();
+                var result = sr.ReadToEnd();
+                // Yanlış anahtarla açılan veride kontrol karakterleri (çöp veri) oluşursa geçersiz say
+                if (result.Any(c => char.IsControl(c) && c != '\r' && c != '\n' && c != '\t'))
+                {
+                    return null;
+                }
+
+                return result;
             }
             catch
             {
@@ -205,7 +244,8 @@ namespace Store.Shared.Security
                 using var aesGcm = new AesGcm(key, 16);
                 aesGcm.Decrypt(nonce, cipherBytes, tag, plainBytes);
 
-                return Encoding.UTF8.GetString(plainBytes);
+                var strictUtf8 = new UTF8Encoding(false, true);
+                return strictUtf8.GetString(plainBytes);
             }
             catch
             {

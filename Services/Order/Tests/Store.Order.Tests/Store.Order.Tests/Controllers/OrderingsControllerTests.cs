@@ -61,8 +61,8 @@ namespace Store.Order.Tests.Controllers
 
             CreateOrderingCommand capturedCommand = null;
             _mediatorMock.Setup(m => m.Send(It.IsAny<CreateOrderingCommand>(), It.IsAny<CancellationToken>()))
-                         .Callback<IRequest, CancellationToken>((req, ct) => capturedCommand = req as CreateOrderingCommand)
-                         .Returns(Task.CompletedTask);
+                         .Callback<IRequest<Guid>, CancellationToken>((req, ct) => capturedCommand = req as CreateOrderingCommand)
+                         .ReturnsAsync(Guid.NewGuid());
 
             // Act
             var result = await _controller.CreateOrdering(command);

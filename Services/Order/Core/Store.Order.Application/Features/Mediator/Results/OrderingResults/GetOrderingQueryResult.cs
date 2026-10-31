@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Store.Order.Domain.Enums;
+using System;
 
 namespace Store.Order.Application.Features.Mediator.Results.OrderingResults
 {
@@ -12,7 +9,6 @@ namespace Store.Order.Application.Features.Mediator.Results.OrderingResults
         public Guid UserId { get; set; }
         public decimal TotalPrice { get; set; } = 0;
         public DateTime OrderDate { get; set; } = DateTime.Now;
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
     }
 }
-
-

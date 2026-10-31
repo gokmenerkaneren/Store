@@ -3,10 +3,9 @@ using Store.Order.Application.Features.Mediator.Queries.OrderingQueries;
 using Store.Order.Application.Features.Mediator.Results.OrderingResults;
 using Store.Order.Application.Interfaces;
 using Store.Order.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
@@ -28,10 +27,9 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
                 Id = x.Id,
                 OrderDate = x.OrderDate,
                 TotalPrice = x.TotalPrice,
-                UserId = x.UserId
+                UserId = x.UserId,
+                Status = x.Status
             }).ToList();
         }
     }
-
 }
-

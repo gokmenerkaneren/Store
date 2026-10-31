@@ -166,7 +166,21 @@ namespace Store.WebUI.Controllers
             // Sipariş kodu oluştur
             var orderCode = $"SZR-{DateTime.Now:yyMMdd}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
 
-            // 1. Order servisine adres ve sipariş kaydını göndermeyi dene
+            // 1. Order servisine adres ve sipariş kaydını (kalemleriyle birlikte) gönder
+            var orderDto = new CreateOrderingDto
+            {
+                UserId = userId,
+                TotalPrice = model.GrandTotal,
+                OrderDate = DateTime.Now,
+                Items = items.Select(i => new CreateOrderItemDto
+                {
+                    ProductId = i.ProductId,
+                    ProductPrice = i.Price,
+                    ProductAmount = i.Quantity,
+                    TotalPrice = i.Price * i.Quantity
+                }).ToList()
+            };
+
             try
             {
                 var addressDto = new CreateOrderAddressDto
@@ -184,21 +198,24 @@ namespace Store.WebUI.Controllers
 
                 await _orderApiService.CreateAddressAsync(addressDto);
 
-                var orderDto = new CreateOrderingDto
+                var orderResponse = await _orderApiService.CreateOrderingAsync(orderDto);
+                if (!orderResponse.IsSuccessStatusCode)
                 {
-                    UserId = userId,
-                    TotalPrice = model.GrandTotal,
-                    OrderDate = DateTime.Now
-                };
-
-                await _orderApiService.CreateOrderingAsync(orderDto);
+                    var errorContent = await orderResponse.Content.ReadAsStringAsync();
+                    _logger.LogError("Store.Order servisi siparişi kaydedemedi: {StatusCode} - {Error}", orderResponse.StatusCode, errorContent);
+                    TempData["CartWarning"] = "Siparişiniz kaydedilirken bir hata oluştu. Sepetiniz korunmuştur, lütfen tekrar deneyiniz.";
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Store.Order servisine sipariş kaydedilirken hata oluştu, ancak sipariş yerel akışta başarılı devam ettiriliyor.");
+                // İ1 Koruması: Sipariş servisi hata verirse sepet ASLA silinmez, sahte başarı gösterilmez
+                _logger.LogError(ex, "Store.Order servisine sipariş kaydedilirken bağlantı hatası oluştu.");
+                TempData["CartWarning"] = "Sipariş servisine ulaşılamadı. Sepetiniz korunmuştur, lütfen daha sonra tekrar deneyiniz.";
+                return RedirectToAction("Index");
             }
 
-            // 2. Kullanıcı sepetini temizle
+            // 2. YALNIZCA sipariş veritabanında başarıyla oluşturulduktan sonra sepeti temizle
             try
             {
                 await _basketApiService.DeleteMyBasketAsync();

@@ -82,7 +82,7 @@ namespace Store.Order.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrdering(CreateOrderingCommand command)
+        public async Task<IActionResult> CreateOrdering([FromBody] CreateOrderingCommand command)
         {
             var currentUserId = GetCurrentUserId();
             if (!currentUserId.HasValue)
@@ -98,8 +98,9 @@ namespace Store.Order.WebApi.Controllers
                 return BadRequest("Sipariş toplam tutarı negatif olamaz.");
             }
 
-            await _mediator.Send(command);
-            return Ok("Sipariş başarılı bir şekilde oluşturuldu.");
+            // İ2 & İ3: Sipariş kalemleri ve durumu ile birlikte atomik oluşturulup ID'si döndürülür
+            var orderId = await _mediator.Send(command);
+            return Ok(new { OrderId = orderId, Message = "Sipariş başarılı bir şekilde oluşturuldu." });
         }
 
         [HttpDelete]

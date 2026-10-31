@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Store.Order.Domain.Entities;
+using Store.Order.Domain.Enums;
 using Store.Shared.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,13 @@ namespace Store.Order.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            // İ3: Ordering.Status integer enum olarak konfigüre edilir
+            modelBuilder.Entity<Ordering>()
+                .Property(o => o.Status)
+                .HasConversion<int>()
+                .HasDefaultValue(OrderStatus.Pending);
+
+            // BaseEntity soft delete global query filter
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
@@ -43,5 +51,3 @@ namespace Store.Order.Persistence.Context
         }
     }
 }
-
-
