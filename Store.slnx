@@ -90,4 +90,7 @@
   <Folder Name="/Services/Rental/Presentation/">
     <Project Path="Services/Rental/Presentation/Store.Rental.WebApi/Store.Rental.WebApi.csproj" />
   </Folder>
+  <Folder Name="/Services/Rental/Tests/">
+    <Project Path="Services/Rental/Tests/Store.Rental.Tests/Store.Rental.Tests.csproj" />
+  </Folder>
 </Solution>

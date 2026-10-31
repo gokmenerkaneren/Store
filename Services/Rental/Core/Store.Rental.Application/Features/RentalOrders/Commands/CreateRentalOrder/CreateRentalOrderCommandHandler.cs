@@ -21,7 +21,38 @@ namespace Store.Rental.Application.Features.RentalOrders.Commands.CreateRentalOr
 
         public async Task<Guid> Handle(CreateRentalOrderCommand request, CancellationToken cancellationToken)
         {
-            // Business Rule: Tarih Çakışması Kontrolü (Conflict Check)
+            // 1. Tarih doğrulaması ve kiralama süresi hesabı (K7 Fiyat ve Süre Koruması)
+            if (request.EndDate <= request.StartDate)
+            {
+                throw new InvalidOperationException("Bitiş tarihi başlangıç tarihinden sonra olmalıdır.");
+            }
+
+            var rentalDays = (int)Math.Ceiling((request.EndDate.Date - request.StartDate.Date).TotalDays);
+            if (rentalDays <= 0)
+            {
+                rentalDays = 1;
+            }
+
+            // 2. Kalem ve Fiyat Doğrulaması (K7 Fiyat Manipülasyon Engeli)
+            if (request.Items == null || !request.Items.Any())
+            {
+                throw new InvalidOperationException("Kiralama siparişinde en az bir ürün bulunmalıdır.");
+            }
+
+            foreach (var item in request.Items)
+            {
+                if (item.Quantity <= 0)
+                {
+                    throw new InvalidOperationException("Ürün miktarı 0'dan büyük olmalıdır.");
+                }
+
+                if (item.UnitPrice <= 0)
+                {
+                    throw new InvalidOperationException("Ürün birim fiyatı 0'dan büyük olmalıdır.");
+                }
+            }
+
+            // 3. Tarih Çakışması Kontrolü (Conflict Check)
             var productIds = request.Items.Select(x => x.ProductId).ToList();
             
             var conflictExists = await _context.RentalOrderItems
@@ -35,9 +66,11 @@ namespace Store.Rental.Application.Features.RentalOrders.Commands.CreateRentalOr
 
             if (conflictExists)
             {
-                // TODO: Custom ApiException fırlatılacak
-                throw new Exception("BusinessRuleException: Seçili tarihler arasında stok çakışması tespit edildi.");
+                throw new InvalidOperationException("Seçili tarihler arasında stok çakışması tespit edildi.");
             }
+
+            // 4. Sunucu Taraflı Toplam Fiyat Hesabı (Miktar * Birim Fiyat * Gün Sayısı)
+            var totalCalculatedAmount = request.Items.Sum(x => x.Quantity * x.UnitPrice * rentalDays);
 
             var rentalOrder = new RentalOrder
             {
@@ -45,7 +78,7 @@ namespace Store.Rental.Application.Features.RentalOrders.Commands.CreateRentalOr
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 Status = RentalStatus.Pending,
-                TotalAmount = request.Items.Sum(x => x.Quantity * x.UnitPrice),
+                TotalAmount = totalCalculatedAmount,
                 InsertUserId = request.UserId
             };
 

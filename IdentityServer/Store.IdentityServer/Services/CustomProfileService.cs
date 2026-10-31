@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Store.IdentityServer.Models;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Store.IdentityServer.Services
             if (user != null)
             {
                 var fullName = string.IsNullOrWhiteSpace(user.LastName) ? user.FirstName : $"{user.FirstName} {user.LastName}";
-                var claims = new[]
+                var claims = new List<Claim>
                 {
                     new Claim("FirstName", user.FirstName ?? string.Empty),
                     new Claim("LastName", user.LastName ?? string.Empty),
@@ -34,6 +35,15 @@ namespace Store.IdentityServer.Services
                     new Claim(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
                     new Claim("phone_number", user.PhoneNumber ?? string.Empty)
                 };
+
+                // Roller token'a 'role' claim'i olarak eklenir (API Authorize(Roles = "...") uyumluluğu)
+                var roles = await _userManager.GetRolesAsync(user);
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim("role", role));
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
                 context.IssuedClaims.AddRange(claims);
             }
         }

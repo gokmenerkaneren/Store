@@ -5,10 +5,27 @@ using System.Text;
 
 namespace Store.IdentityServer.Security
 {
+    /// <summary>
+    /// IdentityServer kullanıcı TCKimlik şifrelemesi için güvenli yardımcı sınıf.
+    /// STORE_AES_KEY ortam değişkenini destekler; eski veriler için geriye dönük anahtarlarla çözme güvencesi sunar.
+    /// </summary>
     public static class EncryptionHelper
     {
-        // KVKK Encryption Key (Must be 32 bytes for AES-256). In production, keep this in Environment Variables!
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("St0reV3ryS3cur3Encrytp1onK3y!!12"); 
+        private static readonly byte[] LegacyKey = Encoding.UTF8.GetBytes("St0reV3ryS3cur3Encrytp1onK3y!!12");
+        private static readonly byte[] SharedLegacyKey = SHA256.HashData(Encoding.UTF8.GetBytes("Store_KVKK_SensitiveData_SecretKey_2026_Secure!"));
+
+        public static byte[] GetActiveKey()
+        {
+            var envKey = Environment.GetEnvironmentVariable("STORE_AES_KEY")
+                      ?? Environment.GetEnvironmentVariable("Security__AesKey");
+
+            if (!string.IsNullOrWhiteSpace(envKey))
+            {
+                return SHA256.HashData(Encoding.UTF8.GetBytes(envKey));
+            }
+
+            return LegacyKey;
+        }
 
         public static string Encrypt(string clearText)
         {
@@ -16,17 +33,17 @@ namespace Store.IdentityServer.Security
 
             try
             {
+                var key = GetActiveKey();
                 byte[] clearBytes = Encoding.UTF8.GetBytes(clearText);
+
                 using (Aes encryptor = Aes.Create())
                 {
-                    encryptor.Key = Key;
-                    // Generate a random IV for each encryption
+                    encryptor.Key = key;
                     encryptor.GenerateIV();
                     byte[] iv = encryptor.IV;
 
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        // Write IV to the beginning of the stream
                         ms.Write(iv, 0, iv.Length);
 
                         using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
@@ -48,21 +65,51 @@ namespace Store.IdentityServer.Security
         {
             if (string.IsNullOrEmpty(cipherText)) return cipherText;
 
+            byte[] cipherBytes;
             try
             {
-                byte[] cipherBytes = Convert.FromBase64String(cipherText);
-                using (Aes encryptor = Aes.Create())
+                cipherBytes = Convert.FromBase64String(cipherText);
+            }
+            catch
+            {
+                return cipherText;
+            }
+
+            if (cipherBytes.Length < 32) return cipherText;
+
+            // Önce aktif anahtarla dene
+            var activeKey = GetActiveKey();
+            var decrypted = TryDecrypt(cipherBytes, activeKey);
+            if (decrypted != null) return decrypted;
+
+            // Başarısız olursa eski anahtarlarla dene
+            if (activeKey != LegacyKey)
+            {
+                decrypted = TryDecrypt(cipherBytes, LegacyKey);
+                if (decrypted != null) return decrypted;
+            }
+
+            decrypted = TryDecrypt(cipherBytes, SharedLegacyKey);
+            if (decrypted != null) return decrypted;
+
+            return cipherText;
+        }
+
+        private static string? TryDecrypt(byte[] cipherBytes, byte[] key)
+        {
+            try
+            {
+                using (Aes decryptor = Aes.Create())
                 {
-                    encryptor.Key = Key;
-                    
-                    // Extract the IV from the first 16 bytes
+                    decryptor.Key = key;
+
                     byte[] iv = new byte[16];
                     Array.Copy(cipherBytes, 0, iv, 0, iv.Length);
-                    encryptor.IV = iv;
+                    decryptor.IV = iv;
 
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                        using (CryptoStream cs = new CryptoStream(ms, decryptor.CreateDecryptor(), CryptoStreamMode.Write))
                         {
                             cs.Write(cipherBytes, iv.Length, cipherBytes.Length - iv.Length);
                             cs.Close();
@@ -73,8 +120,7 @@ namespace Store.IdentityServer.Security
             }
             catch
             {
-                // If decryption fails (e.g., it was plaintext before this feature), return original
-                return cipherText;
+                return null;
             }
         }
     }

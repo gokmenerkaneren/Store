@@ -66,5 +66,61 @@ namespace Store.Location.Tests.Security
             encrypted.Should().NotBe(plainText);
             decrypted.Should().Be(plainText);
         }
+
+        [Fact]
+        public void Decrypt_Should_Fallback_To_Legacy_Key_When_ActiveKey_Rotated()
+        {
+            // Arrange: Eski anahtarla şifrelenmiş veri simülasyonu
+            AesEncryptionHelper.SetActiveKey(null!); // Default legacy key
+            string plainText = "22334455667";
+            string legacyCipher = AesEncryptionHelper.Encrypt(plainText)!;
+
+            // Act: Yeni anahtara geçiş (Key Rotation)
+            AesEncryptionHelper.SetActiveKey("New_Secure_Super_Key_2026_Environment_Secret!");
+            string decrypted = AesEncryptionHelper.Decrypt(legacyCipher)!;
+
+            // Assert: Eski veri yeni anahtar aktifken de başarıyla çözülebilmeli
+            decrypted.Should().Be(plainText);
+
+            // Cleanup
+            AesEncryptionHelper.SetActiveKey(null!);
+        }
+
+        [Fact]
+        public void EncryptGcm_And_Decrypt_Should_Preserve_Original_Value_AuthenticatedEncryption()
+        {
+            // Arrange
+            string plainText = "TCKN_GCM_SECURE_99887766554";
+
+            // Act
+            string? gcmCipher = AesEncryptionHelper.EncryptGcm(plainText);
+            string? decrypted = AesEncryptionHelper.Decrypt(gcmCipher);
+
+            // Assert
+            gcmCipher.Should().NotBeNull();
+            gcmCipher.Should().StartWith("gcm:");
+            decrypted.Should().Be(plainText);
+        }
+
+        [Fact]
+        public void ReEncrypt_Should_Successfully_Migrate_Data_To_Active_Key()
+        {
+            // Arrange
+            AesEncryptionHelper.SetActiveKey(null!);
+            string plainText = "55443322110";
+            string legacyCipher = AesEncryptionHelper.Encrypt(plainText)!;
+
+            // Act: Yeni anahtar ile re-encrypt
+            AesEncryptionHelper.SetActiveKey("Rotated_Active_Key_2026!");
+            string reEncrypted = AesEncryptionHelper.ReEncrypt(legacyCipher, upgradeToGcm: true)!;
+            string decrypted = AesEncryptionHelper.Decrypt(reEncrypted)!;
+
+            // Assert
+            reEncrypted.Should().StartWith("gcm:");
+            decrypted.Should().Be(plainText);
+
+            // Cleanup
+            AesEncryptionHelper.SetActiveKey(null!);
+        }
     }
 }
