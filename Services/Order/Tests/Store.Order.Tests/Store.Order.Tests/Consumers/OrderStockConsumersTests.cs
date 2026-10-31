@@ -20,7 +20,7 @@ namespace Store.Order.Tests.Consumers
             var consumer = new StockReservedConsumer(repository.Object, NullLogger<StockReservedConsumer>.Instance);
 
             await consumer.Consume(CreateContext(new StockReservedIntegrationEvent(
-                ordering.Id, 100m, DateTime.UtcNow, new List<OrderItemMessageDto>())));
+                ordering.Id, Guid.NewGuid(), 100m, DateTime.UtcNow, new List<OrderItemMessageDto>())));
 
             ordering.Status.Should().Be(OrderStatus.Processing);
             repository.Verify(r => r.UpdateAsync(ordering), Times.Once);
@@ -34,7 +34,7 @@ namespace Store.Order.Tests.Consumers
             var consumer = new StockReservationFailedConsumer(repository.Object, NullLogger<StockReservationFailedConsumer>.Instance);
 
             await consumer.Consume(CreateContext(new StockReservationFailedIntegrationEvent(
-                ordering.Id, "Yetersiz stok", DateTime.UtcNow, new List<OrderItemMessageDto>())));
+                ordering.Id, Guid.NewGuid(), 100m, "Yetersiz stok", DateTime.UtcNow, new List<OrderItemMessageDto>())));
 
             ordering.Status.Should().Be(OrderStatus.Cancelled);
             ordering.Notes.Should().Contain("Mevcut not").And.Contain("Yetersiz stok");

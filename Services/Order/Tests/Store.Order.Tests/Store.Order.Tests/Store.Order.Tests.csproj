@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\..\Presentation\Store.Order.WebApi\Store.Order.WebApi.csproj" />
     <ProjectReference Include="..\..\..\Core\Store.Order.Application\Store.Order.Application.csproj" />
     <ProjectReference Include="..\..\..\Core\Store.Order.Domain\Store.Order.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\Payment\Store.Payment\Store.Payment.csproj" />
   </ItemGroup>
 
 </Project>

@@ -57,6 +57,11 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<StockReservedConsumer>();
     x.AddConsumer<StockReservationFailedConsumer>();
+    x.AddConsumer<PaymentCompletedConsumer>();
+
+    // Catalog servisinde aynı adlı consumer var; varsayılan kuyruk adı ortak olsaydı
+    // iki servis aynı kuyrukta yarışır ve her mesajı yalnızca biri işlerdi.
+    x.AddConsumer<PaymentFailedConsumer>().Endpoint(e => e.Name = "order-payment-failed");
 
     x.AddEntityFrameworkOutbox<OrderContext>(o =>
     {

@@ -5,6 +5,8 @@ namespace Store.Shared.Events
     /// </summary>
     public record StockReservationFailedIntegrationEvent(
         Guid OrderId,
+        Guid UserId,
+        decimal TotalPrice,
         string Reason,
         DateTime FailedDate,
         List<OrderItemMessageDto> Items);

@@ -35,8 +35,10 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
 | Olay Adı | Yayınlayan | Dinleyen | Alanlar | Amacı |
 |:---|:---|:---|:---|:---|
 | `OrderCreatedIntegrationEvent` | `Store.Order` | `Store.Catalog`, `Store.B2B` | OrderId, UserId, TotalPrice, OrderDate, Items[] | Siparişin kaydedildiğini bildirir; stok düşümünü ve bayi bakiye artırımını tetikler |
-| `StockReservedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, TotalPrice, ReservedDate, Items[] | Stok başarıyla rezerve edildi, sipariş durumunu `Processing` yapar |
-| `StockReservationFailedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, Reason, FailedDate, Items[] | Yetersiz stok; siparişi `Cancelled` yapar ve telafi notu düşer |
+| `StockReservedIntegrationEvent` | `Store.Catalog` | `Store.Order`, `Store.Payment` | OrderId, UserId, TotalPrice, ReservedDate, Items[] | Stok başarıyla rezerve edildi; ödeme sürecini tetikler |
+| `StockReservationFailedIntegrationEvent` | `Store.Catalog` | `Store.Order`, `Store.B2B` | OrderId, UserId, TotalPrice, Reason, FailedDate, Items[] | Yetersiz stok; siparişi iptal eder ve bayi limitini iade eder |
+| `PaymentCompletedIntegrationEvent` | `Store.Payment` | `Store.Order` | OrderId, UserId, TotalPrice, CompletedDate | Ödeme başarılı; sipariş durumunu `Processing` mühürler |
+| `PaymentFailedIntegrationEvent` | `Store.Payment` | `Store.Order`, `Store.Catalog`, `Store.B2B` | OrderId, UserId, TotalPrice, Reason, FailedDate, Items[] | Ödeme başarısız; siparişi iptal eder, stokları iade eder, bayi limitini iade eder |
 
 ## 4. GÜVENLİK VE ROL STANDARTLARI
 - **Yönetimsel Uçlar:** Tüm Create/Update/Delete ve admin paneli veri işlemleri `[Authorize(Roles = "Admin")]` ile korunur (Catalog, Location, Discount, B2B).
@@ -57,3 +59,11 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
   - 404 Not Found
 - `IB2BApiService` (WebUI Refit İstemcisi): `GetDealerFinancialByDealerIdAsync(Guid dealerId)` ile bayi finansal bilgilerini ve limitlerini sorgular.
 - `OrderCreatedB2BConsumer`: `OrderCreatedIntegrationEvent`'i dinleyerek sipariş tutarını bayinin cari borç bakiyesine ekler.
+- `PaymentFailedB2BConsumer` & `StockReservationFailedB2BConsumer`: Hata durumlarında bayinin cari borç bakiyesini düşerek açık hesap limitini iade eder (Rollback).
+
+## 7. PAYMENT SERVİS SÖZLEŞMELERİ
+- Port: `7309` (`http://localhost:7309`)
+- `POST /api/Payments/Process`:
+  - Request: `{ orderId, userId, amount, cardNumber }`
+  - Response: `{ isSuccess, transactionId, errorMessage }`
+- `StockReservedPaymentConsumer`: `StockReservedIntegrationEvent`'i dinleyerek mock ödeme yürütür ve sonuca göre `PaymentCompletedIntegrationEvent` veya `PaymentFailedIntegrationEvent` yayınlar.

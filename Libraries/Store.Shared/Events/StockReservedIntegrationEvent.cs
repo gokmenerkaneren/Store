@@ -5,6 +5,7 @@ namespace Store.Shared.Events
     /// </summary>
     public record StockReservedIntegrationEvent(
         Guid OrderId,
+        Guid UserId,
         decimal TotalPrice,
         DateTime ReservedDate,
         List<OrderItemMessageDto> Items);

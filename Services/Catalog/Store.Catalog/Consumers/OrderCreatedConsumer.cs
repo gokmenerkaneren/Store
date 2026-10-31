@@ -82,7 +82,7 @@ namespace Store.Catalog.Consumers
                 _logger.LogWarning("Sipariş {OrderId} için stok ayrılamadı: {Reason}", message.OrderId, failureReason);
 
                 await _publishEndpoint.Publish(
-                    new StockReservationFailedIntegrationEvent(message.OrderId, failureReason, DateTime.UtcNow, message.Items),
+                    new StockReservationFailedIntegrationEvent(message.OrderId, message.UserId, message.TotalPrice, failureReason, DateTime.UtcNow, message.Items),
                     cancellationToken);
                 return;
             }
@@ -90,7 +90,7 @@ namespace Store.Catalog.Consumers
             _logger.LogInformation("Sipariş {OrderId} için stok ayrıldı ({ItemCount} kalem).", message.OrderId, message.Items.Count);
 
             await _publishEndpoint.Publish(
-                new StockReservedIntegrationEvent(message.OrderId, message.TotalPrice, DateTime.UtcNow, message.Items),
+                new StockReservedIntegrationEvent(message.OrderId, message.UserId, message.TotalPrice, DateTime.UtcNow, message.Items),
                 cancellationToken);
         }
 

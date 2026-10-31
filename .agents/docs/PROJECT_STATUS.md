@@ -11,7 +11,7 @@
 
 **Aktif Faz:** Faz 2 — Temel İş Akışları, Asenkron Mesajlaşma ve Dağıtık Altyapı
 
-Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 kapsamında Paket 5 (RabbitMQ, MassTransit, EF Core Outbox), Paket 6 (Koreografi Tabanlı Stok Rezervasyonu), Paket 7 (Kupon & Sunucu Checkout) ve Paket 8 (B2B Bayi İskonto Motoru & Kredi Limiti) 114 test ile başarıyla tamamlandı.
+Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 101 test ile %100 kapatıldı. Faz 2 kapsamında Paket 5 (RabbitMQ, MassTransit, EF Core Outbox), Paket 6 (Koreografi Tabanlı Stok Rezervasyonu), Paket 7 (Kupon & Sunucu Checkout), Paket 8 (B2B Bayi İskonto Motoru & Kredi Limiti) ve Paket 9 (Ödeme Entegrasyonu & Dağıtık Kompansasyon / Rollback) 119 test ile başarıyla tamamlandı.
 
 ---
 
@@ -26,7 +26,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 | 5 | 🟡 YÜKSEK | Rental İş Akışı | `PriceType.Rental(3)` ve `WholeRental(5)` tanımlı ama iş akışı kodlanmadı | ✅ ÇÖZÜLDÜ |
 | 6 | 🟡 YÜKSEK | API Gateway Eksikliği | YARP/Ocelot yok; WebUI her servise doğrudan HTTP yapıyor | ❌ AÇIK |
 | 7 | 🟡 YÜKSEK | Mesajlaşma Yok | RabbitMQ, MassTransit ve PostgreSQL EF Core Outbox Pattern entegre edildi | ✅ ÇÖZÜLDÜ |
-| 8 | 🔵 ORTA | Birim Test Kapsamı | Order (84), Location (21), Rental (9) olmak üzere 114 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
+| 8 | 🔵 ORTA | Birim Test Kapsamı | Order (89), Location (21), Rental (9) olmak üzere 119 test aktif (%100 Başarı) | ✅ İYİLEŞTİRİLDİ |
 | 9 | 🔵 ORTA | Discount Coupon İndeksi | `Code` alanı `NVARCHAR(MAX)`, `IsActive` üzerinde index yok | ✅ ÇÖZÜLDÜ |
 | 10 | 🔵 ORTA | Order Namespace Hatası | `Entitties` (çift t) namespace/klasör adı | ✅ ÇÖZÜLDÜ |
 | 11 | ✅ ÇÖZÜLDÜ | Catalog → Location Bağımlılığı | `Store.Shared.Enums` kullanımıyla çözüldü (15.09.2026) | ✅ KAPALI |
@@ -47,6 +47,7 @@ Faz 1 (Güvenlik Sertleştirmesi, Rol Tabanlı Yetkilendirme ve IDOR Koruması) 
 
 | İş | Tarih | Detay |
 |:---|:---|:---|
+| Ödeme & Dağıtık Rollback (Paket 9) | 01.11.2026 | Store.Payment mikroservisi (port 7309), MockPaymentGateway, PaymentCompleted/Failed event'leri, Catalog stok rollback ($inc), B2B kredi limiti rollback (stok/ödeme hatalarında), Order durum makinesi ve 119 test yeşil. |
 | B2B Bayi İskonto & Kredi Limiti (Paket 8) | 01.11.2026 | Store.B2B CQRS bayi sorgusu, DealerPricing motoru, MassTransit OrderCreatedB2BConsumer ile cari borç artırımı, WebUI Checkout guard clause ve 114 test yeşil. |
 | Kupon & Sunucu Checkout (Paket 7) | 01.11.2026 | Store.Discount Dapper get-by-code sorgusu, Store.Shared Pricing motoru, WebUI Refit IDiscountApiService ve CheckoutController sunucu taraflı fiyat güvencesi uygulandı; 108 test yeşil. |
 | Koreografi Stok Rezervasyonu (Paket 6) | 01.11.2026 | Catalog OrderCreatedConsumer varyant stok düşüm ve iade mekanizması, MassTransit RabbitMQ entegrasyonu, Order servisi telafi consumer'ları ve 104 test yeşil. |

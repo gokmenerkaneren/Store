@@ -51,6 +51,8 @@ builder.Services.AddScoped<GetDealerFinancialByDealerIdQueryHandler>();
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<OrderCreatedB2BConsumer>();
+    x.AddConsumer<PaymentFailedB2BConsumer>();
+    x.AddConsumer<StockReservationFailedB2BConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

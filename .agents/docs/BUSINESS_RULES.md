@@ -207,3 +207,17 @@
 - **İskonto Motoru:** `Store.B2B` servisinden bayinin finansal kaydı (`DealerFinancial`) çekilir ve kayıtlı `DiscountRate` oranı uygulanır (`DealerPricing.CalculateDiscount`).
 - **Kredi Limiti Guard Clause:** Bayinin kullanılabilir limiti `CreditLimit - CurrentBalance` olarak hesaplanır. Sipariş net toplamı (`dealerNetTotal`) kullanılabilir limiti aşıyorsa sipariş verilmesi engellenir ve "Yetersiz Kredi Limiti" uyarısı dönülür.
 - **Dağıtık Limit Düşümü (Eventual Consistency):** Sipariş başarıyla veritabanına yazıldığında fırlatılan `OrderCreatedIntegrationEvent`'i `Store.B2B` mikroservisindeki `OrderCreatedB2BConsumer` dinler ve sipariş tutarını bayinin cari borç bakiyesine (`CurrentBalance`) ekler. Eşzamanlı siparişlerde bakiye bütünlüğü EF Core `UpdateDate` concurrency token ile korunur.
+
+### 4.8 Ödeme Akışı ve Dağıtık Kompansasyon (Rollback) Kuralları
+- **Koreografi Tetikleme:** Stok rezervasyonu başarılı olduğunda fırlatılan `StockReservedIntegrationEvent`, `Store.Payment` mikroservisi tarafından dinlenir (`StockReservedPaymentConsumer`).
+- **Ödeme İşlemi:** Ödeme işlemi `IPaymentGateway` (MockPaymentGateway) üzerinden yürütülür.
+- **Başarılı Ödeme Akışı:**
+  - `PaymentCompletedIntegrationEvent` yayınlanır.
+  - `Store.Order` servisi siparişi `OrderStatus.Processing` (Hazırlanıyor) durumuna geçirir ve ödeme onay notunu kaydeder.
+- **Başarısız Ödeme Kompansasyonu (PaymentFailed Rollback):**
+  - `PaymentFailedIntegrationEvent` yayınlanır.
+  - `Store.Order`: Sipariş durumunu `OrderStatus.Cancelled` yapar ve ödeme ret gerekçesini notlara ekler.
+  - `Store.Catalog`: Rezerve edilen kalemlerin stoğunu atomik `$inc` ile ürün varyantına iade eder (Stok Rollback).
+  - `Store.B2B`: Sipariş bayiye aitse sipariş tutarını bayinin `CurrentBalance` borç bakiyesinden geri düşerek açık hesap kredi limitini iade eder (Kredi Limiti Rollback).
+- **Yetersiz Stok Kompansasyonu (StockReservationFailed Rollback):**
+  - `StockReservationFailedIntegrationEvent` yayınlandığında, `Store.B2B` servisi dinler (`StockReservationFailedB2BConsumer`) ve sipariş başında düşülen kredi limitini bayinin cari bakiyesinden eksilterek iade eder.

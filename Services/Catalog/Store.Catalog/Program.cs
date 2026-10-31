@@ -167,6 +167,10 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<OrderCreatedConsumer>();
 
+    // Order servisinde aynı adlı consumer var; varsayılan kuyruk adı ortak olsaydı
+    // iki servis aynı kuyrukta yarışır ve her mesajı yalnızca biri işlerdi.
+    x.AddConsumer<PaymentFailedConsumer>().Endpoint(e => e.Name = "catalog-payment-failed");
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>

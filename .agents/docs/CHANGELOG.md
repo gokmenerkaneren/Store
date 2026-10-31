@@ -22,6 +22,14 @@
 
 ## [v2.0.0] - 2026-11-01
 ### Added
+- **Paket 9: Ödeme (Payment) Mikroservisi Entegrasyonu, Mock Gateway ve Dağıtık Kompansasyon (Rollback):**
+  - `Store.Payment` mikroservisi oluşturuldu (`net8.0`, port 7309); `MockPaymentGateway` ve `POST /api/Payments/Process` uç noktası eklendi.
+  - `Store.Shared` altında `PaymentCompletedIntegrationEvent`, `PaymentFailedIntegrationEvent` olayları tanımlandı; `StockReservedIntegrationEvent` ve `StockReservationFailedIntegrationEvent` sözleşmelerine `UserId` ve `TotalPrice` eklendi.
+  - `Store.Payment` mikroservisine `StockReservedPaymentConsumer` eklendi; stok rezervasyonu sonrası mock ödeme yürütülüp başarıda `PaymentCompleted`, başarısızlıkta `PaymentFailed` olayları yayınlandı.
+  - `Store.Catalog` servisine `PaymentFailedConsumer` eklenerek ödeme başarısızlığında rezerve edilen stokların atomik `$inc` ile varyanta iadesi (Stok Rollback) sağlandı.
+  - `Store.B2B` servisine `PaymentFailedB2BConsumer` ve `StockReservationFailedB2BConsumer` eklenerek hem ödeme başarısızlığında hem de yetersiz stok durumunda bayinin cari borç bakiyesinin geri düşülmesi (Kredi Limiti Rollback) sağlandı.
+  - `Store.Order` servisine `PaymentCompletedConsumer` (`OrderStatus.Processing` + ödeme alındı notu) ve `PaymentFailedConsumer` (`OrderStatus.Cancelled` + hata telafi notu) eklendi.
+  - `Store.Order.Tests` altına 5 yeni birim testi (`PaymentConsumersTests.cs`) eklenerek toplam test sayısı 119'a yükseltildi.
 - **Paket 8: B2B Bayi İskonto Motoru & Kredi Limiti:**
   - `Store.DtoLayer` altına `ResultDealerFinancialDto` eklendi.
   - `Store.WebUI` modellerine `ApiSettings.B2BBaseUrl` eklendi.

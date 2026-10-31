@@ -79,6 +79,9 @@
   <Folder Name="/Services/Order/Tests/Store.Order.Tests/">
     <Project Path="Services/Order/Tests/Store.Order.Tests/Store.Order.Tests/Store.Order.Tests.csproj" />
   </Folder>
+  <Folder Name="/Services/Payment/">
+    <Project Path="Services/Payment/Store.Payment/Store.Payment.csproj" />
+  </Folder>
   <Folder Name="/Services/Rental/" />
   <Folder Name="/Services/Rental/Core/">
     <Project Path="Services/Rental/Core/Store.Rental.Application/Store.Rental.Application.csproj" />
