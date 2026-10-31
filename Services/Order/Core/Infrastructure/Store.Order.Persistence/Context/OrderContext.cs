@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Store.Order.Domain.Entities;
 using Store.Order.Domain.Enums;
@@ -23,6 +24,11 @@ namespace Store.Order.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // MassTransit EF Core Outbox tabloları
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
+            modelBuilder.AddInboxStateEntity();
 
             // İ3: Ordering.Status integer enum olarak konfigüre edilir
             modelBuilder.Entity<Ordering>()

@@ -43,6 +43,23 @@ services:
       - ./Scripts/PostgreSQL:/docker-entrypoint-initdb.d
     restart: always
 
+  # -----------------------------------------------------
+  # 3. MESSAGE BROKER (RabbitMQ + Management UI)
+  # -----------------------------------------------------
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: store_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: always
+
 volumes:
   catalogdb_data:
   postgresdb_data:
+  rabbitmq_data:

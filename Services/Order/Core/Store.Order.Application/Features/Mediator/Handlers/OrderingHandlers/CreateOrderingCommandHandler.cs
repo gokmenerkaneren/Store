@@ -1,7 +1,9 @@
+using MassTransit;
 using MediatR;
 using Store.Order.Application.Features.Mediator.Commands.OrderingCommands;
 using Store.Order.Application.Interfaces;
 using Store.Order.Domain.Entities;
+using Store.Shared.Events;
 using System;
 using System.Linq;
 using System.Threading;
@@ -13,11 +15,16 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
     {
         private readonly IRepository<Ordering> _repository;
         private readonly IStockValidationService? _stockValidationService;
+        private readonly IPublishEndpoint? _publishEndpoint;
 
-        public CreateOrderingCommandHandler(IRepository<Ordering> repository, IStockValidationService? stockValidationService = null)
+        public CreateOrderingCommandHandler(
+            IRepository<Ordering> repository,
+            IStockValidationService? stockValidationService = null,
+            IPublishEndpoint? publishEndpoint = null)
         {
             _repository = repository;
             _stockValidationService = stockValidationService;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Guid> Handle(CreateOrderingCommand request, CancellationToken cancellationToken)
@@ -75,6 +82,23 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
                         InsertUserId = request.UserId
                     });
                 }
+            }
+
+            // Bus Outbox: Publish mesajı yalnızca DbContext'e ekler; asıl yazma SaveChanges ile olur.
+            // Repository.CreateAsync SaveChanges çağırdığı için Publish ondan ÖNCE yapılmalıdır;
+            // böylece sipariş ve olay aynı transaction'da kaydedilir. Sonrasında yapılsaydı olay kaybolurdu.
+            if (_publishEndpoint != null)
+            {
+                var integrationEvent = new OrderCreatedIntegrationEvent(
+                    ordering.Id,
+                    ordering.UserId,
+                    ordering.TotalPrice,
+                    ordering.OrderDate,
+                    ordering.OrderDetails
+                        .Select(d => new OrderItemMessageDto(d.ProductId, d.ProductAmount, d.ProductPrice))
+                        .ToList());
+
+                await _publishEndpoint.Publish(integrationEvent, cancellationToken);
             }
 
             await _repository.CreateAsync(ordering);

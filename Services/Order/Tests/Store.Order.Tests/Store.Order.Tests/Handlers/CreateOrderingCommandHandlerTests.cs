@@ -1,10 +1,12 @@
 using FluentAssertions;
+using MassTransit;
 using Moq;
 using Store.Order.Application.Features.Mediator.Commands.OrderingCommands;
 using Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers;
 using Store.Order.Application.Interfaces;
 using Store.Order.Domain.Entities;
 using Store.Order.Domain.Enums;
+using Store.Shared.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -210,6 +212,63 @@ namespace Store.Order.Tests.Handlers
             // Assert
             orderId.Should().NotBeEmpty();
             _repositoryMock.Verify(r => r.CreateAsync(It.IsAny<Ordering>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Publish_OrderCreatedIntegrationEvent_When_PublishEndpoint_Provided()
+        {
+            // Arrange
+            var publishEndpointMock = new Mock<IPublishEndpoint>();
+            var callOrder = new List<string>();
+            OrderCreatedIntegrationEvent? publishedEvent = null;
+
+            publishEndpointMock
+                .Setup(p => p.Publish(It.IsAny<OrderCreatedIntegrationEvent>(), It.IsAny<CancellationToken>()))
+                .Callback<OrderCreatedIntegrationEvent, CancellationToken>((e, _) =>
+                {
+                    publishedEvent = e;
+                    callOrder.Add("publish");
+                })
+                .Returns(Task.CompletedTask);
+
+            _repositoryMock.Setup(r => r.CreateAsync(It.IsAny<Ordering>()))
+                           .Callback(() => callOrder.Add("save"))
+                           .Returns(Task.CompletedTask);
+
+            var handler = new CreateOrderingCommandHandler(_repositoryMock.Object, null, publishEndpointMock.Object);
+
+            var userId = Guid.NewGuid();
+            var prodId = Guid.NewGuid();
+            var orderDate = DateTime.UtcNow;
+            var command = new CreateOrderingCommand
+            {
+                UserId = userId,
+                TotalPrice = 200,
+                OrderDate = orderDate,
+                Items = new List<CreateOrderItemDto>
+                {
+                    new CreateOrderItemDto { ProductId = prodId, ProductPrice = 100, ProductAmount = 2 }
+                }
+            };
+
+            // Act
+            var orderId = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            publishEndpointMock.Verify(
+                p => p.Publish(It.IsAny<OrderCreatedIntegrationEvent>(), It.IsAny<CancellationToken>()),
+                Times.Once);
+
+            publishedEvent.Should().NotBeNull();
+            publishedEvent!.OrderId.Should().Be(orderId);
+            publishedEvent.UserId.Should().Be(userId);
+            publishedEvent.TotalPrice.Should().Be(200);
+            publishedEvent.OrderDate.Should().Be(orderDate);
+            publishedEvent.Items.Should().ContainSingle();
+            publishedEvent.Items[0].Should().Be(new OrderItemMessageDto(prodId, 2, 100));
+
+            // Outbox garantisi: olay, siparişi kaydeden SaveChanges'ten önce eklenmelidir
+            callOrder.Should().Equal("publish", "save");
         }
     }
 }

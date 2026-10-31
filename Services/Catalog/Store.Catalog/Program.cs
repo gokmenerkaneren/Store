@@ -1,3 +1,5 @@
+using MassTransit;
+using Store.Catalog.Consumers;
 using Store.Shared.Middlewares;
 using System.Reflection;
 using FluentValidation;
@@ -159,6 +161,23 @@ builder.Services.AddHangfire(configuration => configuration
     })
 );
 builder.Services.AddHangfireServer();
+
+// MassTransit + RabbitMQ
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderCreatedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
