@@ -6,7 +6,7 @@ using Store.Catalog.Services.CategoryServices;
 
 namespace Store.Catalog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase

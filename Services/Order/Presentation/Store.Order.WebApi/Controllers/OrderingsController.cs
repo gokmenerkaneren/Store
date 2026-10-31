@@ -93,6 +93,12 @@ namespace Store.Order.WebApi.Controllers
             // Güvenlik K7: UserId istemci gövdesinden kabul edilmez; JWT sub üzerinden bağlanır
             command.UserId = currentUserId.Value;
 
+            // Güvenlik İ3: Müşteri siparişi doğrudan Delivered vb. statüde açamaz, varsayılan Pending'dir
+            if (!IsAdmin())
+            {
+                command.Status = Store.Order.Domain.Enums.OrderStatus.Pending;
+            }
+
             if (command.TotalPrice < 0)
             {
                 return BadRequest("Sipariş toplam tutarı negatif olamaz.");
@@ -127,6 +133,12 @@ namespace Store.Order.WebApi.Controllers
                 {
                     return Forbid();
                 }
+
+                // İ3: İşleme alınmış, kargolanmış veya teslim edilmiş siparişler silinemez
+                if (existingOrder.Status != Store.Order.Domain.Enums.OrderStatus.Pending)
+                {
+                    return BadRequest("İşleme alınmış veya kargoya verilmiş siparişler silinemez. İade/iptal talebi oluşturunuz.");
+                }
             }
 
             await _mediator.Send(new RemoveOrderingCommand(id));
@@ -150,9 +162,23 @@ namespace Store.Order.WebApi.Controllers
                 {
                     return Forbid();
                 }
+
+                // Güvenlik K7: Admin olmayan kullanıcı Status, TotalPrice ve UserId alanlarını değiştiremez;
+                // istek gövdesindeki değerler yok sayılır ve mevcut sipariş değerleri korunur.
+                command.UserId = existingOrder.UserId;
+                command.TotalPrice = existingOrder.TotalPrice;
+                command.Status = existingOrder.Status;
             }
 
-            await _mediator.Send(command);
+            try
+            {
+                await _mediator.Send(command);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+
             return Ok("Sipariş başarılı bir şekilde güncellendi.");
         }
     }

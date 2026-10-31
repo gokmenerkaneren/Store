@@ -5,7 +5,7 @@ using Store.Catalog.Services.ProductImageServices;
 
 namespace Store.Catalog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductImagesController : ControllerBase

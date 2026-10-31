@@ -9,6 +9,8 @@ namespace Store.Order.Domain.Enums
         Processing = 1,    // Sipariş hazırlanıyor / İşleniyor
         Shipped = 2,       // Kargoya verildi
         Delivered = 3,     // Teslim edildi
-        Cancelled = 4      // İptal edildi
+        Cancelled = 4,     // İptal edildi
+        Completed = 5,     // Tamamlandı
+        Returned = 6       // İade edildi
     }
 }

@@ -7,6 +7,7 @@ using Store.Location.Application.Features.CQRS.Queries.CityQueries;
 
 namespace Store.Location.WebApi.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CityController : ControllerBase

@@ -11,7 +11,7 @@ using Store.Catalog.Services.ProductServices;
 
 namespace Store.Catalog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase

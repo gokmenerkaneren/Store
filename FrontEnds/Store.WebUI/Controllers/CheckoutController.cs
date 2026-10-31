@@ -62,7 +62,7 @@ namespace Store.WebUI.Controllers
             if (!Guid.TryParse(userIdString, out Guid userId) || userId == Guid.Empty)
             {
                 TempData["CartWarning"] = "Siparişi tamamlamak için lütfen giriş yapınız.";
-                return RedirectToAction("Index", "Login", new { returnUrl = "/Checkout" });
+                return RedirectToAction("Index", "Uyelik", new { returnUrl = "/Checkout" });
             }
 
             // Giriş yapmış kullanıcının bilgilerini form alanlarına doldur
@@ -150,6 +150,8 @@ namespace Store.WebUI.Controllers
             model.Items = items;
             model.SubTotal = items.Sum(x => x.TotalPrice);
             model.ShippingFee = 0.00m;
+            // K8: İstemciden gelen indirim yok sayılır (doğrulanmamış kupon/indirim manipülasyonu engeli)
+            model.DiscountAmount = 0.00m;
 
             if (!ModelState.IsValid)
             {
@@ -160,7 +162,7 @@ namespace Store.WebUI.Controllers
             if (!Guid.TryParse(userIdString, out Guid userId) || userId == Guid.Empty)
             {
                 TempData["CartWarning"] = "Siparişi tamamlamak için lütfen giriş yapınız.";
-                return RedirectToAction("Index", "Login", new { returnUrl = "/Checkout" });
+                return RedirectToAction("Index", "Uyelik", new { returnUrl = "/Checkout" });
             }
 
             // İ6: Temel Stok Doğrulama (Catalog & WebUI - Sipariş öncesi stok kontrolü)

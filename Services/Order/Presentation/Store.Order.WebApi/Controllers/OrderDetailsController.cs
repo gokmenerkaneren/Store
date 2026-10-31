@@ -8,7 +8,9 @@ using Store.Order.Application.Features.CQRS.Queries.OrderDetailQueries;
 
 namespace Store.Order.WebApi.Controllers
 {
-    [Authorize]
+    // Güvenlik K7: Uçlar sipariş sahipliği kontrolü yapmadığından yalnızca Admin'e açıktır.
+    // Müşteri kalemleri sipariş oluşturma akışında (Orderings) kaydedilir.
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderDetailsController : ControllerBase

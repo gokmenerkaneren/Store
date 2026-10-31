@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Location.Application.Features.CQRS.Commands.BranchCommands;
@@ -6,6 +7,7 @@ using Store.Location.Application.Features.CQRS.Queries.BranchQueries;
 
 namespace Store.Location.WebApi.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BranchController : ControllerBase

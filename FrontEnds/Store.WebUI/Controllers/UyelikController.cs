@@ -99,7 +99,7 @@ namespace Store.WebUI.Controllers
         {
             var data = new System.Collections.Generic.Dictionary<string, string>
             {
-                { "client_id", "StoreAdminId" },
+                { "client_id", "StoreWebClientId" },
                 { "client_secret", "storesecret" },
                 { "grant_type", "password" },
                 { "username", EmailOrPhone },

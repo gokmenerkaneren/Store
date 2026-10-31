@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Store.Catalog.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class DefaultSlider1Controller : ControllerBase
