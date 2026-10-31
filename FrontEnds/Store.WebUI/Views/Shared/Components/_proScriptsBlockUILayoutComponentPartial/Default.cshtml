@@ -1,0 +1,158 @@
+<script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    var body = document.body,
+        style_file = body.getAttribute('data-style-file');
+
+    Loader.require({
+        type: 'style',
+        name: 'text_font'
+    });
+    Loader.require({
+        type: 'style',
+        name: 'plugin_tippy'
+    });
+    Loader.require({
+        type: 'style',
+        name: style_file ? style_file : 'theme'
+    });
+    window.theme = {
+        strings: {
+            general: {
+                popups: {
+                    cart: {
+                        item_added: "{{ title }} sepetinize eklendi.",
+                        limit_is_exceeded: "Sepete eklenebilecek maksimum ürün adedine ({{ limit }}) ulaşıldı.",
+                        count: "({{ count }})"
+                    },
+                    wishlist: {
+                        count: "({{ count }})"
+                    },
+                    compare: {
+                        count: "({{ count }})"
+                    },
+                    confirm_transfer_data: {
+                        info: "{{ title }}: {{ count }} {{ name }}",
+                        wishlist_title: "Favoriler",
+                        compare_title: "Karşılaştır",
+                        name_single: "ürün",
+                        name_plural: "ürün"
+                    }
+                }
+            },
+            layout: {
+                cart: {
+                    items_count: {
+                        one: "ürün",
+                        other: "ürün"
+                    }
+                }
+            },
+            addToCart: "{\u0026quot;title\u0026quot;=\u0026gt;\u0026quot;SEPETE EKLE\u0026quot;, \u0026quot;added\u0026quot;=\u0026gt;\u0026quot;SEPETE EKLENDİ\u0026quot;, \u0026quot;sold_out\u0026quot;=\u0026gt;\u0026quot;TÜKENDİ\u0026quot;}",
+            soldOut: "Tükendi",
+            unavailable: "Mevcut Değil",
+            priceSaleSeparator: " başlangıç:",
+            availability_value_in_stock: "Stokta ({{ count }} {{ item }})",
+            availability_value_out_stock: "Tükendi",
+            stock_countdown: {
+                title: "Acele Edin! Yalnızca {{ quantity }} Adet Stokta Kaldı!"
+            },
+            countdown: {
+                years: "YIL",
+                months: "AY",
+                weeks: "HAFTA",
+                days: "GÜN",
+                hours: "SAAT",
+                minutes: "DAK",
+                seconds: "SN"
+            },
+            text_countdown: {
+                hours: "Saat",
+                minutes: "Dakika",
+                days_of_week: {
+                    sunday: "Pazar",
+                    monday: "Pazartesi",
+                    tuesday: "Salı",
+                    wednesday: "Çarşamba",
+                    thursday: "Perşembe",
+                    friday: "Cuma",
+                    saturday: "Cumartesi"
+                }
+            },
+            header: {
+                cart_count_desktop: "Sepetim ({{ count }})"
+            },
+            label: {
+                sale: "-{{ percent }}%"
+            },
+            cart: {
+                general: {
+                    shipping_calculator_data_info: "{{ data }} için teslimat seçeneği mevcuttur.",
+                    free_shipping_html: "Kargo bedava için {{ value }} tutarında alışveriş yapın",
+                    free_shipping_complete: "Kargo Bedava"
+                }
+            },
+
+        },
+        multipleСurrencies: true,
+        moneyFormat: "\u003cspan class=money\u003e${{amount}}\u003c\/span\u003e",
+        customer: false,
+        animations: {
+            css: {
+                duration: 0.3
+            },
+            tooltip: {
+                type: "scale",
+                inertia: true,
+                show_duration: 0.2,
+                hide_duration: 0.1
+            },
+            sticky_header: {
+                duration: 0.2,
+                opacity: 0.9
+            },
+            header_tape: {
+                duration: 0
+            },
+            menu: {
+                duration: 0.4
+            },
+            dropdown: {
+                duration: 0.3
+            },
+            accordion: {
+                duration: 0.4
+            },
+            footbar_product: {
+                duration: 0.4
+            },
+            tabs: {
+                duration: 0.4,
+                scroll_duration: 0.4
+            },
+            backtotop: {
+                scroll_duration: 0.4
+            }
+        }
+    };
+    Loader.require({
+        type: 'script',
+        name: 'plugin_popper'
+    });
+    Loader.require({
+        type: 'script',
+        name: 'plugin_tippy'
+    });
+    Loader.require({
+        type: 'script',
+        name: 'tooltip'
+    });
+
+    Loader.load();
+</script>
+
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/favorite.js?v=5" asp-append-version="true"></script>
+<script src="~/js/basket.js?v=5" asp-append-version="true"></script>

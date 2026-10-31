@@ -1,0 +1,81 @@
+@model List<Store.DtoLayer.CatalogDtos.InstagramPostDtos.ResultInstagramPostDto>
+
+<div class="product-tabs-section mt-60" data-section-id="instagram-feed" data-section-type="carousel-products" data-postload="carousel_products">
+    <div class="container">
+        <h4 class="mb-30 text-center">
+            <a href="https://instagram.com/sezadandekoratiftasarim/" target="_blank">
+                <span class="text-underline">@@Sezadan</span> Instagram da takip edin
+            </a>
+        </h4>
+
+        <div class="carousel carousel--arrows carousel-products position-relative mt-0 mb-60">
+            <div class="carousel__slider position-relative invisible"
+                 data-js-carousel
+                 data-autoplay="true"
+                 data-speed="5000"
+                 data-count="4"
+                 data-infinite="true"
+                 data-arrows="true"
+                 data-bullets="true">
+                 
+                <!-- Prev Button -->
+                <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev>
+                    <i>
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-006" viewBox="0 0 24 24">
+                            <path d="M16.736 3.417a.652.652 0 0 1-.176.449l-8.32 8.301 8.32 8.301c.117.13.176.28.176.449s-.059.319-.176.449a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.93.93 0 0 1-.215-.127l-8.75-8.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l8.75-8.75a.652.652 0 0 1 .449-.176c.169 0 .319.059.449.176.117.13.176.28.176.449z"/>
+                        </svg>
+                    </i>
+                </div>
+
+                <!-- Products (Instagram posts) -->
+                <div class="carousel__products overflow-hidden">
+                    <div class="carousel__slick row" data-js-carousel-slick data-carousel-items data-max-count="6" data-products-pre-row="4">
+                        
+                        @foreach (var item in Model)
+                        {
+                            <div class="carousel__item col-auto">
+                                <div class="product-collection d-flex flex-column mb-30" style="padding: 10px;">
+                                    <div class="product-collection__image position-relative w-100" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                        <a href="@item.PostUrl" class="d-block cursor-default" target="_blank">
+                                            <div class="rimage" style="padding-top:100.0%;">
+                                                <img src="@item.ImageUrl"
+                                                     data-src="@item.ImageUrl"
+                                                     data-master="@item.ImageUrl"
+                                                     class="rimage__img rimage__img--cover rimage__img--fade-in lazyload"
+                                                     data-aspect-ratio="1"
+                                                     alt="Instagram Post">
+                                            </div>
+                                        </a>
+                                        
+                                        <!-- Hover effects overlay without buttons -->
+                                        <div class="product-image__overlay-top position-absolute d-flex flex-wrap top-0 left-0 w-100 px-10 pt-10" style="pointer-events: none;">
+                                            <div class="absolute-stretch" style="background: rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next>
+                    <i>
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-007" viewBox="0 0 24 24">
+                            <path d="M6.708 20.917c0-.169.059-.319.176-.449l8.32-8.301-8.32-8.301a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l8.75 8.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-8.75 8.75a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.91.91 0 0 1-.215-.127.652.652 0 0 1-.176-.449z"/>
+                        </svg>
+                    </i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (typeof Loader !== 'undefined') {
+        Loader.require({ type: 'style', name: 'plugin_slick' });
+        Loader.require({ type: 'script', name: 'carousel_products' });
+    }
+</script>

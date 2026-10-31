@@ -1,0 +1,9 @@
+IdentityServerPort=5001				https://localhost:5001
+CatalogServicePort=7301				http://localhost:7301/api/Categories
+DiscountServicePort=7302			https://localhost:7302/api/Discounts
+LocationServicePort=7303			https://localhost:7303/api/Locations
+OrderServicePort=7304				https://localhost:7304/api/Orders
+B2BServicePort=7305					http://localhost:7305/api/Dealers
+BasketServicePort=7306				http://localhost:7306/api/Basket
+FavoriteServicePort=7307			http://localhost:7307/api/Favorites
+RentalServicePort=7308				http://localhost:7308/api/Rentals

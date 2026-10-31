@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.28">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.28">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Store.Location.Application\Store.Location.Application.csproj" />
+    <ProjectReference Include="..\..\Core\Store.Location.Domain\Store.Location.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Store.Location.Persistence\Store.Location.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Store.Shared\Store.Shared.csproj" />
+  </ItemGroup>
+
+  <Target Name="UnblockDlls" AfterTargets="Build">
+    <Exec Command="powershell -Command &quot;Get-ChildItem '$(OutDir)' -Filter *.dll | Unblock-File&quot;" />
+  </Target>
+
+</Project>

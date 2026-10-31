@@ -1,0 +1,154 @@
+<style>
+    /* Shella Ürün Detayı Stili Yatay Sekmeler (Product Tabs Stili) */
+    .hesabim-order-tabs-head {
+        border-bottom: 2px solid #e5e5e5;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+    .hesabim-order-tab-btn {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 12px 2px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: #777777;
+        cursor: pointer;
+        position: relative;
+        margin-bottom: -2px;
+        transition: color 0.2s ease, border-color 0.2s ease;
+        outline: none !important;
+    }
+    .hesabim-order-tab-btn:hover {
+        color: #111111;
+    }
+    .hesabim-order-tab-btn.active {
+        color: #111111;
+        border-bottom: 2px solid #d9534f; /* Product sayfasındaki kırmızı aktif çizgi vurgusu */
+    }
+    .hesabim-order-tab-pane {
+        display: none;
+    }
+    .hesabim-order-tab-pane.active {
+        display: block;
+    }
+</style>
+
+<div class="card border rounded shadow-sm bg-white p-4">
+    <!-- Üst Başlık ve 3 Numaralı Büyük Alışverişe Başla Butonu -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h3 class="h4 font-weight-bold mb-1 text-dark">Siparişlerim</h3>
+            <p class="text-muted small mb-0">Geçmiş ve devam eden tüm siparişlerinizi buradan takip edebilirsiniz.</p>
+        </div>
+        <div>
+            <!-- 3 Numara: Daha büyük ALIŞVERİŞE BAŞLA butonu -->
+            <a href="/Default/Index" class="btn btn-outline-dark font-weight-bold text-uppercase px-4 py-2" 
+               style="border-radius: 6px; font-size: 14px; letter-spacing: 0.8px; height: 46px; display: inline-flex; align-items: center;">
+                ALIŞVERİŞE BAŞLA
+            </a>
+        </div>
+    </div>
+
+    <!-- 4 Numara: Product/Index'teki Gibi Sağa Doğru Yatay Shella Tabları -->
+    <div class="hesabim-order-tabs-head">
+        <button type="button" class="hesabim-order-tab-btn active" onclick="switchOrderTab('all-orders', this)">
+            TÜMÜ
+        </button>
+        <button type="button" class="hesabim-order-tab-btn" onclick="switchOrderTab('active-orders', this)">
+            DEVAM EDENLER
+        </button>
+        <button type="button" class="hesabim-order-tab-btn" onclick="switchOrderTab('cancelled-orders', this)">
+            İPTALLER
+        </button>
+        <button type="button" class="hesabim-order-tab-btn" onclick="switchOrderTab('returned-orders', this)">
+            İADELER
+        </button>
+    </div>
+
+    <!-- Tab İçerikleri -->
+    <div class="hesabim-order-tabs-body">
+        <!-- 1) TÜMÜ -->
+        <div class="hesabim-order-tab-pane active text-center py-5" id="tab-all-orders">
+            <div class="mb-3">
+                <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+            </div>
+            <h5 class="font-weight-bold text-dark mt-2" style="font-size: 17px;">Henüz kayıtlı bir siparişiniz bulunmamaktadır.</h5>
+            <p class="text-muted small mb-3">Tüm alışveriş geçmişiniz ve kargo takip numaralarınız bu alanda listelenecektir.</p>
+            
+            <!-- 2 Numara: Daha büyük ALIŞVERİŞE BAŞLA butonu -->
+            <a href="/Default/Index" class="btn btn-dark font-weight-bold text-uppercase px-5 py-3 shadow-sm mt-2" 
+               style="border-radius: 6px; font-size: 15px; letter-spacing: 0.8px; height: 50px; min-width: 250px; display: inline-flex; align-items: center; justify-content: center;">
+                ALIŞVERİŞE BAŞLA
+            </a>
+        </div>
+
+        <!-- 2) DEVAM EDENLER -->
+        <div class="hesabim-order-tab-pane text-center py-5" id="tab-active-orders">
+            <div class="mb-3">
+                <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h5 class="font-weight-bold text-dark mt-2" style="font-size: 17px;">Devam eden aktif bir siparişiniz bulunmamaktadır.</h5>
+            <p class="text-muted small mb-3">Hazırlık aşamasında veya kargoda olan siparişleriniz burada gösterilir.</p>
+            <a href="/Default/Index" class="btn btn-dark font-weight-bold text-uppercase px-5 py-3 shadow-sm mt-2" 
+               style="border-radius: 6px; font-size: 15px; letter-spacing: 0.8px; height: 50px; min-width: 250px; display: inline-flex; align-items: center; justify-content: center;">
+                ALIŞVERİŞE BAŞLA
+            </a>
+        </div>
+
+        <!-- 3) İPTALLER -->
+        <div class="hesabim-order-tab-pane text-center py-5" id="tab-cancelled-orders">
+            <div class="mb-3">
+                <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </div>
+            <h5 class="font-weight-bold text-dark mt-2" style="font-size: 17px;">İptal edilmiş bir siparişiniz bulunmamaktadır.</h5>
+            <p class="text-muted small mb-0">İptal edilen sipariş kayıtlarınız burada listelenir.</p>
+        </div>
+
+        <!-- 4) İADELER -->
+        <div class="hesabim-order-tab-pane text-center py-5" id="tab-returned-orders">
+            <div class="mb-3">
+                <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+            </div>
+            <h5 class="font-weight-bold text-dark mt-2" style="font-size: 17px;">İade talebiniz bulunmamaktadır.</h5>
+            <p class="text-muted small mb-0">İade sürecindeki ürünleriniz ve iade kargo kodlarınız bu alanda listelenir.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchOrderTab(tabId, btn) {
+        document.querySelectorAll('.hesabim-order-tab-btn').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        document.querySelectorAll('.hesabim-order-tab-pane').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        
+        btn.classList.add('active');
+        var targetPane = document.getElementById('tab-' + tabId);
+        if (targetPane) {
+            targetPane.classList.add('active');
+        }
+    }
+</script>

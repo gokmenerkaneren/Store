@@ -1,0 +1,31 @@
+@model List<Store.DtoLayer.CatalogDtos.ProductImageDtos.ResultProductImageDto>
+
+<div class="row m-b-30" id="imageGallery">
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var img in Model.OrderByDescending(x => x.IsMain))
+        {
+            <div class="col-md-3 col-sm-6 mb-4 image-card-container">
+                <div class="card h-100 shadow-sm border overflow-hidden">
+                    <img src="@img.ImageUrl" class="card-img-top" style="height: 180px; object-fit: cover;" alt="@img.AltText">
+                    <div class="card-body p-2 text-center bg-white">
+                        <span class="badge @(img.IsMain ? "badge-success" : "badge-secondary") m-b-5 main-badge">@(img.IsMain ? "Ana Resim" : "Ek Resim")</span>
+                        <div class="m-t-5 btn-group w-100" role="group">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteImage('@img.Id', '@img.ProductId')"><i class="icofont icofont-ui-delete"></i> Sil</button>
+                            <button type="button" class="btn btn-outline-success btn-sm btn-make-main" style="display:@(img.IsMain ? "none" : "block")" onclick="setMainImage('@img.ProductId', '@img.Id')">
+                                <i class="icofont icofont-star"></i> Ana Resim
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5 text-muted bg-light rounded" id="no-image-msg">
+            <i class="icofont icofont-image icofont-4x"></i>
+            <p class="m-t-10">Henüz bir görsel yüklenmemiş.</p>
+        </div>
+    }
+</div>

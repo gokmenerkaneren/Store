@@ -1,0 +1,223 @@
+@model Store.WebUI.Models.ProductTabsViewModel
+
+<style>
+    /* Tab baslik navigasyon stilleri */
+    .product-tabs__nav {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: 24px;
+        margin-bottom: 0;
+    }
+
+    /* Aktif olmayan tab basliginin stili - tema carousel__title ile uyumlu */
+    .product-tabs__nav-link {
+        color: #999 !important;
+        border-bottom: 2px solid transparent !important;
+        padding-bottom: 4px;
+        cursor: pointer;
+        transition: color 0.25s ease, border-color 0.25s ease;
+        text-decoration: none;
+    }
+
+    /* Aktif tab basliginin stili */
+    .product-tabs__nav-link.is-active {
+        color: #1a1a1a !important;
+        border-bottom-color: #1a1a1a !important;
+    }
+
+    .product-tabs__nav-link:hover {
+        color: #1a1a1a !important;
+    }
+
+    /* Gorünmeyen tab panelleri gizlenir */
+    .product-tabs__pane {
+        display: none;
+    }
+
+    .product-tabs__pane.is-active {
+        display: block;
+    }
+
+    /* Hover tooltip stili - orijinal bilesenden kopyalandi */
+    .tippy-box[data-theme~='large'] {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 5px 10px;
+    }
+    .tippy-content {
+        font-size: 16px !important;
+    }
+</style>
+
+@* ── Orijinal tema yapisiyla birebir uyumlu En Cok Satanlar bolumu ── *@
+@* data-section-type ve data-postload: tema JS'nin carousel'i bulmasi icin zorunlu *@
+<div class="product-tabs-section">
+    <div class="container">
+
+        @* ── Tab baslik satirı: yan yana "En Cok Satanlar" | "Yeni Urunler" ── *@
+        <div class="carousel carousel--arrows carousel-products position-relative mt-0 mb-0">
+            <div class="carousel__head row justify-content-center mb-25" data-carousel-control>
+                <h4 class="carousel__title col-auto mb-10 text-center">
+                    <a href="#"
+                       id="tab-bestsellers"
+                       class="product-tabs__nav-link is-active"
+                       data-tab-target="pane-bestsellers"
+                       aria-selected="true">En &Ccedil;ok Satanlar</a>
+                </h4>
+                <h4 class="carousel__title col-auto mb-10 text-center" style="margin-left:0;">
+                    <a href="#"
+                       id="tab-newproducts"
+                       class="product-tabs__nav-link"
+                       data-tab-target="pane-newproducts"
+                       aria-selected="false">Yeni &Uuml;r&uuml;nler</a>
+                </h4>
+            </div>
+        </div>
+
+        @* ── En Cok Satanlar paneli ── *@
+        <div id="pane-bestsellers" class="product-tabs__pane is-active" data-section-id="product-tabs-bestsellers" data-section-type="carousel-products" data-postload="carousel_products">
+            <div class="carousel carousel--arrows carousel-products position-relative mt-0 mb-60">
+                <div class="carousel__slider position-relative invisible"
+                     data-js-carousel
+                     data-autoplay="true"
+                     data-speed="5000"
+                     data-count="4"
+                     data-infinite="true"
+                     data-arrows="true"
+                     data-bullets="true">
+                    <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-006" viewBox="0 0 24 24">
+                                <path d="M16.736 3.417a.652.652 0 0 1-.176.449l-8.32 8.301 8.32 8.301c.117.13.176.28.176.449s-.059.319-.176.449a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.93.93 0 0 1-.215-.127l-8.75-8.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l8.75-8.75a.652.652 0 0 1 .449-.176c.169 0 .319.059.449.176.117.13.176.28.176.449z"/>
+                            </svg>
+                        </i>
+                    </div>
+                    <div class="carousel__products overflow-hidden">
+                        <div class="carousel__slick row" data-js-carousel-slick data-carousel-items
+                             data-max-count="6" data-products-pre-row="4" data-async-ajax-loading="true">
+                            @foreach (var product in Model.BestSellers)
+                            {
+                                <partial name="_ProductCardPartial" model="product" />
+                            }
+                        </div>
+                    </div>
+                    <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-007" viewBox="0 0 24 24">
+                                <path d="M6.708 20.917c0-.169.059-.319.176-.449l8.32-8.301-8.32-8.301a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l8.75 8.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-8.75 8.75a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.91.91 0 0 1-.215-.127.652.652 0 0 1-.176-.449z"/>
+                            </svg>
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ── Yeni Urunler paneli ── *@
+        <div id="pane-newproducts" class="product-tabs__pane" data-section-id="product-tabs-newproducts" data-section-type="carousel-products" data-postload="carousel_products">
+            <div class="carousel carousel--arrows carousel-products position-relative mt-0 mb-60">
+                <div class="carousel__slider position-relative invisible"
+                     data-js-carousel
+                     data-autoplay="true"
+                     data-speed="5000"
+                     data-count="4"
+                     data-infinite="true"
+                     data-arrows="true"
+                     data-bullets="true">
+                    <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-006" viewBox="0 0 24 24">
+                                <path d="M16.736 3.417a.652.652 0 0 1-.176.449l-8.32 8.301 8.32 8.301c.117.13.176.28.176.449s-.059.319-.176.449a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.93.93 0 0 1-.215-.127l-8.75-8.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l8.75-8.75a.652.652 0 0 1 .449-.176c.169 0 .319.059.449.176.117.13.176.28.176.449z"/>
+                            </svg>
+                        </i>
+                    </div>
+                    <div class="carousel__products overflow-hidden">
+                        <div class="carousel__slick row" data-js-carousel-slick data-carousel-items
+                             data-max-count="6" data-products-pre-row="4" data-async-ajax-loading="true">
+                            @foreach (var product in Model.NewProducts)
+                            {
+                                <partial name="_ProductCardPartial" model="product" />
+                            }
+                        </div>
+                    </div>
+                    <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-007" viewBox="0 0 24 24">
+                                <path d="M6.708 20.917c0-.169.059-.319.176-.449l8.32-8.301-8.32-8.301a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l8.75 8.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-8.75 8.75a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.91.91 0 0 1-.215-.127.652.652 0 0 1-.176-.449z"/>
+                            </svg>
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Slick carousel stil ve script'ini yukluyoruz (orijinal yapıyla ayni)
+    Loader.require({ type: 'style', name: 'plugin_slick' });
+    Loader.require({ type: 'script', name: 'carousel_products' });
+</script>
+
+<script>
+    // Tab gecis mantigi
+    // Carousel 'invisible' sinifini kaldirip kendini DOM yuklendikten sonra baslattigindan,
+    // tab gecisinde sadece CSS display degistiriliyor; carousel zaten hazir olarak bekliyor.
+    (function () {
+        document.querySelectorAll('[data-tab-target]').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var targetId = this.getAttribute('data-tab-target');
+
+                // Tum tab linklerini pasif yap
+                document.querySelectorAll('[data-tab-target]').forEach(function (l) {
+                    l.classList.remove('is-active');
+                    l.setAttribute('aria-selected', 'false');
+                });
+
+                // Tum panelleri gizle
+                document.querySelectorAll('.product-tabs__pane').forEach(function (p) {
+                    p.classList.remove('is-active');
+                });
+
+                // Tiklanan tab ve paneli aktif yap
+                this.classList.add('is-active');
+                this.setAttribute('aria-selected', 'true');
+
+                var pane = document.getElementById(targetId);
+                if (pane) {
+                    pane.classList.add('is-active');
+
+                    // Yeni Urunler paneli gorunur oldugunda slick carousel genislikleri hesaplayabilsin diye
+                    // ve lazyload resimleri tetiklensin diye kucuk bir gecikme ile refresh yapiyoruz.
+                    setTimeout(function() {
+                        // 1. Standart JS resize
+                        window.dispatchEvent(new Event('resize'));
+                        
+                        if (window.jQuery) {
+                            var $ = window.jQuery;
+                            // 2. jQuery resize ve scroll tetiklemesi (Lazyload resimleri icin)
+                            $(window).trigger('resize').trigger('scroll');
+                            
+                            // 3. Slick carousel'e dogrudan setPosition komutu gonderiyoruz
+                            var $slick = $(pane).find('.carousel__slick');
+                            if ($slick.length && $slick.hasClass('slick-initialized')) {
+                                $slick.slick('setPosition');
+                                $slick.slick('resize');
+                            }
+                        }
+                    }, 100);
+
+                    // Eger tema tarafindan henuz baslatilmamissa baslatilmasini sagliyoruz.
+                    var slider = pane.querySelector('[data-js-carousel]');
+                    if (slider && slider.classList.contains('invisible')) {
+                        if (typeof Loader !== 'undefined') {
+                            Loader.require({ type: 'script', name: 'carousel_products' });
+                        }
+                    }
+                }
+            });
+        });
+    })();
+</script>

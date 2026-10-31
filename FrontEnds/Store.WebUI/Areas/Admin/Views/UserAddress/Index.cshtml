@@ -1,0 +1,473 @@
+
+@model List<Store.DtoLayer.LocationDtos.UserAddressDtos.ResultUserAddressDto>
+@{
+    ViewData["Title"] = "UserAddress Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        KULLANICI ADRESİ İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Firma Listesi</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+    <div class="card-block">
+        <div class="dt-responsive table-responsive">
+            <table id="basic-btn" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>ContactFullName</th>
+                        <th>PhoneNumber</th>
+                        <th>AddressDetail</th>
+                        <th>CityId</th>
+                        <th>DistrictId</th>
+                        <th>NeighborhoodId</th>
+                        <th>CustomerId</th>
+                        <th>InvoiceType</th>
+                        <th>IdentityNumber</th>
+                        <th>TaxOffice</th>
+                        <th>TaxNumber</th>
+                        <th>CompanyId</th>
+                        <th>IsAnonymized</th>
+                        <th>IsActive</th>
+                        <th>Notes</th>
+                        <th>InsertDate</th>
+                        <th>UpdateDate</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr style="@(item.IsDeleted ? "background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;" : (!item.IsActive ? "opacity:0.5;background-color:#f8d7da;" : ""))">
+                                <td>@item.Title</td>
+                                <td>@item.ContactFullName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.AddressDetail</td>
+                                <td>@item.CityId</td>
+                                <td>@item.DistrictId</td>
+                                <td>@item.NeighborhoodId</td>
+                                <td>@item.CustomerId</td>
+                                <td>@item.InvoiceType</td>
+                                <td>@item.IdentityNumber</td>
+                                <td>@item.TaxOffice</td>
+                                <td>@item.TaxNumber</td>
+                                <td>@item.CompanyId</td>
+                                <td><span class="label label-@(item.IsAnonymized ? "success" : "danger")">@(item.IsAnonymized ? "Evet" : "Hayır")</span></td>
+                                <td><span class="label label-@(item.IsActive ? "success" : "danger")">@(item.IsActive ? "Evet" : "Hayır")</span></td>
+                                <td>@item.Notes</td>
+                                <td>@item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-grd-info waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#editModal"
+                                                 data-id="@item.Id" data-title="@item.Title" data-contactFullName="@item.ContactFullName" data-phoneNumber="@item.PhoneNumber" data-addressDetail="@item.AddressDetail" data-cityId="@item.CityId" data-districtId="@item.DistrictId" data-neighborhoodId="@item.NeighborhoodId" data-customerId="@item.CustomerId" data-invoiceType="@item.InvoiceType" data-identityNumber="@item.IdentityNumber" data-taxOffice="@item.TaxOffice" data-taxNumber="@item.TaxNumber" data-companyId="@item.CompanyId" data-isAnonymized="@item.IsAnonymized" data-isActive="@item.IsActive" data-notes="@item.Notes" data-insertUserId="@item.InsertUserId" data-insertDate="@(item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss"))" data-updateUserId="@item.UpdateUserId" data-updateDate="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))" data-isDeleted="@item.IsDeleted" data-deleteUserId="@item.DeleteUserId" data-deleteDate="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))">
+                                            <span class="feather icon-edit"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#detailsModal"
+                                                 data-id="@item.Id" data-title="@item.Title" data-contactFullName="@item.ContactFullName" data-phoneNumber="@item.PhoneNumber" data-addressDetail="@item.AddressDetail" data-cityId="@item.CityId" data-districtId="@item.DistrictId" data-neighborhoodId="@item.NeighborhoodId" data-customerId="@item.CustomerId" data-invoiceType="@item.InvoiceType" data-identityNumber="@item.IdentityNumber" data-taxOffice="@item.TaxOffice" data-taxNumber="@item.TaxNumber" data-companyId="@item.CompanyId" data-isAnonymized="@item.IsAnonymized" data-isActive="@item.IsActive" data-notes="@item.Notes" data-insertUserId="@item.InsertUserId" data-insertDate="@(item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss"))" data-updateUserId="@item.UpdateUserId" data-updateDate="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))" data-isDeleted="@item.IsDeleted" data-deleteUserId="@item.DeleteUserId" data-deleteDate="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))">
+                                            <i class="icofont icofont-file-document"></i>
+                                        </button>
+                                        <a href="/Admin/UserAddress/DeleteUserAddress/@item.Id" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                            <span class="feather icon-trash"></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-grd-primary waves-effect waves-light" data-toggle="modal" data-target="#createModal">
+                Yeni UserAddress Ekle
+            </button>
+            <a href="/Admin/UserAddress/Index?showDeleted=@(ViewBag.ShowDeleted != null && ViewBag.ShowDeleted ? "false" : "true")" class="btn btn-grd-warning waves-effect waves-light">
+                @(ViewBag.ShowDeleted != null && ViewBag.ShowDeleted ? "Aktif Kayıtları Göster" : "Silinmiş Kayıtları Göster")
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="createForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni UserAddress Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="Title" required />
+                        </div>
+                        <div class="form-group">
+                            <label>ContactFullName</label>
+                            <input type="text" class="form-control" name="ContactFullName" required />
+                        </div>
+                        <div class="form-group">
+                            <label>PhoneNumber</label>
+                            <input type="text" class="form-control" name="PhoneNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>AddressDetail</label>
+                            <input type="text" class="form-control" name="AddressDetail" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CityId</label>
+                            <input type="text" class="form-control" name="CityId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>DistrictId</label>
+                            <input type="text" class="form-control" name="DistrictId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>NeighborhoodId</label>
+                            <input type="text" class="form-control" name="NeighborhoodId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CustomerId</label>
+                            <input type="text" class="form-control" name="CustomerId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>InvoiceType</label>
+                            <input type="text" class="form-control" name="InvoiceType" required />
+                        </div>
+                        <div class="form-group">
+                            <label>IdentityNumber</label>
+                            <input type="text" class="form-control" name="IdentityNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>TaxOffice</label>
+                            <input type="text" class="form-control" name="TaxOffice" required />
+                        </div>
+                        <div class="form-group">
+                            <label>TaxNumber</label>
+                            <input type="text" class="form-control" name="TaxNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CompanyId</label>
+                            <input type="text" class="form-control" name="CompanyId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>IsAnonymized</label>
+                            <select class="form-control" name="IsAnonymized">
+                                <option value="true">Evet</option>
+                                <option value="false">Hayır</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>IsActive</label>
+                            <select class="form-control" name="IsActive">
+                                <option value="true">Evet</option>
+                                <option value="false">Hayır</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <input type="text" class="form-control" name="Notes" required />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-inverse" data-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="submitCreate()">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editForm">
+                <input type="hidden" name="Id" id="edit-id" />
+                <div class="modal-header">
+                    <h5 class="modal-title">UserAddress Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="Title" id="edit-title" required />
+                        </div>
+                        <div class="form-group">
+                            <label>ContactFullName</label>
+                            <input type="text" class="form-control" name="ContactFullName" id="edit-contactFullName" required />
+                        </div>
+                        <div class="form-group">
+                            <label>PhoneNumber</label>
+                            <input type="text" class="form-control" name="PhoneNumber" id="edit-phoneNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>AddressDetail</label>
+                            <input type="text" class="form-control" name="AddressDetail" id="edit-addressDetail" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CityId</label>
+                            <input type="text" class="form-control" name="CityId" id="edit-cityId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>DistrictId</label>
+                            <input type="text" class="form-control" name="DistrictId" id="edit-districtId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>NeighborhoodId</label>
+                            <input type="text" class="form-control" name="NeighborhoodId" id="edit-neighborhoodId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CustomerId</label>
+                            <input type="text" class="form-control" name="CustomerId" id="edit-customerId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>InvoiceType</label>
+                            <input type="text" class="form-control" name="InvoiceType" id="edit-invoiceType" required />
+                        </div>
+                        <div class="form-group">
+                            <label>IdentityNumber</label>
+                            <input type="text" class="form-control" name="IdentityNumber" id="edit-identityNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>TaxOffice</label>
+                            <input type="text" class="form-control" name="TaxOffice" id="edit-taxOffice" required />
+                        </div>
+                        <div class="form-group">
+                            <label>TaxNumber</label>
+                            <input type="text" class="form-control" name="TaxNumber" id="edit-taxNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label>CompanyId</label>
+                            <input type="text" class="form-control" name="CompanyId" id="edit-companyId" required />
+                        </div>
+                        <div class="form-group">
+                            <label>IsAnonymized</label>
+                            <select class="form-control" name="IsAnonymized" id="edit-isAnonymized">
+                                <option value="true">Evet</option>
+                                <option value="false">Hayır</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>IsActive</label>
+                            <select class="form-control" name="IsActive" id="edit-isActive">
+                                <option value="true">Evet</option>
+                                <option value="false">Hayır</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <input type="text" class="form-control" name="Notes" id="edit-notes" required />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-inverse" data-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-info" onclick="submitEdit()">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">
+                <h5 class="modal-title"><i class="feather icon-info"></i> UserAddress Detayları</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                        <div class="col-sm-6"><strong>Id:</strong> <p id="det-id" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Title:</strong> <p id="det-title" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>ContactFullName:</strong> <p id="det-contactFullName" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>PhoneNumber:</strong> <p id="det-phoneNumber" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>AddressDetail:</strong> <p id="det-addressDetail" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>CityId:</strong> <p id="det-cityId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>DistrictId:</strong> <p id="det-districtId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>NeighborhoodId:</strong> <p id="det-neighborhoodId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>CustomerId:</strong> <p id="det-customerId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>InvoiceType:</strong> <p id="det-invoiceType" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>IdentityNumber:</strong> <p id="det-identityNumber" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>TaxOffice:</strong> <p id="det-taxOffice" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>TaxNumber:</strong> <p id="det-taxNumber" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>CompanyId:</strong> <p id="det-companyId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>IsAnonymized:</strong> <p id="det-isAnonymized" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>IsActive:</strong> <p id="det-isActive" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Notes:</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                </div>
+                <div class="row">
+                        <div class="col-sm-6"><strong>InsertUserId:</strong> <p id="det-insertUserId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>InsertDate:</strong> <p id="det-insertDate" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>UpdateUserId:</strong> <p id="det-updateUserId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>UpdateDate:</strong> <p id="det-updateDate" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>IsDeleted:</strong> <p id="det-isDeleted" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>DeleteUserId:</strong> <p id="det-deleteUserId" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>DeleteDate:</strong> <p id="det-deleteDate" class="text-muted"></p></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-inverse" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#editModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#edit-id').val(button.data('id'));
+        modal.find('#edit-id').val(button.data('ıd'));
+        modal.find('#det-id').text(button.data('ıd'));
+        modal.find('#edit-title').val(button.data('title'));
+        modal.find('#det-title').text(button.data('title'));
+        modal.find('#edit-contactFullName').val(button.data('contactFullName'));
+        modal.find('#det-contactFullName').text(button.data('contactFullName'));
+        modal.find('#edit-phoneNumber').val(button.data('phoneNumber'));
+        modal.find('#det-phoneNumber').text(button.data('phoneNumber'));
+        modal.find('#edit-addressDetail').val(button.data('addressDetail'));
+        modal.find('#det-addressDetail').text(button.data('addressDetail'));
+        modal.find('#edit-cityId').val(button.data('cityId'));
+        modal.find('#det-cityId').text(button.data('cityId'));
+        modal.find('#edit-districtId').val(button.data('districtId'));
+        modal.find('#det-districtId').text(button.data('districtId'));
+        modal.find('#edit-neighborhoodId').val(button.data('neighborhoodId'));
+        modal.find('#det-neighborhoodId').text(button.data('neighborhoodId'));
+        modal.find('#edit-customerId').val(button.data('customerId'));
+        modal.find('#det-customerId').text(button.data('customerId'));
+        modal.find('#edit-invoiceType').val(button.data('ınvoiceType'));
+        modal.find('#det-invoiceType').text(button.data('ınvoiceType'));
+        modal.find('#edit-identityNumber').val(button.data('ıdentityNumber'));
+        modal.find('#det-identityNumber').text(button.data('ıdentityNumber'));
+        modal.find('#edit-taxOffice').val(button.data('taxOffice'));
+        modal.find('#det-taxOffice').text(button.data('taxOffice'));
+        modal.find('#edit-taxNumber').val(button.data('taxNumber'));
+        modal.find('#det-taxNumber').text(button.data('taxNumber'));
+        modal.find('#edit-companyId').val(button.data('companyId'));
+        modal.find('#det-companyId').text(button.data('companyId'));
+        var ısAnonymized = button.data('ısAnonymized') === 'True' || button.data('ısAnonymized') === true || button.data('ısAnonymized') === 'true';
+        modal.find('#edit-isAnonymized').val(ısAnonymized.toString());
+        modal.find('#det-isAnonymized').text(ısAnonymized ? 'Evet' : 'Hayır');
+        var ısActive = button.data('ısActive') === 'True' || button.data('ısActive') === true || button.data('ısActive') === 'true';
+        modal.find('#edit-isActive').val(ısActive.toString());
+        modal.find('#det-isActive').text(ısActive ? 'Evet' : 'Hayır');
+        modal.find('#edit-notes').val(button.data('notes'));
+        modal.find('#det-notes').text(button.data('notes'));
+        modal.find('#edit-insertUserId').val(button.data('ınsertUserId'));
+        modal.find('#det-insertUserId').text(button.data('ınsertUserId'));
+        modal.find('#edit-insertDate').val(button.data('ınsertDate'));
+        modal.find('#det-insertDate').text(button.data('ınsertDate'));
+        modal.find('#edit-updateUserId').val(button.data('updateUserId'));
+        modal.find('#det-updateUserId').text(button.data('updateUserId'));
+        modal.find('#edit-updateDate').val(button.data('updateDate'));
+        modal.find('#det-updateDate').text(button.data('updateDate'));
+        var isDeleted = button.data('isDeleted') === 'True' || button.data('isDeleted') === true || button.data('isDeleted') === 'true';
+        modal.find('#edit-isDeleted').val(isDeleted.toString());
+        modal.find('#det-isDeleted').text(isDeleted ? 'Evet' : 'Hayır');
+        modal.find('#edit-deleteUserId').val(button.data('deleteUserId'));
+        modal.find('#det-deleteUserId').text(button.data('deleteUserId'));
+        modal.find('#edit-deleteDate').val(button.data('deleteDate'));
+        modal.find('#det-deleteDate').text(button.data('deleteDate'));
+    });
+
+    $('#detailsModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#edit-id').val(button.data('ıd'));
+        modal.find('#det-id').text(button.data('ıd'));
+        modal.find('#edit-title').val(button.data('title'));
+        modal.find('#det-title').text(button.data('title'));
+        modal.find('#edit-contactFullName').val(button.data('contactFullName'));
+        modal.find('#det-contactFullName').text(button.data('contactFullName'));
+        modal.find('#edit-phoneNumber').val(button.data('phoneNumber'));
+        modal.find('#det-phoneNumber').text(button.data('phoneNumber'));
+        modal.find('#edit-addressDetail').val(button.data('addressDetail'));
+        modal.find('#det-addressDetail').text(button.data('addressDetail'));
+        modal.find('#edit-cityId').val(button.data('cityId'));
+        modal.find('#det-cityId').text(button.data('cityId'));
+        modal.find('#edit-districtId').val(button.data('districtId'));
+        modal.find('#det-districtId').text(button.data('districtId'));
+        modal.find('#edit-neighborhoodId').val(button.data('neighborhoodId'));
+        modal.find('#det-neighborhoodId').text(button.data('neighborhoodId'));
+        modal.find('#edit-customerId').val(button.data('customerId'));
+        modal.find('#det-customerId').text(button.data('customerId'));
+        modal.find('#edit-invoiceType').val(button.data('ınvoiceType'));
+        modal.find('#det-invoiceType').text(button.data('ınvoiceType'));
+        modal.find('#edit-identityNumber').val(button.data('ıdentityNumber'));
+        modal.find('#det-identityNumber').text(button.data('ıdentityNumber'));
+        modal.find('#edit-taxOffice').val(button.data('taxOffice'));
+        modal.find('#det-taxOffice').text(button.data('taxOffice'));
+        modal.find('#edit-taxNumber').val(button.data('taxNumber'));
+        modal.find('#det-taxNumber').text(button.data('taxNumber'));
+        modal.find('#edit-companyId').val(button.data('companyId'));
+        modal.find('#det-companyId').text(button.data('companyId'));
+        var ısAnonymized = button.data('ısAnonymized') === 'True' || button.data('ısAnonymized') === true || button.data('ısAnonymized') === 'true';
+        modal.find('#edit-isAnonymized').val(ısAnonymized.toString());
+        modal.find('#det-isAnonymized').text(ısAnonymized ? 'Evet' : 'Hayır');
+        var ısActive = button.data('ısActive') === 'True' || button.data('ısActive') === true || button.data('ısActive') === 'true';
+        modal.find('#edit-isActive').val(ısActive.toString());
+        modal.find('#det-isActive').text(ısActive ? 'Evet' : 'Hayır');
+        modal.find('#edit-notes').val(button.data('notes'));
+        modal.find('#det-notes').text(button.data('notes'));
+        modal.find('#edit-insertUserId').val(button.data('ınsertUserId'));
+        modal.find('#det-insertUserId').text(button.data('ınsertUserId'));
+        modal.find('#edit-insertDate').val(button.data('ınsertDate'));
+        modal.find('#det-insertDate').text(button.data('ınsertDate'));
+        modal.find('#edit-updateUserId').val(button.data('updateUserId'));
+        modal.find('#det-updateUserId').text(button.data('updateUserId'));
+        modal.find('#edit-updateDate').val(button.data('updateDate'));
+        modal.find('#det-updateDate').text(button.data('updateDate'));
+        var isDeleted = button.data('isDeleted') === 'True' || button.data('isDeleted') === true || button.data('isDeleted') === 'true';
+        modal.find('#edit-isDeleted').val(isDeleted.toString());
+        modal.find('#det-isDeleted').text(isDeleted ? 'Evet' : 'Hayır');
+        modal.find('#edit-deleteUserId').val(button.data('deleteUserId'));
+        modal.find('#det-deleteUserId').text(button.data('deleteUserId'));
+        modal.find('#edit-deleteDate').val(button.data('deleteDate'));
+        modal.find('#det-deleteDate').text(button.data('deleteDate'));
+    });
+
+    function submitCreate() {
+        var data = {};
+        $('#createForm').serializeArray().map(function(x){data[x.name] = x.value;});
+        $.post('/Admin/UserAddress/Create', data, function (res) {
+            if (res.success) location.reload();
+            else alert('Hata: ' + res.message);
+        });
+    }
+
+    function submitEdit() {
+        var data = {};
+        $('#editForm').serializeArray().map(function(x){data[x.name] = x.value;});
+        $.post('/Admin/UserAddress/Edit', data, function (res) {
+            if (res.success) location.reload();
+            else alert('Hata: ' + res.message);
+        });
+    }
+</script>
+

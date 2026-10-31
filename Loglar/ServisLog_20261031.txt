@@ -1,0 +1,288 @@
+﻿==============================================================================================================
+Tarih / Saat       : 2026-10-31 21:40:05
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (18 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (16 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (8 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (6 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (25 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (2 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (12 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (61 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 21:39:29
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (25 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (405 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (93 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (11 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (15 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (52 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (332 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (380 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 21:38:52
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 2 ÇEVRİMİÇİ | 7 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (1467 ms)
+[BAŞARISIZ]  | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | A task was canceled.
+[BAŞARISIZ]  | 7302   | Discount (İndirim Servisi)     | http://localhost:7302        | A task was canceled.
+[BAŞARISIZ]  | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | A task was canceled.
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (1719 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARISIZ]  | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | A task was canceled.
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:51:13
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (15 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (11 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (8 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (16 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (9 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (9 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (129 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (135 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:51:06
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 6 ÇEVRİMİÇİ | 3 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (408 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (301 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (147 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (377 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (187 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (701 ms)
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:37:58
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (35 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (26 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (34 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (51 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (16 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (1235 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (949 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (1203 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:35:31
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 3 ÇEVRİMİÇİ | 6 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (371 ms)
+[BAŞARISIZ]  | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | A task was canceled.
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (234 ms)
+[BAŞARISIZ]  | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | Bir iş parçacığı çıkışı veya bir uygulama isteği nedeniyle G/Ç işlemi iptal edildi.
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (263 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARISIZ]  | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | A task was canceled.
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:20:29
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 1 ÇEVRİMİÇİ | 8 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (1076 ms)
+[BAŞARISIZ]  | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | A task was canceled.
+[BAŞARISIZ]  | 7302   | Discount (İndirim Servisi)     | http://localhost:7302        | A task was canceled.
+[BAŞARISIZ]  | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | A task was canceled.
+[BAŞARISIZ]  | 7304   | Order (Sipariş Servisi)        | http://localhost:7304        | A task was canceled.
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARISIZ]  | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | A task was canceled.
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:01:43
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (16 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (6 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (10 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (12 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (5 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (13 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (10 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (14 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 13:01:14
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (292 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (203 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (133 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (272 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (156 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (168 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (149 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (164 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 12:53:41
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (42 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (15 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (38 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (912 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (25 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (32 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (963 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (1198 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 12:52:59
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 1 ÇEVRİMİÇİ | 8 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (1034 ms)
+[BAŞARISIZ]  | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | A task was canceled.
+[BAŞARISIZ]  | 7302   | Discount (İndirim Servisi)     | http://localhost:7302        | A task was canceled.
+[BAŞARISIZ]  | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | A task was canceled.
+[BAŞARISIZ]  | 7304   | Order (Sipariş Servisi)        | http://localhost:7304        | The response ended prematurely. (ResponseEnded)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARISIZ]  | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | The response ended prematurely. (ResponseEnded)
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 12:36:56
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (2 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (4 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (1 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (1 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (0 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (1 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (3 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (7 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 12:36:25
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (22 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (22 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (22 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (28 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (10 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (16 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (12 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (21 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 11:44:47
+Tetikleyici Durumu : Default Sayfası İlk Açılış
+Genel Özet         : Toplam 9 Servis | 8 ÇEVRİMİÇİ | 1 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (9 ms)
+[BAŞARILI]   | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | HTTP 404 NotFound (6 ms)
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (16 ms)
+[BAŞARILI]   | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | HTTP 404 NotFound (133 ms)
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (8 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARILI]   | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | HTTP 404 NotFound (114 ms)
+[BAŞARILI]   | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | HTTP 404 NotFound (108 ms)
+[BAŞARILI]   | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | HTTP 404 NotFound (114 ms)
+==============================================================================================================
+
+==============================================================================================================
+Tarih / Saat       : 2026-10-31 11:44:37
+Tetikleyici Durumu : Uygulama Başlangıcı (Application Startup)
+Genel Özet         : Toplam 9 Servis | 3 ÇEVRİMİÇİ | 6 ÇEVRİMDİŞİ
+--------------------------------------------------------------------------------------------------------------
+DURUM        | PORT   | SERVİS ADI                     | URL                          | DETAY / HATA MESAJI
+--------------------------------------------------------------------------------------------------------------
+[BAŞARILI]   | 5001   | IdentityServer (Kimlik)        | https://localhost:5001       | HTTP 200 OK (245 ms)
+[BAŞARISIZ]  | 7301   | Catalog (Katalog Servisi)      | http://localhost:7301        | A task was canceled.
+[BAŞARILI]   | 7302   | Discount (İndirim Servisi)     | https://localhost:7302       | HTTP 404 NotFound (728 ms)
+[BAŞARISIZ]  | 7303   | Location (Lokasyon Servisi)    | https://localhost:7303       | A task was canceled.
+[BAŞARILI]   | 7304   | Order (Sipariş Servisi)        | https://localhost:7304       | HTTP 404 NotFound (480 ms)
+[BAŞARISIZ]  | 7305   | B2B (Bayi Yönetim Servisi)     | http://localhost:7305        | A task was canceled.
+[BAŞARISIZ]  | 7306   | Basket (Sepet Servisi)         | http://localhost:7306        | A task was canceled.
+[BAŞARISIZ]  | 7307   | Favorite (Favori Servisi)      | http://localhost:7307        | A task was canceled.
+[BAŞARISIZ]  | 7308   | Rental (Kiralama Servisi)      | http://localhost:7308        | A task was canceled.
+==============================================================================================================
+

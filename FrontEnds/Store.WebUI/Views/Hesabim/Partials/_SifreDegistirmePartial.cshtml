@@ -1,0 +1,88 @@
+@model Store.WebUI.Models.HesabimViewModels.SifreDegistirmeViewModel
+
+<div class="card border rounded shadow-sm bg-white p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+        <div>
+            <h3 class="h4 font-weight-bold mb-1 text-dark">Şifre Değiştirme</h3>
+            <p class="text-muted small mb-0">Hesap güvenliğiniz için şifrenizi düzenli aralıklarla güncellemenizi öneririz.</p>
+        </div>
+    </div>
+
+    @if (TempData["PasswordSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa fa-check-circle mr-2"></i> @TempData["PasswordSuccess"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Kapat">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["PasswordError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa fa-exclamation-circle mr-2"></i> @TempData["PasswordError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Kapat">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <form asp-controller="Hesabim" asp-action="SifreDegistirme" method="post" id="changePasswordForm">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group mb-3" style="max-width: 500px;">
+            <label asp-for="CurrentPassword" class="font-weight-bold small text-dark mb-1">Mevcut Şifre <span class="text-danger">*</span></label>
+            <input asp-for="CurrentPassword" id="CurrentPassword" type="password" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="••••••••" required />
+            <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group mb-3" style="max-width: 500px;">
+            <label asp-for="NewPassword" class="font-weight-bold small text-dark mb-1">Yeni Şifre <span class="text-danger">*</span></label>
+            <input asp-for="NewPassword" id="NewPassword" type="password" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="En az 6 karakter" required />
+            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group mb-3" style="max-width: 500px;">
+            <label asp-for="ConfirmPassword" class="font-weight-bold small text-dark mb-1">Yeni Şifre (Tekrar) <span class="text-danger">*</span></label>
+            <input asp-for="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="Yeni şifrenizi tekrar giriniz" required />
+            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+        </div>
+
+        <!-- 1 Numara: Şifreleri Göster Checkbox -->
+        <div class="form-group mb-3 d-flex align-items-center" style="max-width: 500px;">
+            <div class="custom-control custom-checkbox" style="padding-left: 1.75rem;">
+                <input type="checkbox" class="custom-control-input" id="showPasswordsToggle" style="cursor: pointer; width: 18px; height: 18px;">
+                <label class="custom-control-label font-weight-bold small text-dark" for="showPasswordsToggle" style="user-select: none; cursor: pointer; padding-top: 1px;">
+                    Şifreleri Göster
+                </label>
+            </div>
+        </div>
+
+        <!-- 2 Numara: Şifreyi Güncelle Butonu -->
+        <div class="pt-3 border-top mt-4">
+            <button type="submit" id="btnUpdatePassword" class="btn btn-dark px-4 py-2 font-weight-bold text-uppercase" style="min-width: 220px; height: 44px; letter-spacing: 0.5px; border-radius: 6px; font-size: 14px;">
+                ŞİFREYİ GÜNCELLE
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var toggle = document.getElementById("showPasswordsToggle");
+        if (toggle) {
+            toggle.addEventListener("change", function () {
+                var isVisible = this.checked;
+                var currentPass = document.getElementById("CurrentPassword");
+                var newPass = document.getElementById("NewPassword");
+                var confirmPass = document.getElementById("ConfirmPassword");
+
+                var targetType = isVisible ? "text" : "password";
+                if (currentPass) currentPass.type = targetType;
+                if (newPass) newPass.type = targetType;
+                if (confirmPass) confirmPass.type = targetType;
+            });
+        }
+    });
+</script>

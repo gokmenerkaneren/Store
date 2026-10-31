@@ -1,0 +1,248 @@
+@model List<Store.DtoLayer.LocationDtos.CompanyDtos.ResultCompanyDto>
+@{
+    ViewData["Title"] = "Firma Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        FİRMA İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Firma Listesi ve İşlemleri</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="card-block">
+        <div class="dt-responsive table-responsive">
+            <table id="company-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>LegalName</th>
+                        <th>BrandName</th>
+                        <th>TaxOffice</th>
+                        <th>TaxNumber</th>
+                        <th>ERP Kodu</th>
+                        <th>Website</th>
+                        <th>LogoUrl</th>
+                        <th>IsActive</th>
+                        <th>Notes</th>
+                        <th>InsertDate</th>
+                        <th>UpdateDate</th>
+                        <th>DeleteDate</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr style="@(item.IsDeleted ? "background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;" : (!item.IsActive ? "opacity:0.6;background-color:#f8d7da;" : ""))">
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.LegalName</td>
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.BrandName</td>
+                                <td>@item.TaxOffice</td>
+                                <td>@item.TaxNumber</td>
+                                <td>@item.ErpCode</td>
+                                <td><a href="@(item.Website?.StartsWith("http") == true ? item.Website : "http://" + item.Website)" target="_blank" style="@(item.IsDeleted ? "color:#fff;" : "")">@item.Website</a></td>
+                                <td class="text-center" style="vertical-align: middle; padding: 0; width: 120px; height: 80px;">
+                                    @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                    {
+                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: white; border-radius: 4px;">
+                                            <img src="@item.LogoUrl" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain; padding: 4px;" />
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsDeleted)
+                                    {
+                                        <span class="label" style="background:#7b241c; color:#fff;">Hayır</span>
+                                    }
+                                    else if (item.IsActive)
+                                    {
+                                        <span class="label label-success" style="background-color: #2ed8b6;">Evet</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger" style="background-color: #ff5370;">Hayır</span>
+                                    }
+                                </td>
+                                <td>@item.Notes</td>
+                                <td>@item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <!-- Detay Butonu -->
+                                        <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#detailsModal"
+                                                data-id="@item.Id" data-legalname="@item.LegalName" data-brandname="@item.BrandName"
+                                                data-taxoffice="@item.TaxOffice" data-taxnumber="@item.TaxNumber"
+                                                data-website="@item.Website" data-logourl="@item.LogoUrl"
+                                                data-erpcode="@item.ErpCode" data-invoicetype="@item.InvoiceType"
+                                                data-iseinvoiceuser="@item.IsEInvoiceUser"
+                                                data-is-active="@item.IsActive" data-notes="@item.Notes"
+                                                data-insert-user-id="@item.InsertUserId" data-insert-date="@item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss")"
+                                                data-update-user-id="@item.UpdateUserId" data-update-date="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-is-deleted="@item.IsDeleted"
+                                                data-delete-user-id="@item.DeleteUserId" data-delete-date="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))">
+                                            <i class="icofont icofont-file-document"></i>
+                                        </button>
+
+                                        @if (item.IsDeleted)
+                                        {
+                                            <!-- Geri Alma Butonu -->
+                                            <a href="/Admin/Company/RestoreCompany/@item.Id" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">
+                                                <i class="feather icon-rotate-ccw"></i> Geri Al
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <!-- Güncelle Butonu -->
+                                            <a href="/Admin/Company/Edit/@item.Id" class="btn btn-grd-info waves-effect waves-light" style="float: none;margin: 5px;">
+                                                <span class="feather icon-edit"></span>
+                                            </a>
+
+                                            <!-- Sil Butonu -->
+                                            <a href="/Admin/Company/DeleteCompany/@item.Id" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                                <span class="feather icon-trash"></span>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div>
+                
+                    <a href="/Admin/Company/Add" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px; background-color: #00bcd4; border-color: #00bcd4; color: white;">
+                        <span class="feather icon-plus"> Yeni Firma Ekle</span>
+                    </a>
+
+                    @if (ViewBag.ShowDeleted == true)
+                    {
+                        <a href="/Admin/Company/Index?showDeleted=false" class="btn btn-grd-warning waves-effect waves-light" style="float: none;margin: 5px; background-color: #ffb64d; border-color: #ffb64d; color: white;">
+                            <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/Admin/Company/Index?showDeleted=true" class="btn btn-grd-inverse waves-effect waves-light" style="float: none;margin: 5px;">
+                            <span class="feather icon-eye"> Silinenleri Göster</span>
+                        </a>
+                    }
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">
+                <h5 class="modal-title"><i class="feather icon-info"></i> Company Detayları</h5>
+               @*  <button type="button" class="close text-white" data-dismiss="modal">&times;</button> *@
+            </div>
+            <div class="modal-body p-4">
+                <div class="text-center mb-4" id="det-logo-container">
+                    <img id="det-logo" src="" alt="Firma Logosu" style="max-height: 80px; max-width: 160px; object-fit: contain; border: 1px solid #ddd; padding: 5px; border-radius: 4px; background: white;" />
+                </div>
+                <div class="row">
+                    <div class="col-sm-6"><strong>Id</strong> <p id="det-id" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Yasal Adı</strong> <p id="det-legalname" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Marka Adı</strong> <p id="det-brandname" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Vergi Dairesi</strong> <p id="det-taxoffice" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Vergi Numarası</strong> <p id="det-taxnumber" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Fatura Tipi</strong> <p id="det-invoicetype" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>E-Fatura Mükellefi</strong> <p id="det-iseinvoiceuser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>ERP / Cari Kodu</strong> <p id="det-erpcode" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Web Sitesi</strong> <p id="det-website" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Aktif mi?</strong> <p id="det-isActive" class="text-muted"></p></div>
+                    <div class="col-sm-12"><strong>Notlar</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6"><strong>Kaydeden Kullanıcı</strong> <p id="det-insertUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Kayıt Tarihi</strong> <p id="det-insertDate" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Değiştiren Kullanıcı</strong> <p id="det-updateUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Değiştirilme Tarihi</strong> <p id="det-updateDate" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silen Kullanıcı</strong> <p id="det-deleteUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silinme Tarihi</strong> <p id="det-deleteDate" class="text-muted"></p></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: white;"> <i class="icofont icofont-ui-close"></i> Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#company-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                order: []
+            });
+        });
+
+        $('#detailsModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            modal.find('#det-id').text(button.data('id'));
+            modal.find('#det-legalname').text(button.data('legalname'));
+            modal.find('#det-brandname').text(button.data('brandname'));
+            modal.find('#det-taxoffice').text(button.data('taxoffice'));
+            modal.find('#det-taxnumber').text(button.data('taxnumber'));
+            
+            var invType = button.data('invoicetype');
+            modal.find('#det-invoicetype').text(invType === 1 ? 'Kurumsal' : (invType === 0 ? 'Bireysel' : '-'));
+            
+            var isEinv = button.data('iseinvoiceuser') === 'True' || button.data('iseinvoiceuser') === true || button.data('iseinvoiceuser') === 'true';
+            modal.find('#det-iseinvoiceuser').text(isEinv ? 'Evet' : 'Hayır');
+            
+            modal.find('#det-erpcode').text(button.data('erpcode') || '-');
+            
+            modal.find('#det-website').text(button.data('website'));
+
+            var logoUrl = button.data('logourl');
+            if (logoUrl) {
+                modal.find('#det-logo').attr('src', logoUrl).show();
+                modal.find('#det-logo-container').show();
+            } else {
+                modal.find('#det-logo').hide();
+                modal.find('#det-logo-container').hide();
+            }
+
+            var isActive = button.data('is-active') === 'True' || button.data('is-active') === true || button.data('is-active') === 'true';
+            modal.find('#det-isActive').text(isActive ? 'Evet' : 'Hayır');
+            modal.find('#det-notes').text(button.data('notes'));
+            modal.find('#det-insertUserId').text(button.data('insert-user-id'));
+            modal.find('#det-insertDate').text(button.data('insert-date'));
+            modal.find('#det-updateUserId').text(button.data('update-user-id'));
+            modal.find('#det-updateDate').text(button.data('update-date'));
+            modal.find('#det-deleteUserId').text(button.data('delete-user-id'));
+            modal.find('#det-deleteDate').text(button.data('delete-date'));
+        });
+    </script>
+}

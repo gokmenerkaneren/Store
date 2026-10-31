@@ -1,0 +1,245 @@
+@model Store.WebUI.Controllers.RequirementViewModel
+
+@{
+    ViewData["Title"] = "Form Gereksinimleri";
+}
+
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    /* Küçük düzeltmeler */
+    .position-relative { position: relative; }
+    .position-absolute { position: absolute; }
+    .text-danger { color: #dc3545 !important; display: block; margin-top: 5px; font-size: 12px; }
+    .form-control { border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; margin-bottom: 5px; outline: none; }
+    .form-control:focus { border-color: #000; }
+    .tabs__slider { display: flex; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+    
+    /* Sekme stilleri */
+    .tabs__btn { cursor: pointer; padding: 10px 20px; font-weight: bold; border-bottom: 2px solid transparent; }
+    .tabs__btn.active, .tabs__btn[data-active="true"] { border-bottom: 2px solid #000; color: #000; }
+    .tabs__body > div { display: none; }
+    .tabs__body > div.active { display: block; }
+
+    /* Flatpickr Seç Butonu */
+    .flatpickr-select-btn {
+        background-color: #1a1a1a;
+        color: #fff;
+        border: none;
+        padding: 6px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+    }
+    .flatpickr-select-btn:hover { background-color: #333; }
+</style>
+
+<div class="container mb-60 mt-40">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-20 text-center">Gereksinim Test Formu</h1>
+            
+            @if(ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success text-center mb-30" style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 4px;">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+
+            <div class="tabs" data-js-tabs>
+                <!-- TABS HEAD -->
+                <div class="tabs__head mb-30" data-js-tabs-head>
+                    <div class="tabs__slider justify-content-lg-center" data-js-tabs-slider>
+                        <div class="tabs__btn" data-js-tabs-btn data-active="true">TEMEL BİLGİLER</div>
+                        <div class="tabs__btn" data-js-tabs-btn>İLETİŞİM VE ŞİFRE</div>
+                        <div class="tabs__btn" data-js-tabs-btn>TARİH VE SEÇİMLER</div>
+                    </div>
+                </div>
+
+                <!-- TABS BODY -->
+                <div class="tabs__body">
+                    <form asp-action="Index" asp-controller="ZZRequirements" method="post" id="requirementsForm">
+                        
+                        <!-- TAB 1 CONTENT -->
+                        <div data-js-tabs-tab class="active" style="display: block;">
+                            <div class="row">
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="UsernameField" style="display:block; margin-bottom: 5px;">Kullanıcı Adı</label>
+                                    <input asp-for="UsernameField" class="form-control" placeholder="Kullanıcı Adı" />
+                                    <span asp-validation-for="UsernameField" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="TextOnlyField" style="display:block; margin-bottom: 5px;">Sadece Text (Harf)</label>
+                                    <input asp-for="TextOnlyField" class="form-control" placeholder="Sadece Harf" />
+                                    <span asp-validation-for="TextOnlyField" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="NumberOnlyField" style="display:block; margin-bottom: 5px;">Sadece Rakam</label>
+                                    <!-- Rakam harici girişi engeller -->
+                                    <input asp-for="NumberOnlyField" class="form-control" placeholder="Sadece Rakam" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                                    <span asp-validation-for="NumberOnlyField" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2 CONTENT -->
+                        <div data-js-tabs-tab style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="EmailField" style="display:block; margin-bottom: 5px;">Email Adresi</label>
+                                    <input asp-for="EmailField" class="form-control" placeholder="ornek@domain.com" />
+                                    <span asp-validation-for="EmailField" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="PhoneField" style="display:block; margin-bottom: 5px;">Cep Telefonu</label>
+                                    <div class="position-relative">
+                                        <input asp-for="PhoneField" class="form-control phone-mask" placeholder="(555) 444 33 22" style="padding-right: 40px;" />
+                                        <i class="position-absolute" style="right: 15px; top: 12px; color: #777; pointer-events: none;">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                        </i>
+                                    </div>
+                                    <span asp-validation-for="PhoneField" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="PasswordField" style="display:block; margin-bottom: 5px;">Şifre</label>
+                                    <input asp-for="PasswordField" class="form-control" placeholder="Şifreniz" />
+                                    <span asp-validation-for="PasswordField" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3 CONTENT -->
+                        <div data-js-tabs-tab style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="DateField" style="display:block; margin-bottom: 5px;">Tarih</label>
+                                    <!-- Tipe 'text' verilerek tarayıcının native tarih seçeceğini flatpickr ile ezmesi sağlandı -->
+                                    <input asp-for="DateField" type="text" class="form-control date-picker" placeholder="Tarih seçiniz" style="background-color: #fff;" />
+                                    <span asp-validation-for="DateField" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-20">
+                                    <label asp-for="DateTimeField" style="display:block; margin-bottom: 5px;">Tarih ve Saat</label>
+                                    <input asp-for="DateTimeField" type="text" class="form-control datetime-picker" placeholder="Tarih ve Saat seçiniz" style="background-color: #fff;" />
+                                    <span asp-validation-for="DateTimeField" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-20">
+                                    <label asp-for="DropdownField" style="display:block; margin-bottom: 5px;">Şehir Seçimi (Dropdown)</label>
+                                    <select asp-for="DropdownField" class="form-control" style="height: 45px; width: 100%; border: 1px solid #e1e1e1; padding-left: 15px; color: #555;">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="Istanbul">İstanbul</option>
+                                        <option value="Ankara">Ankara</option>
+                                        <option value="Izmir">İzmir</option>
+                                    </select>
+                                    <span asp-validation-for="DropdownField" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-40">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn--secondary btn--full" style="max-width: 300px;">FORMU GÖNDER VE DOĞRULA</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <!-- JS Bağımlılıkları -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // JQuery Mask - Telefon Numarası Maskeleme
+            $('.phone-mask').mask('(000) 000 00 00');
+
+            // Flatpickr Buton Ekleme Fonksiyonu ("Seç" Butonu)
+            function addSelectButton(instance) {
+                const btn = document.createElement("button");
+                btn.className = "flatpickr-select-btn";
+                btn.type = "button";
+                btn.textContent = "Seç";
+                btn.addEventListener("click", function() {
+                    instance.close();
+                });
+                instance.calendarContainer.appendChild(btn);
+            }
+
+            // Flatpickr - Sadece Tarih
+            flatpickr(".date-picker", {
+                locale: "tr",
+                dateFormat: "Y-m-d",
+                onReady: function(selectedDates, dateStr, instance) {
+                    addSelectButton(instance);
+                }
+            });
+
+            // Flatpickr - Tarih ve Saat
+            flatpickr(".datetime-picker", {
+                enableTime: true,
+                locale: "tr",
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                onReady: function(selectedDates, dateStr, instance) {
+                    addSelectButton(instance);
+                }
+            });
+
+            // Sekme geçiş kontrolü
+            var tabs = document.querySelectorAll("[data-js-tabs-btn]");
+            var contents = document.querySelectorAll("[data-js-tabs-tab]");
+            
+            tabs.forEach(function(tab, index) {
+                tab.addEventListener("click", function() {
+                    tabs.forEach(function(t) { 
+                        t.removeAttribute("data-active");
+                        t.classList.remove("active"); 
+                        t.style.borderBottom = "2px solid transparent";
+                        t.style.color = "#888";
+                    });
+                    
+                    this.setAttribute("data-active", "true");
+                    this.classList.add("active");
+                    this.style.borderBottom = "2px solid #000";
+                    this.style.color = "#000";
+                    
+                    contents.forEach(function(c) { 
+                        c.style.display = "none"; 
+                        c.classList.remove("active");
+                    });
+                    if(contents[index]) {
+                        contents[index].style.display = "block";
+                        contents[index].classList.add("active");
+                    }
+                });
+                
+                if(tab.getAttribute("data-active") === "true") {
+                    tab.style.borderBottom = "2px solid #000";
+                    tab.style.color = "#000";
+                } else {
+                    tab.style.borderBottom = "2px solid transparent";
+                    tab.style.color = "#888";
+                }
+                tab.style.cursor = "pointer";
+                tab.style.padding = "10px 20px";
+                tab.style.fontWeight = "bold";
+            });
+        });
+    </script>
+}

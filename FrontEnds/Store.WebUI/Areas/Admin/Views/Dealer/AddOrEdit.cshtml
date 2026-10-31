@@ -1,0 +1,507 @@
+@model Store.DtoLayer.LocationDtos.DealerDtos.UpdateDealerDto
+
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Bayi Güncelle" : "Yeni Bayi Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    var contactInfos = ViewBag.ContactInfos as List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto> ?? new List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto>();
+    var dealerAddresses = ViewBag.DealerAddresses as List<Store.DtoLayer.LocationDtos.DealerAddressDtos.ResultDealerAddressDto> ?? new List<Store.DtoLayer.LocationDtos.DealerAddressDtos.ResultDealerAddressDto>();
+    var countries = ViewBag.Countries as List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto> ?? new List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto>();
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <!-- Header -->
+                <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                        <div class="d-flex align-items-center">
+                            <i class="feather icon-users" style="font-size: 45px; color: #ffffff !important;"></i>
+                            <div style="margin-left: 10px;">
+                                <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                    @(isEdit ? "Bayi Profilini Güncelle" : "Yeni Bayi Profili Ekle")
+                                </h4>
+                                <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">
+                                    Bayiye ait ticari, finansal ve çoklu adres (Merkez, Fatura, Sevkiyat) bilgilerini buradan yönetebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Tabs Header -->
+                <div class="card-block p-t-10">
+                    <ul class="nav nav-tabs md-tabs" role="tablist" style="border-bottom: 2px solid #00bcd4;">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tab-general" role="tab" style="font-weight: 600; font-size: 16px;">
+                                <i class="feather icon-file-text mr-2"></i>Genel & Finansal Bilgiler
+                            </a>
+                            <div class="slide"></div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(isEdit ? "" : "disabled")" data-toggle="tab" href="#tab-addresses" role="tab" style="font-weight: 600; font-size: 16px;">
+                                <i class="feather icon-map-pin mr-2"></i>Çoklu Adres Yönetimi @(isEdit ? $"({dealerAddresses.Count})" : "(Önce Bayiyi Kaydedin)")
+                            </a>
+                            <div class="slide"></div>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-content card-block p-t-20">
+                        <!-- TAB 1: GENEL & FİNANSAL BİLGİLER -->
+                        <div class="tab-pane active" id="tab-general" role="tabpanel">
+                            <form method="post" action="@(isEdit ? "/Admin/Dealer/Edit" : "/Admin/Dealer/Add")" id="dealerForm">
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                @if (isEdit)
+                                {
+                                    <input type="hidden" asp-for="Id" />
+                                }
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="sub-title" style="color: #00bcd4; font-weight: 600;"><i class="feather icon-briefcase mr-1"></i>Ticari & Kurumsal Kimlik</h5>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Ticari Unvan</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" asp-for="CompanyName" placeholder="Ticari Unvan / Şirket Adı" required minlength="5" data-val="false" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen bu alanı doldurun.' : 'Ticari Unvan en az 5 karakter olmalıdır.')" oninput="this.setCustomValidity('')" />
+                                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Vergi Numarası</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" asp-for="TaxNumber" placeholder="Vergi Numarası" required pattern="[0-9]{11}" maxlength="11" data-val="false" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen bu alanı doldurun.' : 'Vergi Numarası tam olarak 11 rakamdan oluşmalıdır.')" oninput="this.setCustomValidity('')" />
+                                                <span asp-validation-for="TaxNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Vergi Dairesi</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" asp-for="TaxOffice" placeholder="Vergi Dairesi (Örn: Bornova V.D.)" required minlength="5" data-val="false" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen bu alanı doldurun.' : 'Vergi Dairesi en az 5 karakter olmalıdır.')" oninput="this.setCustomValidity('')" />
+                                                <span asp-validation-for="TaxOffice" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Durum</strong></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" asp-for="IsActive">
+                                                    <option value="true">Aktif</option>
+                                                    <option value="false">Pasif</option>
+                                                </select>
+                                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Bayi Notları</strong></label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" asp-for="Notes" rows="5" placeholder="Bayi ile ilgili özel şartlar, temsilci notları..."></textarea>
+                                                <span asp-validation-for="Notes" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h5 class="sub-title" style="color: #00bcd4; font-weight: 600;"><i class="feather icon-credit-card mr-1"></i>Finansal Koşullar & Durum</h5>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>İskonto Oranı (%)</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="number" step="0.01" class="form-control" asp-for="DiscountRate" placeholder="Otomatik İskonto Oranı (Örn: 15.00)" />
+                                                <span asp-validation-for="DiscountRate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Kredi Limiti (₺)</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="number" step="0.01" class="form-control" asp-for="CreditLimit" placeholder="Üst Kredi Limit Miktarı" />
+                                                <span asp-validation-for="CreditLimit" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label"><strong>Anlık Bakiye (₺)</strong></label>
+                                            <div class="col-sm-9">
+                                                <input type="number" step="0.01" class="form-control" asp-for="CurrentBalance" placeholder="Anlık Borç/Alacak Bakiyesi" />
+                                                <span asp-validation-for="CurrentBalance" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label"></label>
+                                        <div class="col-sm-9">
+                                            <button type="submit" class="btn btn-success" style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;"><i class="icofont icofont-check-circled"></i>@(isEdit ? "Güncelle" : "Kaydet")</button>
+                                            <a href="/Admin/Dealer/Index" class="btn btn-danger ml-2" style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;"><i class="icofont icofont-ui-close"></i>Vazgeç</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- TAB 2: ÇOKLU ADRES YÖNETİMİ -->
+                        <div class="tab-pane" id="tab-addresses" role="tabpanel">
+                            @if (isEdit)
+                            {
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 style="color: #00bcd4; font-weight: 600;"><i class="feather icon-map-pin mr-1"></i>Kayıtlı Bayi Adresleri</h5>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table id="addressTable" class="table table-striped table-bordered nowrap" style="width:100%">
+                                        <thead style="background-color: #00bcd4; color: white;">
+                                            <tr>
+                                                <th>Başlık</th>
+                                                <th>Adres Tipi</th>
+                                                <th>Teslimat Yetkilisi / Telefon</th>
+                                                <th>Açık Adres</th>
+                                                <th>Şehir / İlçe</th>
+                                                <th style="width: 150px;" class="text-center">İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (dealerAddresses.Any())
+                                            {
+                                                foreach (var addr in dealerAddresses)
+                                                {
+                                                    var typeBadgeClass = addr.AddressType == 1 ? "badge-primary" : (addr.AddressType == 2 ? "badge-info" : "badge-warning");
+                                                    var typeText = addr.AddressType == 1 ? "Merkez Adres" : (addr.AddressType == 2 ? "Fatura Adresi" : "Sevkiyat Adresi");
+                                                    <tr>
+                                                        <td><strong>@addr.Title</strong></td>
+                                                        <td><span class="badge @typeBadgeClass">@typeText</span></td>
+                                                        <td>@addr.ContactFullName<br/><small class="text-muted">@addr.PhoneNumber</small></td>
+                                                        <td style="white-space: normal;">@addr.AddressDetail</td>
+                                                        <td>@addr.CityName / @addr.DistrictName<br/><small class="text-muted">@addr.CountryName</small></td>
+                                                        <td class="text-center">
+                                                            <div class="btn-group btn-group-sm">
+                                                                <button type="button" class="btn btn-grd-info waves-effect waves-light" onclick="openEditAddressModal('@addr.Id')" title="Düzenle">
+                                                                    <i class="feather icon-edit"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-grd-danger waves-effect waves-light" onclick="deleteDealerAddress('@addr.Id')" title="Sil">
+                                                                    <i class="feather icon-trash-2"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-grd-primary waves-effect waves-light" onclick="openAddAddressModal()">
+                                            <i class="feather icon-plus mr-1"></i>Yeni Adres Ekle
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- ADRES EKLEME MODAL -->
+                                <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-c-blue text-white" style="background-color: #00bcd4 !important;">
+                                                <h5 class="modal-title text-white" id="modalHeaderTitle" style="font-weight: 600;"><i class="feather icon-map-pin mr-2"></i>Bayiye Yeni Adres Ekle</h5>
+                                                <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="newAddressForm" onsubmit="event.preventDefault(); saveDealerAddress();">
+                                                    <input type="hidden" id="modalDealerId" value="@Model.Id" />
+                                                    <input type="hidden" id="modalAddressId" value="" />
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Adres Başlığı</strong></label>
+                                                            <input type="text" id="modalTitle" class="form-control" placeholder="Örn: Merkez Bina, Fatura Adresi" required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen adres başlığını giriniz.' : '')" oninput="this.setCustomValidity('')" />
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Adres Tipi</strong></label>
+                                                            <select id="modalAddressType" class="form-control" required>
+                                                                <option value="1">🏢 Merkez Adres (Headquarters)</option>
+                                                                <option value="2">🧾 Fatura Adresi (Billing)</option>
+                                                                <option value="3">🚚 Sevkiyat Adresi (Shipping)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Teslimat Yetkilisi Adı</strong></label>
+                                                            <input type="text" id="modalContactFullName" class="form-control" placeholder="Ad Soyad" required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen teslimat yetkilisi adını giriniz.' : '')" oninput="this.setCustomValidity('')" />
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>İletişim Telefonu</strong></label>
+                                                            <input type="text" id="modalPhoneNumber" class="form-control" placeholder="Örn: 0232 000 00 00" required pattern="[0-9]{10,11}" data-val="false" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen iletişim telefonunu giriniz.' : 'Telefon numarası sadece rakamlardan oluşmalı ve geçerli uzunlukta olmalıdır.')" oninput="this.setCustomValidity('')" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Ülke</strong></label>
+                                                            <select id="modalCountryId" class="form-control" required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen ülke seçiniz.' : '')" onchange="this.setCustomValidity('')">
+                                                                <option value="">-- Ülke Seçin --</option>
+                                                                @foreach (var c in countries)
+                                                                {
+                                                                    <option value="@c.Id">@c.CountryName</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Şehir</strong></label>
+                                                            <select id="modalCityId" class="form-control" disabled required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen şehir seçiniz.' : '')" onchange="this.setCustomValidity('')">
+                                                                <option value="">-- Önce Ülke Seçin --</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>İlçe</strong></label>
+                                                            <select id="modalDistrictId" class="form-control" disabled required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen ilçe seçiniz.' : '')" onchange="this.setCustomValidity('')">
+                                                                <option value="">-- Önce Şehir Seçin --</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label style="font-weight: 600;"><strong>Mahalle</strong></label>
+                                                            <select id="modalNeighborhoodId" class="form-control" disabled>
+                                                                <option value="">-- Önce İlçe Seçin --</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label style="font-weight: 600;"><strong>Açık Adres Detayı</strong></label>
+                                                        <textarea id="modalAddressDetail" class="form-control" rows="3" placeholder="Sokak, Cadde, Bina No, Kat/Daire..." required oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Lütfen açık adres detayını giriniz.' : '')" oninput="this.setCustomValidity('')"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                <button type="submit" form="newAddressForm" class="btn btn-primary"><i class="feather icon-save mr-1"></i>Adresi Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // DataTables Initialization for Addresses
+            $('#addressTable').DataTable({
+                "dom": 'Bfrtip',
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Turkish.json"
+                },
+                "responsive": true,
+                "order": [] // Disable initial sorting
+            });
+
+            // ═══ CASCADING DROPDOWN: Ülke → Şehir → İlçe → Mahalle ═══
+
+            // Ülke değiştiğinde Şehirleri yükle
+            $('#modalCountryId').on('change', function () {
+                var countryId = $(this).val();
+
+                // Alt dropdown'ları sıfırla
+                $('#modalCityId').html('<option value="">-- Yükleniyor... --</option>').prop('disabled', true);
+                $('#modalDistrictId').html('<option value="">-- Önce Şehir Seçin --</option>').prop('disabled', true);
+                $('#modalNeighborhoodId').html('<option value="">-- Önce İlçe Seçin --</option>').prop('disabled', true);
+
+                if (!countryId) {
+                    $('#modalCityId').html('<option value="">-- Önce Ülke Seçin --</option>');
+                    return;
+                }
+
+                $.getJSON('/Admin/Dealer/GetCitiesByCountry', { countryId: countryId }, function (data) {
+                    var options = '<option value="">-- Şehir Seçin --</option>';
+                    $.each(data, function (i, item) {
+                        options += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+                    $('#modalCityId').html(options).prop('disabled', false);
+                });
+            });
+
+            // Şehir değiştiğinde İlçeleri yükle
+            $('#modalCityId').on('change', function () {
+                var cityId = $(this).val();
+
+                // Alt dropdown'ları sıfırla
+                $('#modalDistrictId').html('<option value="">-- Yükleniyor... --</option>').prop('disabled', true);
+                $('#modalNeighborhoodId').html('<option value="">-- Önce İlçe Seçin --</option>').prop('disabled', true);
+
+                if (!cityId) {
+                    $('#modalDistrictId').html('<option value="">-- Önce Şehir Seçin --</option>');
+                    return;
+                }
+
+                $.getJSON('/Admin/Dealer/GetDistrictsByCity', { cityId: cityId }, function (data) {
+                    var options = '<option value="">-- İlçe Seçin --</option>';
+                    $.each(data, function (i, item) {
+                        options += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+                    $('#modalDistrictId').html(options).prop('disabled', false);
+                });
+            });
+
+            // İlçe değiştiğinde Mahalleleri yükle
+            $('#modalDistrictId').on('change', function () {
+                var districtId = $(this).val();
+
+                // Alt dropdown'ı sıfırla
+                $('#modalNeighborhoodId').html('<option value="">-- Yükleniyor... --</option>').prop('disabled', true);
+
+                if (!districtId) {
+                    $('#modalNeighborhoodId').html('<option value="">-- Önce İlçe Seçin --</option>');
+                    return;
+                }
+
+                $.getJSON('/Admin/Dealer/GetNeighborhoodsByDistrict', { districtId: districtId }, function (data) {
+                    var options = '<option value="">-- Mahalle Seçin --</option>';
+                    $.each(data, function (i, item) {
+                        options += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+                    $('#modalNeighborhoodId').html(options).prop('disabled', false);
+                });
+            });
+        });
+
+        function openAddAddressModal() {
+            $('#newAddressForm')[0].reset();
+            $('#modalAddressId').val('');
+            $('#modalHeaderTitle').html('<i class="feather icon-map-pin mr-2"></i>Bayiye Yeni Adres Ekle');
+            
+            $('#modalCityId').html('<option value="">-- Önce Ülke Seçin --</option>').prop('disabled', true);
+            $('#modalDistrictId').html('<option value="">-- Önce Şehir Seçin --</option>').prop('disabled', true);
+            $('#modalNeighborhoodId').html('<option value="">-- Önce İlçe Seçin --</option>').prop('disabled', true);
+            
+            $('#addAddressModal').modal('show');
+        }
+
+        function openEditAddressModal(id) {
+            $.get('/Admin/Dealer/GetDealerAddressById/' + id, function(data) {
+                if (data) {
+                    $('#modalAddressId').val(data.id);
+                    $('#modalTitle').val(data.title);
+                    $('#modalAddressType').val(data.addressType);
+                    $('#modalContactFullName').val(data.contactFullName);
+                    $('#modalPhoneNumber').val(data.phoneNumber);
+                    $('#modalAddressDetail').val(data.addressDetail);
+                    $('#modalCountryId').val(data.countryId);
+                    
+                    $('#modalHeaderTitle').html('<i class="feather icon-edit mr-2"></i>Bayi Adresini Düzenle');
+                    
+                    // Cascade dropdowns need to be populated
+                    $.getJSON('/Admin/Dealer/GetCitiesByCountry', { countryId: data.countryId }, function (cities) {
+                        var cityOptions = '<option value="">-- Şehir Seçin --</option>';
+                        $.each(cities, function (i, item) {
+                            cityOptions += '<option value="' + item.id + '"' + (item.id === data.cityId ? ' selected' : '') + '>' + item.name + '</option>';
+                        });
+                        $('#modalCityId').html(cityOptions).prop('disabled', false);
+                        
+                        $.getJSON('/Admin/Dealer/GetDistrictsByCity', { cityId: data.cityId }, function (districts) {
+                            var distOptions = '<option value="">-- İlçe Seçin --</option>';
+                            $.each(districts, function (i, item) {
+                                distOptions += '<option value="' + item.id + '"' + (item.id === data.districtId ? ' selected' : '') + '>' + item.name + '</option>';
+                            });
+                            $('#modalDistrictId').html(distOptions).prop('disabled', false);
+                            
+                            $.getJSON('/Admin/Dealer/GetNeighborhoodsByDistrict', { districtId: data.districtId }, function (neighborhoods) {
+                                var neighOptions = '<option value="">-- Mahalle Seçin --</option>';
+                                $.each(neighborhoods, function (i, item) {
+                                    neighOptions += '<option value="' + item.id + '"' + (item.id === data.neighborhoodId ? ' selected' : '') + '>' + item.name + '</option>';
+                                });
+                                $('#modalNeighborhoodId').html(neighOptions).prop('disabled', false);
+                                
+                                $('#addAddressModal').modal('show');
+                            });
+                        });
+                    });
+                }
+            }).fail(function() {
+                alert('Adres bilgileri alınırken bir hata oluştu.');
+            });
+        }
+
+        function deleteDealerAddress(id) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu adres silinecek!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Admin/Dealer/SoftDeleteDealerAddress/' + id,
+                        type: 'DELETE',
+                        success: function(res) {
+                            if (res.success) {
+                                Swal.fire('Silindi!', res.message, 'success').then(() => location.reload());
+                            } else {
+                                Swal.fire('Hata!', res.message, 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Hata!', 'Adres silinirken bir sunucu hatası oluştu.', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function saveDealerAddress() {
+            var addressId = $('#modalAddressId').val();
+            var data = {
+                id: addressId ? addressId : '00000000-0000-0000-0000-000000000000',
+                dealerId: $('#modalDealerId').val(),
+                addressType: parseInt($('#modalAddressType').val()),
+                title: $('#modalTitle').val(),
+                contactFullName: $('#modalContactFullName').val(),
+                phoneNumber: $('#modalPhoneNumber').val(),
+                addressDetail: $('#modalAddressDetail').val(),
+                countryId: $('#modalCountryId').val(),
+                cityId: $('#modalCityId').val(),
+                districtId: $('#modalDistrictId').val(),
+                neighborhoodId: $('#modalNeighborhoodId').val() || null,
+                isActive: true
+            };
+
+            $.ajax({
+                url: '/Admin/Dealer/SaveDealerAddress',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(res) {
+                    if (res.success) {
+                        Swal.fire('Başarılı', res.message, 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Hata', res.message, 'error');
+                    }
+                },
+                error: function(err) {
+                    Swal.fire('Hata', 'Adres kaydedilirken bir sunucu hatası oluştu.', 'error');
+                }
+            });
+        }
+    </script>
+}

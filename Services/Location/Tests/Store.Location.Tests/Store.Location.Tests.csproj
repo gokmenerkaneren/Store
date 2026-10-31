@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.28" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="xunit" Version="2.8.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="FluentAssertions" Version="8.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Store.Location.Domain\Store.Location.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\Store.Location.Application\Store.Location.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Store.Location.Persistence\Store.Location.Persistence.csproj" />
+    <ProjectReference Include="..\..\Presentation\Store.Location.WebApi\Store.Location.WebApi.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Store.Shared\Store.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

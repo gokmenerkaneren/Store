@@ -1,0 +1,35 @@
+﻿@model List<Store.DtoLayer.CatalogDtos.ProductPriceDtos.ResultProductPriceDto>
+
+<table id="priceTable" class="table table-hover table-bordered shadow-sm">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th>Fiyat Listesi</th>
+            <th>Fiyat Tipi</th>
+            <th>Tutar</th>
+            <th>Min Miktar</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+        </tr>
+    </thead>
+    <tbody id="priceTableBody">
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@(p.PriceListId?.ToString() ?? "-")</td>
+                    @{ var ptName = (ViewBag.PriceTypes as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)?.FirstOrDefault(x => x.Value == p.PriceTypeId.ToString())?.Text ?? "-"; } <td><span class="badge badge-info">@ptName</span></td>
+                    <td class="font-weight-bold text-dark">@p.Amount.ToString("N2")</td>
+                    <td>@p.MinimumQuantity</td>
+                    <td>@(p.ValidFrom?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                    <td>@(p.ValidTo?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr id="no-price-row"><td colspan="6" class="text-center text-muted py-4">Henüz bir fiyat tanımlanmamış. Yukarıdaki formdan ekleyebilirsiniz.</td></tr>
+        }
+    </tbody>
+</table>
+

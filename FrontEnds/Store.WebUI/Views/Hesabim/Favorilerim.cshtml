@@ -1,0 +1,239 @@
+@model Store.WebUI.Models.FavoriteViewModels.UserFavoriteListViewModel
+@{
+    ViewData["Title"] = "Favorilerim";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+    var sidebarModel = ViewBag.SidebarModel as Store.WebUI.Models.HesabimViewModels.HesabimSidebarViewModel ?? new Store.WebUI.Models.HesabimViewModels.HesabimSidebarViewModel { ActiveTab = "Favorilerim" };
+}
+
+<style>
+    /* Spin-button oklarını kaldır ve input alanını tam ortala */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
+<div class="breadcrumbs mt-15">
+    <div class="container">
+        <ul class="list-unstyled d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start mb-0">
+            <li><a href="/Default/Index">Anasayfa</a></li>
+            <li><a href="/Hesabim/Index">Hesabım</a></li>
+            <li><span>Favorilerim</span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="account-portal-container py-35 mb-50">
+    <div class="container">
+        <div class="row">
+            <!-- SOL KOLON: Navigasyon Menüsü -->
+            <div class="col-lg-3 mb-30 mb-lg-0">
+                <partial name="Partials/_HesabimSidebarPartial" model="sidebarModel" />
+            </div>
+
+            <!-- SAĞ KOLON: Favorilerim Listesi -->
+            <div class="col-lg-9">
+                <div class="card border rounded shadow-sm bg-white p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                        <div>
+                            <h3 class="h4 font-weight-bold mb-1 text-dark">Favorilerim</h3>
+                            <p class="text-muted small mb-0">Beğendiğiniz ürünlerin listesi aşağıdadır.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row" id="favorites-container">
+        @if(Model.Items != null && Model.Items.Count > 0)
+        {
+            foreach (var item in Model.Items)
+            {
+                <div class="col-12 col-md-6 mb-4 favorite-card-wrapper" id="fav-card-@item.ProductId">
+                    <div class="card h-100 shadow-sm border position-relative @(!item.IsActive ? "opacity-50" : "")" style="border-radius: 8px; overflow: hidden; background: #fff; transition: box-shadow 0.2s ease;">
+                        
+                        <!-- Sağ Üst Favorilerden Çıkar Butonu (Kırmızı Dolu Çöp Kutusu) -->
+                        <button type="button" 
+                                class="btn btn-white rounded-circle shadow-sm position-absolute d-flex align-items-center justify-content-center" 
+                                style="top: 12px; right: 12px; width: 38px; height: 38px; z-index: 10; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; padding: 0; transition: transform 0.15s ease;"
+                                onclick="removeFromFavorites('@item.ProductId')"
+                                data-js-tooltip
+                                data-tippy-content="Favorilerden Çıkar"
+                                data-tippy-placement="left"
+                                title="Favorilerden Çıkar">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 448 512" width="17" height="17">
+                                <path fill="#dc3545" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Fiyatı Düştü Rozeti -->
+                        @if(item.IsPriceDropped && item.IsActive)
+                        {
+                            <span class="badge badge-danger position-absolute" style="top: 12px; left: 12px; font-size: 12px; padding: 5px 10px; z-index: 10; border-radius: 4px;">
+                                İndirim
+                            </span>
+                        }
+
+                        <!-- Ürün Fotoğrafı (Daha Büyük Görünürlük) -->
+                        <a href="/Product/Index/@item.ProductId" class="d-block overflow-hidden" style="background: #f8f9fa;">
+                            <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" 
+                                 style="height: 310px; width: 100%; object-fit: cover; transition: transform 0.3s ease;" 
+                                 onerror="this.src='/images/no-image.jpg';">
+                        </a>
+                        
+                        <div class="card-body text-center d-flex flex-column p-4">
+                            <h5 class="card-title font-weight-bold mb-2" style="font-size: 16px; line-height: 1.4; min-height: 44px;">
+                                <a href="/Product/Index/@item.ProductId" class="text-dark text-decoration-none">@item.Name</a>
+                            </h5>
+                            
+                            @if(!item.IsActive)
+                            {
+                                <div class="mt-auto">
+                                    <span class="text-danger font-weight-bold small">Bu ürün artık satışta değil</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="price-box my-2" style="font-size: 17px;">
+                                    @if(item.DiscountedPrice > 0 && item.Price > item.DiscountedPrice)
+                                    {
+                                        <span class="text-muted mr-2" style="font-size: 14px; text-decoration: line-through;">@item.Price.ToString("N2") @item.CurrencySymbol</span>
+                                        <span class="text-danger font-weight-bold" style="font-size: 19px;">@item.DiscountedPrice.ToString("N2") @item.CurrencySymbol</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="font-weight-bold text-dark" style="font-size: 19px;">@((item.DiscountedPrice > 0 ? item.DiscountedPrice : item.Price).ToString("N2")) @item.CurrencySymbol</span>
+                                    }
+                                </div>
+                                
+                                <div class="mt-auto pt-3">
+                                    @if(!item.IsInStock)
+                                    {
+                                        <button class="btn btn-outline-secondary w-100" style="height: 46px; font-size: 13px;">Gelince Haber Ver</button>
+                                    }
+                                    else if(item.HasVariants)
+                                    {
+                                        <a href="/Product/Index/@item.ProductId" class="btn btn--secondary w-100 d-flex align-items-center justify-content-center" style="height: 46px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px;">SEÇENEKLERİ GÖR</a>
+                                    }
+                                    else
+                                    {
+                                        <!-- Adet Textbox'ı ve Sepete Ekle Butonu -->
+                                        <div class="d-flex align-items-center w-100" style="gap: 10px;">
+                                            <div class="d-flex align-items-center justify-content-between border rounded" style="background: #ffffff; width: 105px; min-width: 105px; height: 46px; padding: 0 6px; box-sizing: border-box;">
+                                                <button type="button" class="btn btn-sm p-0 d-flex align-items-center justify-content-center text-dark" 
+                                                        onclick="var el = document.getElementById('qty-@item.ProductId'); var v = parseInt(el.value, 10) || 1; if(v > 1) { el.value = v - 1; var b = document.getElementById('btn-add-@item.ProductId'); if(b) b.setAttribute('data-product-quantity', el.value); }" 
+                                                        style="width: 28px; height: 100%; border: none; background: transparent; font-size: 20px; font-weight: bold; line-height: 1; cursor: pointer; box-shadow: none;">-</button>
+                                                <input type="number" id="qty-@item.ProductId" name="quantity" 
+                                                       value="@item.DefaultQuantity" min="1" max="99" 
+                                                       oninput="var b = document.getElementById('btn-add-@item.ProductId'); if(b) b.setAttribute('data-product-quantity', this.value);"
+                                                       style="width: 44px; height: 42px; line-height: 42px; border: none; outline: none; background: transparent; text-align: center; font-weight: 700; font-size: 15px; margin: 0; padding: 0; box-shadow: none; -moz-appearance: textfield;">
+                                                <button type="button" class="btn btn-sm p-0 d-flex align-items-center justify-content-center text-dark" 
+                                                        onclick="var el = document.getElementById('qty-@item.ProductId'); var v = parseInt(el.value, 10) || 1; el.value = v + 1; var b = document.getElementById('btn-add-@item.ProductId'); if(b) b.setAttribute('data-product-quantity', el.value);" 
+                                                        style="width: 28px; height: 100%; border: none; background: transparent; font-size: 20px; font-weight: bold; line-height: 1; cursor: pointer; box-shadow: none;">+</button>
+                                            </div>
+                                            <button type="button" 
+                                                    id="btn-add-@item.ProductId"
+                                                    class="btn btn--secondary flex-grow-1 font-weight-bold text-uppercase js-product-button-add-to-cart m-0 shadow-sm" 
+                                                    data-product-id="@item.ProductId"
+                                                    data-product-name="@item.Name"
+                                                    data-product-price="@((item.DiscountedPrice > 0 ? item.DiscountedPrice : item.Price).ToString(System.Globalization.CultureInfo.InvariantCulture))"
+                                                    data-product-image="@item.ImageUrl"
+                                                    data-product-quantity="@item.DefaultQuantity"
+                                                    data-product-isrental="false"
+                                                    style="height: 46px; display: flex; align-items: center; justify-content: center; font-size: 13px; letter-spacing: 0.8px; border-radius: 6px; padding: 0 16px;">
+                                                SEPETE EKLE
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center mt-4">
+                <div class="alert alert-light p-5 border" role="alert" style="border-radius: 8px;">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="48" height="48" class="mb-3" style="opacity: 0.3;">
+                        <path fill="#000000" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <h4 class="mt-2 font-weight-bold">Favori listeniz şu an boş.</h4>
+                    <p class="text-muted">Hemen alışverişe başlayıp beğendiğiniz ürünleri favorilerinize ekleyebilirsiniz.</p>
+                    <a href="/Default/Index" class="btn btn--secondary mt-2">Alışverişe Başla</a>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <!-- Sayfalama (Pagination) -->
+    @if(Model.TotalPages > 1)
+    {
+        <div class="row mt-4">
+            <div class="col-12 d-flex justify-content-center">
+                <nav aria-label="Favori Sayfaları">
+                    <ul class="pagination">
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(Model.CurrentPage - 1)" tabindex="-1">Önceki</a>
+                        </li>
+                        
+                        @for(int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                                <a class="page-link" href="?page=@i">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(Model.CurrentPage + 1)">Sonraki</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function removeFromFavorites(productId) {
+            var $card = $('#fav-card-' + productId);
+            $card.animate({ opacity: 0.4 }, 200);
+            
+            $.ajax({
+                url: '/Favorite/Remove',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ ProductId: productId }),
+                success: function(res) {
+                    if(res && res.success) {
+                        $card.slideUp(300, function() {
+                            $(this).remove();
+                            if ($('.favorite-card-wrapper').length === 0) {
+                                location.reload();
+                            }
+                        });
+                        
+                        // Header ve sağ çekmeceyi de güncelle
+                        if (typeof fetchFavorites === 'function') {
+                            fetchFavorites();
+                        }
+                    } else {
+                        alert("İşlem başarısız oldu.");
+                        $card.animate({ opacity: 1 }, 200);
+                    }
+                },
+                error: function(err) {
+                    alert("Favorilerden çıkarılırken bir hata oluştu.");
+                    $card.animate({ opacity: 1 }, 200);
+                }
+            });
+        }
+    </script>
+}

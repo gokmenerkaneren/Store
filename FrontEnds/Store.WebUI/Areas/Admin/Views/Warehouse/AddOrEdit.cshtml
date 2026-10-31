@@ -1,0 +1,181 @@
+@model Store.DtoLayer.LocationDtos.WarehouseDtos.UpdateWarehouseDto
+
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Depo Güncelle" : "Yeni Depo Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var branches = ViewBag.Branches as List<Store.DtoLayer.LocationDtos.BranchDtos.ResultBranchDto> ?? new List<Store.DtoLayer.LocationDtos.BranchDtos.ResultBranchDto>();
+    var contactInfos = ViewBag.ContactInfos as List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto> ?? new List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto>();
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                        <div class="d-flex align-items-center">
+                            <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                            <div style="margin-left: 10px;">
+                                <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                    @(isEdit ? "Depo Güncelle" : "Yeni Depo Ekle")
+                                </h4>
+                                <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">
+                                    Aşağıdaki form üzerinden depo bilgilerini kaydedebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                            <ul class="list-unstyled card-option" style="margin: 0;">
+                                <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                                <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                                <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" action="@(isEdit ? "/Admin/Warehouse/Edit" : "/Admin/Warehouse/Add")" id="warehouseForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                        }
+                        <div class="row">
+                            <div class="col-sm-9">
+                            
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label"><strong>Bağlı Şube</strong></label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" asp-for="BranchId" required>
+                                        <option value="">-- Şube Seçin --</option>
+                                        @foreach (var branch in branches)
+                                        {
+                                            if (Model?.BranchId == branch.Id)
+                                            {
+                                                <option value="@branch.Id" selected="selected">@branch.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@branch.Id">@branch.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="BranchId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>Depo Kodu</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Code" placeholder="Depo Kodu" required />
+                                        <span asp-validation-for="Code" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>Depo Adı</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Name" placeholder="Depo Adı" required />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>İletişim & Sorumlu</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="ContactInfoId" >
+                                            <option value="">-- İletişim Kaydı Seçin --</option>
+                                            @foreach (var contact in contactInfos)
+                                            {
+                                                var label = !string.IsNullOrEmpty(contact.AuthorizedPersonName)
+                                                    ? $"{contact.AuthorizedPersonName} ({contact.Phone} / {contact.CompanyEmail})"
+                                                    : $"{contact.CompanyEmail} ({contact.Phone})";
+                                                if (Model?.ContactInfoId == contact.Id)
+                                                {
+                                                    <option value="@contact.Id" selected="selected">@label</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@contact.Id">@label</option>
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-validation-for="ContactInfoId" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>Varsayılan mı?</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="IsDefault">
+                                            <option value="true">Evet</option>
+                                            <option value="false">Hayır</option>
+                                        </select>
+                                        <span asp-validation-for="IsDefault" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>Aktif mi ?</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="IsActive">
+                                            <option value="true">Evet</option>
+                                            <option value="false">Hayır</option>
+                                        </select>
+                                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"><strong>Notlar</strong></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" asp-for="Notes" rows="5" placeholder="Notlar..."></textarea>
+                                        <span asp-validation-for="Notes" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success" style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;"><i class="icofont icofont-check-circled"></i>@(isEdit ? "Güncelle" : "Kaydet")</button>
+                                        <a href="/Admin/Warehouse/Index" class="btn btn-danger ml-2" style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;"><i class="icofont icofont-ui-close"></i>Vazgeç</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#warehouseForm').on('submit', function(e) {
+                var name = $('[name="Name"]').val() ? $('[name="Name"]').val().trim() : '';
+                var code = $('[name="Code"]').val() ? $('[name="Code"]').val().trim() : '';
+
+                if (name && !/^[a-zA-ZçĞıÖŞÜÇğİöşü\s]+$/.test(name)) {
+                    showToastAlert('Depo Adı sadece harflerden oluşmalıdır.', 'danger', 'Hata', 'animated flipInY', 'animated flipOutY');
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (code && !/^\d+$/.test(code)) {
+                    showToastAlert('Depo Kodu sadece rakamlardan oluşmalıdır.', 'danger', 'Hata', 'animated flipInY', 'animated flipOutY');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

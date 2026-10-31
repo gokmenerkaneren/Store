@@ -1,0 +1,165 @@
+@model Store.DtoLayer.CatalogDtos.InstagramPostDtos.CreateInstagramPostDto
+@{
+    ViewData["Title"] = "Yeni Instagram Gönderisi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white" style="background-color: #34495e !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                        <div class="d-flex align-items-center">
+                            <i class="feather icon-image" style="font-size: 45px; color: #ffffff !important;"></i>
+                            <div style="margin-left: 10px;">
+                                <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                    Yeni Instagram Gönderisi Ekle
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" action="/Admin/InstagramPost/CreateInstagramPost">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="row">
+                            <!-- Sol Sütun: Form Alanları -->
+                            <div class="col-sm-9">
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Sıra No</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="number" class="form-control" asp-for="OrderIndex" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Instagram Gönderi Linki</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="postUrlInput" asp-for="PostUrl" required placeholder="https://www.instagram.com/p/..." />
+                                        <small id="postUrlHelp" class="form-text text-muted">Linki yapıştırdığınızda resim otomatik olarak çekilecektir.</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Resim Linki (URL)</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="imageUrlInput" asp-for="ImageUrl" required />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Sağ Sütun: Resim Önizleme -->
+                            <div class="col-sm-3">
+                                <div style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff; min-height: 200px;" class="d-flex flex-column align-items-center justify-content-center">
+                                    <h6 class="mb-3" style="font-weight: 600;"><strong>Instagram Resmi</strong></h6>
+
+                                    <div id="loadingSpinner" style="display: none; margin-bottom: 15px;">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="sr-only">Yükleniyor...</span>
+                                        </div>
+                                    </div>
+
+                                    <img id="imagePreview"
+                                         src=""
+                                         alt="Instagram Gönderisi"
+                                         style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 15px; border: 1px solid #eee; padding: 5px; background: white; display: none;" />
+
+                                    <div id="noImageIcon" style="font-size: 50px; color: #ccc; margin-bottom: 10px; display: block;"><i class="feather icon-image"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success" style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;"><i class="icofont icofont-check-circled"></i>Kaydet</button>
+                                        <a href="/Admin/InstagramPost/Index" class="btn btn-danger ml-2" style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;"><i class="icofont icofont-ui-close"></i>Vazgeç</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Resim URL (manuel girilirse) değiştikçe önizlemeyi güncelle
+            $('#imageUrlInput').on('input', function() {
+                var url = $(this).val();
+                if (url && url.trim() !== '') {
+                    $('#imagePreview').attr('src', url).show();
+                    $('#noImageIcon').hide();
+                } else {
+                    $('#imagePreview').hide();
+                    $('#noImageIcon').show();
+                }
+            });
+
+            // Instagram linki girildiğinde otomatik resim çekme
+            let typingTimer;                
+            let doneTypingInterval = 1000;  // Kullanıcı yazmayı bitirdikten sonra 1 sn bekle
+            
+            $('#postUrlInput').on('keyup', function () {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(fetchInstagramMedia, doneTypingInterval);
+            });
+            $('#postUrlInput').on('keydown', function () {
+                clearTimeout(typingTimer);
+            });
+            $('#postUrlInput').on('paste', function () {
+                setTimeout(fetchInstagramMedia, 100);
+            });
+
+            function fetchInstagramMedia() {
+                var postUrl = $('#postUrlInput').val();
+                if (!postUrl || !postUrl.includes('instagram.com/p/')) {
+                    return;
+                }
+
+                $('#loadingSpinner').show();
+                $('#imagePreview').hide();
+                $('#noImageIcon').hide();
+                $('#postUrlHelp').text('Instagram\'dan resim çekiliyor...').css('color', 'blue');
+
+                $.ajax({
+                    url: '/Admin/InstagramPost/FetchInstagramMedia',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ postUrl: postUrl }),
+                    success: function (response) {
+                        $('#loadingSpinner').hide();
+                        if (response.success) {
+                            $('#imageUrlInput').val(response.url).trigger('input');
+                            $('#postUrlHelp').text('Resim başarıyla indirildi.').css('color', 'green');
+                        } else {
+                            $('#postUrlHelp').text('Hata: ' + response.message).css('color', 'red');
+                            // Hata durumunda var olan resim varsa göster
+                            if($('#imageUrlInput').val()) {
+                                $('#imagePreview').show();
+                            } else {
+                                $('#noImageIcon').show();
+                            }
+                        }
+                    },
+                    error: function () {
+                        $('#loadingSpinner').hide();
+                        $('#postUrlHelp').text('Sunucu hatası oluştu. Lütfen resmi manuel yükleyin.').css('color', 'red');
+                        $('#noImageIcon').show();
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,5 @@
+CREATE DATABASE "StoreIdentityDB";
+CREATE DATABASE "StoreLocationDb";
+CREATE DATABASE "StoreB2BDb";
+CREATE DATABASE "StoreDiscountDb";
+CREATE DATABASE "StoreOrderDb";

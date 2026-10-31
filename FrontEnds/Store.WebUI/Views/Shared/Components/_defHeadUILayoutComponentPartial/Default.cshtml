@@ -1,0 +1,374 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#141414">
+    <link rel="shortcut icon" href="~/ZZShella/favicon.png" type="image/png">
+    <title>SEZADAN Dekoratif Tasarım</title>
+    <meta name="description" content="Checkout fashion HTML theme.">
+    <link rel="stylesheet" href="~/ZZShella/styles/start-style.css">
+    <link rel="stylesheet" href="~/css/site.css?v=2" asp-append-version="true">
+    <script>
+        var Loader = {
+            settings: {
+                scripts: {
+                    carousel_articles: {
+                        postload: true
+                    },
+                    carousel_products: {
+                        postload: true
+                    },
+                    carousel_brands: {
+                        postload: true
+                    }
+                },
+                styles: {
+                    theme: {
+                        loaded_class: 'css-theme-loaded'
+                    }
+                }
+            },
+            main: {
+                scripts: ['vendor', 'theme'],
+                styles: []
+            },
+            includes: {
+                scripts: {
+                    //plugins
+                    plugin_popper: '',
+                    plugin_popper: '/ZZShella/scripts/plugin.popper.min.js',
+                    plugin_tippy: '/ZZShella/scripts/plugin.tippy.all.min.js',
+                    plugin_fotorama: '/ZZShella/scripts/plugin.fotorama.min.js',
+                    plugin_instafeed: '/ZZShella/scripts/plugin.instafeed.min.js',
+                    plugin_ion_range_slider: '/ZZShella/scripts/plugin.ion-range-slider.min.js',
+                    plugin_masonry: '/ZZShella/scripts/plugin.masonry.min.js',
+                    plugin_revolution_slider: '/ZZShella/scripts/plugin.revolution-slider.min.js',
+                    plugin_sticky_sidebar: '/ZZShella/scripts/plugin.sticky-sidebar.min.js',
+                    //global
+                    vendor: '/ZZShella/scripts/vendor.min.js',
+                    theme: '/ZZShella/scripts/theme.min.js?v=6',
+                    //modules
+                    tooltip: '/ZZShella/scripts/module.tooltip.min.js',
+                    buttons_blocks_visibility: '/ZZShella/scripts/module.buttons-blocks-visibility.min.js',
+                    collections: '/ZZShella/scripts/module.collections.min.js',
+                    dynamic_checkout: '/ZZShella/scripts/module.dynamic-checkout.min.js',
+                    masonry: '/ZZShella/scripts/module.masonry.min.js',
+                    notifications: '/ZZShella/scripts/module.notifications.min.js',
+                    parallax: '/ZZShella/scripts/module.parallax.min.js',
+                    popup_subscription: '/ZZShella/scripts/module.popup-subscription.min.js',
+                    product_footbar: '/ZZShella/scripts/module.product-footbar.min.js',
+                    products_view: '/ZZShella/scripts/module.products-view.min.js',
+                    range_of_price: '/ZZShella/scripts/module.range-of-price.min.js',
+                    shipping_rates_calculation: '/ZZShella/scripts/module.shipping-rates-calculation.min.js',
+                    sticky_header: '/ZZShella/scripts/module.sticky-header.min.js',
+                    sticky_sidebar: '/ZZShella/scripts/module.sticky-sidebar.min.js',
+                    tabs: '/ZZShella/scripts/module.tabs.min.js',
+                    trigger: '/ZZShella/scripts/module.trigger.min.js',
+                    presentation: '/ZZShella/scripts/module.presentation.min.js',
+                    //sections
+                    header: '/ZZShella/scripts/section.header.min.js',
+                    article_body: '/ZZShella/scripts/section.article-body.min.js',
+                    blog_body: '/ZZShella/scripts/section.blog-body.min.js',
+                    blog_sidebar: '/ZZShella/scripts/section.blog-sidebar.min.js',
+                    carousel_articles: '/ZZShella/scripts/section.carousel-articles.min.js',
+                    carousel_brands: '/ZZShella/scripts/section.carousel-brands.min.js',
+                    carousel_products: '/ZZShella/scripts/section.carousel-products.min.js',
+                    collection_body: '/ZZShella/scripts/section.collection-body.min.js',
+                    collection_head: '/ZZShella/scripts/section.collection-head.min.js',
+                    collection_sidebar: '/ZZShella/scripts/section.collection-sidebar.min.js',
+                    gallery: '/ZZShella/scripts/section.gallery.min.js',
+                    home_builder: '/ZZShella/scripts/section.home-builder.min.js',
+                    list_collections: '/ZZShella/scripts/section.list-collections.min.js',
+                    lookbook: '/ZZShella/scripts/section.lookbook.min.js',
+                    password_page_content: '/ZZShella/scripts/section.password-page-content.min.js',
+                    product: '/ZZShella/scripts/section.product.min.js?v=2',
+                    slider_revolution: '/ZZShella/scripts/section.slider-revolution.min.js',
+                    sorting_collections: '/ZZShella/scripts/section.sorting-collections.min.js',
+                    footbar: '/ZZShella/scripts/section.footbar.min.js',
+                    footer: '/ZZShella/scripts/section.footer.min.js'
+                },
+                styles: {
+                    //plugins
+                    plugin_tippy: '/ZZShella/styles/plugin.tippy.min.css',
+                    plugin_fotorama: '/ZZShella/styles/plugin.fotorama.min.css',
+                    plugin_ion_range_slider: '/ZZShella/styles/plugin.ion-range-slider.min.css',
+                    plugin_revolution: '/ZZShella/styles/plugin.revolution.min.css',
+                    plugin_slick: '/ZZShella/styles/plugin.slick.min.css',
+                    //font
+                    text_font: 'https://fonts.googleapis.com/css?family=Archivo',
+                    //global
+                    theme: '/ZZShella/styles/theme.min.css'
+                }
+            },
+            deps: {
+                scripts: {
+                    //plugins
+                    plugin_tippy: ['plugin_popper'],
+                    //global
+                    theme: ['vendor', 'plugin_fotorama'],
+                    //modules
+                    tooltip: ['plugin_tippy'],
+                    collections: ['products_view'],
+                    masonry: ['plugin_masonry'],
+                    product_footbar: ['trigger'],
+                    range_of_price: ['plugin_ion_range_slider', 'collections'],
+                    sticky_sidebar: ['plugin_sticky_sidebar', 'sticky_header'],
+                    tabs: ['plugin_sticky_sidebar', 'sticky_sidebar', 'sticky_header'],
+                    //sections
+                    header: ['sticky_header'],
+                    blog_body: ['masonry'],
+                    blog_sidebar: ['sticky_sidebar'],
+                    collection_sidebar: ['range_of_price'],
+                    gallery: ['plugin_fotorama', 'masonry'],
+                    home_builder: ['plugin_instafeed', 'plugin_revolution_slider', 'parallax'],
+                    list_collections: ['masonry'],
+                    product: ['sticky_sidebar', 'tabs'],
+                    article_body: ['plugin_slick'],
+                    footbar: ['notifications', 'trigger', 'product_footbar']
+                },
+                styles: {
+                    //global
+                    theme: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme2: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme3: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme4: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme5: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme6: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme7: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme8: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme9: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme10: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme11: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme12: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme13: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme14: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick'],
+                    // theme15: ['plugin_tippy', 'plugin_fotorama', 'plugin_ion_range_slider', 'plugin_revolution', 'plugin_slick']
+                }
+            },
+            callback: {
+                scripts: {},
+                styles: {}
+            },
+            queue: {
+                scripts: [],
+                styles: []
+            },
+            initials: {
+                scripts: {},
+                styles: {}
+            },
+            loaded: {
+                scripts: {},
+                styles: {}
+            },
+            postload: {
+                scripts: {},
+                styles: {}
+            },
+            postload_offset: 400,
+            require: function (obj) {
+                var namespace;
+    
+                switch (obj.type) {
+                    case 'style':
+                    {
+                        namespace = 'styles';
+                        break;
+                    }
+                    case 'script':
+                    {
+                        namespace = 'scripts';
+                        break;
+                    }
+                }
+    
+                if (this.settings[namespace][obj.name] && this.settings[namespace][obj.name].postload) {
+                    this.postload[namespace][obj.name] = true;
+                } else {
+                    this.queue[namespace].push(obj.name);
+                }
+    
+                this.initials[namespace][obj.name] = true;
+            },
+            load: function () {
+                var _ = this,
+                        namespace,
+                        i;
+    
+                for (namespace in this.main) {
+                    for (i = this.main[namespace].length - 1; i >= 0; i--) {
+                        this.initials[namespace][this.main[namespace][i]] = true;
+                        this.queue[namespace].unshift(this.main[namespace][i]);
+                    }
+                }
+    
+                function load_deps(namespace, name, j, callback) {
+                    if (j < _.deps[namespace][name].length) {
+                        if (_.initials[namespace][_.deps[namespace][name][j]]) {
+                            delete _.initials[namespace][_.deps[namespace][name][j]];
+    
+                            _.loadTag(namespace, _.deps[namespace][name][j], function () {
+                                j++;
+                                load_deps(namespace, name, j, callback);
+                            });
+                        } else {
+                            j++;
+                            load_deps(namespace, name, j, callback);
+                        }
+                    } else {
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                };
+    
+                function iteration(namespace, i, callback) {
+                    var name = _.queue[namespace][i];
+    
+                    if (i < _.queue[namespace].length && !_.initials[namespace][name]) {
+                        i++;
+                        iteration(namespace, i, callback);
+    
+                        return;
+                    }
+    
+                    function load_deps_callback() {
+                        delete _.initials[namespace][name];
+    
+                        _.loadTag(namespace, name, function () {
+                            i++;
+                            iteration(namespace, i, callback);
+                        });
+                    };
+    
+                    if (i < _.queue[namespace].length) {
+                        if (_.checkDeps(namespace, name)) {
+                            load_deps_callback();
+                        } else {
+                            load_deps(namespace, name, 0, load_deps_callback);
+                        }
+                    } else if (callback) {
+                        callback();
+                    }
+                };
+    
+                iteration('styles', 0, function () {
+                    iteration('scripts', 0);
+                });
+    
+                function onPostload(namespace, name, elems, j) {
+                    for (namespace in _.postload) {
+                        for (name in _.postload[namespace]) {
+                            elems = document.querySelectorAll('[data-postload="' + name + '"]');
+    
+                            for (j = 0; j < elems.length; j++) {
+                                if (elems[j].getBoundingClientRect().top < window.innerHeight + _.postload_offset) {
+                                    _.queue[namespace].push(name);
+                                    delete _.postload[namespace][name];
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+    
+                    iteration('styles', 0, function () {
+                        iteration('scripts', 0);
+                    });
+                };
+    
+                window.addEventListener('load', function () {
+                    onPostload();
+    
+                    window.addEventListener('scroll', onPostload);
+                });
+            },
+            checkDeps: function (namespace, name) {
+                var deps = this.deps[namespace][name],
+                        clear_deps = true,
+                        i;
+    
+                if (deps) {
+                    for (i = 0; i < deps.length; i++) {
+                        if (!this.loaded[namespace][deps[i]] && this.initials[namespace][deps[i]] !== undefined) {
+                            clear_deps = false;
+                            break;
+                        }
+                    }
+                }
+    
+                return clear_deps;
+            },
+            loadTag: function (namespace, name, callback) {
+                var _ = this,
+                        tag,
+                        onload;
+    
+                if(document.querySelectorAll('[data-loader-name="' + namespace + '_' + name + '"]').length) {
+                    /*console.log('double loading');*/
+                    return;
+                }
+    
+                onload = function () {
+                    _.loaded[namespace][name] = true;
+    
+                    if (_.settings[namespace][name]) {
+                        if (_.settings[namespace][name].loaded_class) {
+                            document.getElementsByTagName('html')[0].classList.add(_.settings[namespace][name].loaded_class);
+                        }
+                    }
+    
+                    if (callback) {
+                        if (_.callback[namespace][name]) {
+                            _.callback[namespace][name](_);
+                        }
+    
+                        callback();
+                    }
+    
+                    //console.debug('loaded:', namespace, name);
+                };
+    
+                switch (namespace) {
+                    case 'styles':
+                    {
+                        tag = this.buildStyle(name, onload);
+                        break;
+                    }
+                    case 'scripts':
+                    {
+                        tag = this.buildScript(name, onload);
+                        break;
+                    }
+                }
+    
+                tag.setAttribute('data-loader-name', namespace + '_' + name);
+    
+                document.head.insertBefore(tag, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
+            },
+            buildScript: function (name, onload) {
+                var tag = document.createElement('script');
+    
+                tag.onload = onload;
+    
+                tag.async = true;
+                tag.src = this.includes.scripts[name];
+    
+                return tag;
+            },
+            buildStyle: function (name, onload) {
+                var tag = document.createElement('link');
+    
+                tag.onload = onload;
+    
+                tag.rel = 'stylesheet';
+                tag.href = this.includes.styles[name];
+    
+                return tag;
+            }
+        };
+    
+        window.page = {
+            default: {}
+        };
+    </script>
+</head>

@@ -1,0 +1,8 @@
+
+docker volume create portainer_data
+
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v 
+/var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:lts
+
+Password	:  *Seza43/55.58*
+Token		:  94ea2fa114cd1362a901213724ed74014cb9fca823f84dd114dae53ae4313b9a

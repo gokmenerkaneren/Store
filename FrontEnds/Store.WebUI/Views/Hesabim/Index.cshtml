@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Hesabım";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+    var activeTab = (ViewBag.ActiveTab as string) ?? "KullaniciBilgileri";
+    var sidebarModel = ViewBag.SidebarModel as Store.WebUI.Models.HesabimViewModels.HesabimSidebarViewModel ?? new Store.WebUI.Models.HesabimViewModels.HesabimSidebarViewModel { ActiveTab = activeTab };
+}
+
+<div class="breadcrumbs mt-15">
+    <div class="container">
+        <ul class="list-unstyled d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start mb-0">
+            <li><a href="/Default/Index">Anasayfa</a></li>
+            <li><a href="/Hesabim/Index">Hesabım</a></li>
+            <li>
+                <span>
+                    @(activeTab switch {
+                        "KullaniciBilgileri" => "Kullanıcı Bilgilerim",
+                        "AdresBilgileri" => "Adres Bilgilerim",
+                        "KayitliKartlarim" => "Kayıtlı Kartlarım",
+                        "SifreDegistirme" => "Şifre Değiştirme",
+                        "Siparislerim" => "Siparişlerim",
+                        "Mesajlarim" => "Mesajlarım",
+                        "IndirimKuponlarim" => "İndirim Kuponlarım",
+                        _ => "Hesabım"
+                    })
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="account-portal-container py-35 mb-50">
+    <div class="container">
+        <div class="row">
+            <!-- SOL KOLON: Navigasyon Menüsü (~28%) -->
+            <div class="col-lg-3 mb-30 mb-lg-0">
+                <partial name="Partials/_HesabimSidebarPartial" model="sidebarModel" />
+            </div>
+
+            <!-- SAĞ KOLON: İlgili Adıma Ait Dinamik İçerik (~72%) -->
+            <div class="col-lg-9">
+                @switch (activeTab)
+                {
+                    case "KullaniciBilgileri":
+                        <partial name="Partials/_KullaniciBilgileriPartial" model="Model" />
+                        break;
+                    case "AdresBilgileri":
+                        <partial name="Partials/_AdresBilgileriPartial" model="Model" />
+                        break;
+                    case "KayitliKartlarim":
+                        <partial name="Partials/_KayitliKartlarimPartial" />
+                        break;
+                    case "SifreDegistirme":
+                        <partial name="Partials/_SifreDegistirmePartial" model="Model" />
+                        break;
+                    case "Siparislerim":
+                        <partial name="Partials/_SiparislerimPartial" />
+                        break;
+                    case "Mesajlarim":
+                        <partial name="Partials/_MesajlarimPartial" />
+                        break;
+                    case "IndirimKuponlarim":
+                        <partial name="Partials/_IndirimKuponlarimPartial" />
+                        break;
+                    default:
+                        <partial name="Partials/_KullaniciBilgileriPartial" model="Model" />
+                        break;
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,194 @@
+﻿@model List<Store.WebUI.Models.ProductListViewModel>
+
+<style>
+    .tippy-box[data-theme~='large'] {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 5px 10px;
+    }
+    .tippy-content {
+        font-size: 16px !important;
+    }
+</style>
+
+<div data-section-id="1537200465879" data-section-type="carousel-products" data-postload="carousel_products">
+    <div class="container">
+        <div class="carousel carousel--arrows carousel-products position-relative mt-0 mb-60">
+            <div class="carousel__head row justify-content-center mb-25" data-carousel-control><h4
+                    class="carousel__title col-auto mb-10 text-center">
+                <a href="collection.html" class="active" data-collection="new-products-hp">Yeni Ürünler</a>
+            </h4></div>
+            <div class="carousel__slider position-relative invisible"
+                 data-js-carousel
+                 data-autoplay="true"
+                 data-speed="5000"
+                 data-count="4"
+                 data-infinite="true"
+                 data-arrows="true"
+                 data-bullets="true">
+                <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev><i>
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-006"
+                         viewBox="0 0 24 24">
+                        <path d="M16.736 3.417a.652.652 0 0 1-.176.449l-8.32 8.301 8.32 8.301c.117.13.176.28.176.449s-.059.319-.176.449a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.93.93 0 0 1-.215-.127l-8.75-8.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l8.75-8.75a.652.652 0 0 1 .449-.176c.169 0 .319.059.449.176.117.13.176.28.176.449z"/>
+                    </svg>
+                </i></div>
+                <div class="carousel__products overflow-hidden">
+                    <div class="carousel__slick row" data-js-carousel-slick data-carousel-items
+                         data-max-count="6" data-products-pre-row="4" data-async-ajax-loading="true">
+                         
+                        @foreach (var product in Model)
+                        {
+                            <div class="carousel__item col-auto">
+                                <div class="product-collection d-flex flex-column mb-30" data-js-product
+                                     data-js-product-json-preload data-product-handle="product-@product.Id"
+                                     data-product-variant-id="@product.Id"
+                                >
+                                    @{
+                                        var hoverClass = !string.IsNullOrEmpty(product.HoverImageUrl) ? "js-product-images-hover" : "";
+                                        var hoverAttr = !string.IsNullOrEmpty(product.HoverImageUrl) ? $"data-js-product-image-hover=\"{product.HoverImageUrl}#{{width}}\"" : "";
+                                    }
+                                    <div class="product-collection__image product-image product-image--hover-emersion-z position-relative w-100 js-product-images-navigation js-product-images-hovered-end @hoverClass"
+                                         @Html.Raw(hoverAttr)
+                                         data-js-product-image-hover-id="@product.Id">
+                                        <a href="/Product/Index/@product.Id"
+                                           class="d-block cursor-default" data-js-product-image>
+                                            <div class="rimage" style="padding-top:100.0%;">
+                                                <img src="@product.MainImageUrl"
+                                                     data-src="@product.MainImageUrl"
+                                                     data-master="@product.MainImageUrl#{{width}}"
+                                                     class="rimage__img rimage__img--cover rimage__img--fade-in lazyload"
+                                                     alt="@product.Name"
+                                                     data-aspect-ratio="1">
+                                            </div>
+                                        </a>
+                                        <div class="product-image__overlay-top position-absolute d-flex flex-wrap top-0 left-0 w-100 px-10 pt-10">
+                                            <a href="/Product/Index/@product.Id"
+                                               class="absolute-stretch cursor-default"></a>
+                                            <div class="product-image__overlay-top-left product-collection__labels position-relative d-flex flex-column align-items-start mb-10">
+                                                <div class="label label--hot mb-3 mr-3 text-nowrap d-none-important"
+                                                     data-js-product-label-hot>Hot
+                                                </div>
+                                                <div class="label label--new mb-3 mr-3 text-nowrap d-none-important"
+                                                     data-js-product-label-new>New
+                                                </div>
+                                                <div class="label label--sale mb-3 mr-3 text-nowrap d-none-important"
+                                                     data-js-product-label-sale></div>
+                                                <div class="label label--out-stock mb-3 mr-3 text-nowrap d-none-important"
+                                                     data-js-product-label-out-stock>Out Stock
+                                                </div>
+                                            </div>
+                                            <div class="product-image__overlay-top-right product-collection__button-quick-view position-lg-relative d-none d-lg-flex flex-column mb-lg-10 ml-lg-auto">
+                                                <a href="javascript:void(0);" 
+   class="button-wishlist d-flex flex-center rounded-circle js-btn-favorite mb-5"
+   data-product-id="@product.Id"
+   data-js-tooltip
+   data-tippy-content="Favorilere Ekle"
+   data-tippy-theme="large"
+   data-tippy-placement="left"
+   data-tippy-distance="5">
+    <i class="icon-heart-empty">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon custom-heart-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+    </i>
+</a>
+																<a href="/Product/QuickView/@product.Id"
+   class="button-quick-view d-flex flex-center rounded-circle js-popup-button"
+   data-js-popup-button="quick-view"
+   data-js-tooltip
+   data-tippy-content="<i style='color: #ffffff;'>Hızlı Bakış</i>"
+   data-tippy-allowHTML="true"
+   data-tippy-theme="large"
+   data-tippy-placement="left"
+   data-tippy-distance="5">
+    <i>
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon" viewBox="0 0 576 512" style="width:16px; height:16px;">
+            <path fill="currentColor" d="M288 144a110.94 110.94 0 0 0 -31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1 -56 56 55.4 55.4 0 0 1 -27 -7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
+        </svg>
+    </i>
+</a>
+                                            </div>
+                                        </div>
+                                        <div class="product-image__overlay-bottom position-absolute d-flex justify-content-center justify-content-lg-start align-items-end bottom-0 left-0 w-100 px-10 pb-10">
+                                            <a href="/Product/Index/@product.Id"
+                                               class="absolute-stretch cursor-default"></a>
+                                            <div class="product-image__overlay-bottom-left product-collection__countdown position-relative mt-10">
+                                                <div class="d-none-important" data-js-product-countdown>
+                                                    <div class="countdown countdown--type-01 d-flex flex-wrap justify-content-center js-countdown"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="product-collection__content d-flex flex-column align-items-start mt-15">
+                                        <div class="product-collection__title mb-3">
+                                            <h4 class="h6 m-0">
+                                                <a href="/Product/Index/@product.Id">@product.Name</a>
+                                            </h4>
+                                        </div>
+                                        <div class="product-collection__price mb-10">
+                                            <span class="price" data-js-product-price>
+                                                <span><span class="money">@product.RetailPrice.ToString("C2")</span></span>
+                                                <span class="price__compare"><span class="money"><del>@product.OldPrice.ToString("C2")</del></span></span>
+                                            </span>
+                                        </div>
+                                        <form method="post" action="/cart/add" accept-charset="UTF-8"
+                                              class="d-flex flex-column w-100 m-0" enctype="multipart/form-data"
+                                              data-js-product-form="">
+                                            <input type="hidden" name="form_type" value="product"/>
+                                            <input type="hidden" name="utf8" value="&#x2713;"/>
+                                            
+                                            <div class="product-collection__buttons d-flex flex-column flex-lg-row align-items-lg-center flex-wrap mt-5 mt-lg-10">
+                                                <div class="product-collection__button-add-to-cart mb-10">
+                                                    <button type="submit"
+                                                            class="btn btn--status btn--animated js-product-button-add-to-cart"
+                                                            name="add" data-js-product-button-add-to-cart>
+                                                        <span class="d-flex flex-center"><i
+                                                                class="btn__icon mr-5 mb-4"><svg aria-hidden="true"
+                                                                                                 focusable="false"
+                                                                                                 role="presentation"
+                                                                                                 class="icon icon-theme-109"
+                                                                                                 viewBox="0 0 24 24"><path
+                                                                d="M19.884 21.897a.601.601 0 0 1-.439.186h-15a.6.6 0 0 1-.439-.186.601.601 0 0 1-.186-.439v-15a.6.6 0 0 1 .186-.439.601.601 0 0 1 .439-.186h3.75c0-1.028.368-1.911 1.104-2.646.735-.735 1.618-1.104 2.646-1.104s1.911.368 2.646 1.104c.735.736 1.104 1.618 1.104 2.646h3.75a.6.6 0 0 1 .439.186.601.601 0 0 1 .186.439v15a.604.604 0 0 1-.186.439zM18.819 7.083h-3.125v2.5a.598.598 0 0 1-.186.439c-.124.124-.271.186-.439.186s-.315-.062-.439-.186a.6.6 0 0 1-.186-.439v-2.5h-5v2.5a.598.598 0 0 1-.186.439c-.124.124-.271.186-.439.186s-.315-.062-.439-.186a.6.6 0 0 1-.186-.439v-2.5H5.069v13.75h13.75V7.083zm-8.642-3.018a2.409 2.409 0 0 0-.733 1.768h5c0-.69-.244-1.279-.732-1.768s-1.077-.732-1.768-.732-1.279.244-1.767.732z"/></svg></i><span
+                                                                class="btn__text">SEPETE EKLE</span></span>
+                                                        <span class="d-flex flex-center"
+                                                              data-button-content="added"><i class="mr-5 mb-4"><svg
+                                                                aria-hidden="true" focusable="false"
+                                                                role="presentation" class="icon icon-theme-110"
+                                                                viewBox="0 0 24 24"><path
+                                                                d="M19.855 5.998a.601.601 0 0 0-.439-.186h-3.75c0-1.028-.368-1.911-1.104-2.646-.735-.735-1.618-1.104-2.646-1.104s-1.911.369-2.646 1.104c-.736.736-1.104 1.618-1.104 2.647h-3.75a.6.6 0 0 0-.439.186.598.598 0 0 0-.186.439v15a.6.6 0 0 0 .186.439c.124.123.27.186.439.186h15a.6.6 0 0 0 .439-.186.601.601 0 0 0 .186-.439v-15a.602.602 0 0 0-.186-.44zm-9.707-1.953c.488-.488 1.077-.732 1.768-.732s1.279.244 1.768.732.732 1.078.732 1.768h-5c0-.69.244-1.28.732-1.768zm6.926 7.194l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .896.896 0 0 1-.215-.127l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449z"/></svg></i>EKLENDI</span>
+                                                        <span class="d-flex flex-center"
+                                                              data-button-content="sold-out">TÜKENDİ</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next><i>
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-007"
+                         viewBox="0 0 24 24">
+                        <path d="M6.708 20.917c0-.169.059-.319.176-.449l8.32-8.301-8.32-8.301a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l8.75 8.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-8.75 8.75a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.91.91 0 0 1-.215-.127.652.652 0 0 1-.176-.449z"/>
+                    </svg>
+                </i></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    Loader.require({
+        type: "style",
+        name: "plugin_slick"
+    });
+
+    Loader.require({
+        type: "script",
+        name: "carousel_products"
+    });
+</script>

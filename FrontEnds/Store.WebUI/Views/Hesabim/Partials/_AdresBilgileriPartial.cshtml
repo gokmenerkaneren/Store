@@ -1,0 +1,839 @@
+@model Store.WebUI.Models.HesabimViewModels.UserAddressListViewModel
+
+@Html.AntiForgeryToken()
+
+<div class="card border rounded shadow-sm bg-white p-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h3 class="h4 font-weight-bold mb-1 text-dark">Adres Bilgilerim</h3>
+            <p class="text-muted small mb-0">Teslimat ve fatura adreslerinizi buradan yönetebilir, yeni adres ekleyebilirsiniz.</p>
+        </div>
+        <button type="button" class="btn btn-dark btn-sm font-weight-bold mt-2 mt-sm-0" style="border-radius: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; min-width: 195px; height: 42px; display: inline-flex; align-items: center; justify-content: center; padding: 0 20px;" onclick="openNewAddressModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2" style="vertical-align: -2px;">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Yeni Adres Ekle
+        </button>
+    </div>
+
+    <!-- Başarı / Hata Bildirim Alanı -->
+    <div id="addressAlertBox" style="display: none;" class="alert mb-4"></div>
+
+    <!-- Adres Kartları Listesi -->
+    <div class="address-cards-grid" id="addressListGrid">
+        @if (Model != null && Model.Addresses != null && Model.Addresses.Any())
+        {
+            foreach (var addr in Model.Addresses)
+            {
+                <div class="card border rounded shadow-xs position-relative address-card-item d-flex flex-column" id="address-card-@addr.Id" data-id="@addr.Id" data-title="@addr.Title" style="transition: all 0.2s ease-in-out; border-color: #e2e8f0; padding: 22px; margin: 0; height: 100%; background: #ffffff;">
+                    <!-- Üst Başlık & Tür Rozetleri (Sola Yaslı, Geniş Boşluklu) -->
+                    <div class="d-flex flex-wrap align-items-center mb-3" style="gap: 10px;">
+                        <span class="font-weight-bold text-dark" style="font-size: 12px; background: #f8f9fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 6px 16px; display: inline-flex; align-items: center; letter-spacing: 0.3px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2" style="vertical-align: -1px;">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            @addr.Title
+                        </span>
+                        @if (addr.InvoiceType == 1)
+                        {
+                            <span style="font-size: 12px; font-weight: 700; background: #e7f5ff; color: #1971c2; border: 1px solid #a5d8ff; border-radius: 6px; padding: 6px 16px; display: inline-flex; align-items: center; letter-spacing: 0.3px;">
+                                Kurumsal
+                            </span>
+                        }
+                        else
+                        {
+                            <span style="font-size: 12px; font-weight: 700; background: #f1f3f5; color: #343a40; border: 1px solid #ced4da; border-radius: 6px; padding: 6px 16px; display: inline-flex; align-items: center; letter-spacing: 0.3px;">
+                                Bireysel
+                            </span>
+                        }
+                        @if (addr.IsDefault)
+                        {
+                            <span style="font-size: 12px; font-weight: 700; background: #e6fcf5; color: #0ca678; border: 1px solid #63e6be; border-radius: 6px; padding: 6px 14px; display: inline-flex; align-items: center; letter-spacing: 0.3px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1" style="vertical-align: -1px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Varsayılan
+                            </span>
+                        }
+                    </div>
+                    <br/>
+                    <!-- İletişim Kişisi & Telefon -->
+                    <div class="mb-2">
+                        <strong class="text-dark d-block" style="font-size: 15px; font-weight: 700;">@addr.ContactFullName</strong>
+                        <span class="text-muted small" style="font-size: 13px;">@addr.PhoneNumber</span>
+                    </div>
+
+                    <!-- Açık Adres Metni -->
+                    <p class="text-secondary small mb-3 flex-grow-1" style="font-size: 13px; line-height: 1.5; min-height: 44px;">
+                        @addr.AddressDetail
+                    </p>
+
+                    <!-- Alt Bilgi & Düzenle / Sil Butonları -->
+                    <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto" style="border-top-color: #f1f3f5 !important;">
+                        <span class="small font-weight-bold text-dark" style="font-size: 13px;">
+                            @(!string.IsNullOrEmpty(addr.DistrictName) ? addr.DistrictName + " / " : "")@addr.CityName
+                        </span>
+                        <div class="d-flex align-items-center" style="gap: 8px;">
+                            @if (!addr.IsDefault)
+                            {
+                                <button type="button" class="btn btn-outline-success btn-sm" style="height: 35px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center;" onclick="setDefaultAddress('@addr.Id')">
+                                    Varsayılan Yap
+                                </button>
+                            }
+                            <button type="button" class="btn btn-outline-dark btn-sm" style="width: 85px; height: 35px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;" onclick="openEditAddressModal('@addr.Id')">
+                                Düzenle
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" style="width: 85px; height: 35px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;" onclick="confirmDeleteAddress('@addr.Id', '@addr.Title')">
+                                Sil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5" id="noAddressPlaceholder" style="grid-column: 1 / -1;">
+                <div class="mb-3">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <h5 class="font-weight-bold text-dark">Kayıtlı Adresiniz Bulunmuyor</h5>
+                <p class="text-muted small mb-3">Siparişlerinizin sorunsuz teslimatı için lütfen yeni bir teslimat adresi tanımlayınız.</p>
+                <button type="button" class="btn btn-dark btn-sm px-4 py-2 font-weight-bold" style="border-radius: 6px;" onclick="openNewAddressModal()">
+                    + Yeni Adres Ekle
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- ADRES EKLEME / DÜZENLEME MODALI                               -->
+<!-- ============================================================== -->
+<div id="addressCustomModal" class="custom-modal-overlay" style="display: none;">
+    <div class="custom-modal-dialog">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="custom-modal-title mb-0 font-weight-bold" id="addressModalTitle">Yeni Adres Ekle</h5>
+                <button type="button" class="close-modal-btn" onclick="closeAddressModal()">&times;</button>
+            </div>
+            <form id="addressForm" onsubmit="handleAddressSubmit(event)">
+                <input type="hidden" id="addrId" name="Id" value="" />
+
+                <div class="custom-modal-body">
+                    <!-- Form Hata Mesajı Kutusu -->
+                    <div id="formModalError" class="alert alert-danger py-2 small" style="display: none;"></div>
+
+                    <!-- 1. Adres Başlığı -->
+                    <div class="form-group mb-3">
+                        <label for="addrTitle" class="font-weight-bold small text-dark mb-1">Adres Başlığı <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" id="addrTitle" name="Title" placeholder="Örn: Evim, İş Yerim, Yazlık" required maxlength="100" />
+                    </div>
+
+                    <!-- 2. Ad ve Soyad -->
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="addrFirstName" class="font-weight-bold small text-dark mb-1">Ad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="addrFirstName" name="FirstName" placeholder="Adınız" required maxlength="70" />
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="addrLastName" class="font-weight-bold small text-dark mb-1">Soyad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="addrLastName" name="LastName" placeholder="Soyadınız" required maxlength="70" />
+                        </div>
+                    </div>
+
+                    <!-- 3. Telefon Numarası -->
+                    <div class="form-group mb-3">
+                        <label for="addrPhoneNumber" class="font-weight-bold small text-dark mb-1">Cep Telefonu <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control form-control-sm" id="addrPhoneNumber" name="PhoneNumber" placeholder="05XX XXX XX XX" required maxlength="20" />
+                    </div>
+
+                    <!-- Ülke Seçimi -->
+                    <div class="form-group mb-3">
+                        <label for="addrCountry" class="font-weight-bold small text-dark mb-1">Ülke <span class="text-danger">*</span></label>
+                        <select class="form-control form-control-sm" id="addrCountry" name="CountryId" required onchange="onCountryChanged()">
+                            <option value="">Ülke Seçiniz</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. İl / İlçe Kademeli Seçim -->
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="addrCity" class="font-weight-bold small text-dark mb-1">İl <span class="text-danger">*</span></label>
+                            <select class="form-control form-control-sm" id="addrCity" name="CityId" required onchange="onCityChanged()">
+                                <option value="">İl Seçiniz</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="addrDistrict" class="font-weight-bold small text-dark mb-1">İlçe <span class="text-danger">*</span></label>
+                            <select class="form-control form-control-sm" id="addrDistrict" name="DistrictId" required disabled onchange="onDistrictChanged()">
+                                <option value="">Önce İl Seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 5. Mahalle Seçimi -->
+                    <div class="form-group mb-3">
+                        <label for="addrNeighborhood" class="font-weight-bold small text-dark mb-1">Mahalle</label>
+                        <select class="form-control form-control-sm" id="addrNeighborhood" name="NeighborhoodId" disabled>
+                            <option value="">Önce İlçe Seçiniz</option>
+                        </select>
+                    </div>
+
+                    <!-- 6. Açık Adres -->
+                    <div class="form-group mb-3">
+                        <label for="addrDetail" class="font-weight-bold small text-dark mb-1">Açık Adres <span class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" id="addrDetail" name="AddressDetail" rows="3" placeholder="Cadde, sokak, mahalle, bina ve kapı no bilgilerini eksiksiz yazınız..." required maxlength="500"></textarea>
+                    </div>
+
+                    <!-- 7. Fatura Türü Bölümü (Trendyol Stili) -->
+                    <div class="form-group mb-3 pt-2 border-top">
+                        <label class="font-weight-bold small text-dark d-block mb-2">Fatura Türü</label>
+                        <div class="d-flex">
+                            <div class="custom-control custom-radio mr-4">
+                                <input type="radio" id="invoiceTypeBireysel" name="InvoiceType" value="2" class="custom-control-input" checked onchange="toggleInvoiceFields()">
+                                <label class="custom-control-label small font-weight-bold" for="invoiceTypeBireysel">Bireysel Fatura</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="invoiceTypeKurumsal" name="InvoiceType" value="1" class="custom-control-input" onchange="toggleInvoiceFields()">
+                                <label class="custom-control-label small font-weight-bold" for="invoiceTypeKurumsal">Kurumsal Fatura</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bireysel: T.C. Kimlik No -->
+                    <div id="bireyselFields" class="form-group mb-3">
+                        <label for="addrIdentityNumber" class="font-weight-bold small text-dark mb-1">T.C. Kimlik Numarası <span class="text-muted font-weight-normal">(Opsiyonel)</span></label>
+                        <input type="text" class="form-control form-control-sm" id="addrIdentityNumber" name="IdentityNumber" placeholder="11 haneli T.C. Kimlik No" maxlength="11" />
+                        <small class="form-text text-muted" style="font-size: 11px;">Mevzuat gereği 5.000 TL üzeri faturalarda TC Kimlik No bulunması zorunludur.</small>
+                    </div>
+
+                    <!-- Kurumsal: Vergi Dairesi & Vergi No -->
+                    <div id="kurumsalFields" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="addrTaxOffice" class="font-weight-bold small text-dark mb-1">Vergi Dairesi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="addrTaxOffice" name="TaxOffice" placeholder="Bağlı olduğu vergi dairesi" maxlength="100" />
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="addrTaxNumber" class="font-weight-bold small text-dark mb-1">Vergi Numarası <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="addrTaxNumber" name="TaxNumber" placeholder="10 haneli vergi no" maxlength="50" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Varsayılan Teslimat Adresi Checkbox -->
+                    <div class="form-group mb-2 pt-2 border-top">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="addrIsDefault" name="IsDefault" value="true">
+                            <label class="custom-control-label font-weight-bold text-dark small" for="addrIsDefault" style="cursor: pointer;">
+                                Bu adresi varsayılan teslimat adresim yap
+                            </label>
+                            <p class="text-muted mb-0" style="font-size: 11px; margin-left: 2px;">Siparişlerinizde varsayılan teslimat adresi olarak bu adres seçili gelecektir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-modal-footer d-flex justify-content-end p-3 border-top bg-light">
+                    <button type="button" class="btn btn-outline-secondary btn-sm py-2 mr-2" style="border-radius: 5px; width: 140px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;" onclick="closeAddressModal()">
+                        Vazgeç
+                    </button>
+                    <button type="submit" id="saveAddressBtn" class="btn btn-dark btn-sm py-2 font-weight-bold" style="border-radius: 5px; width: 140px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <span id="saveBtnSpinner" class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true" style="display: none;"></span>
+                        <span id="saveBtnText">Kaydet</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- SİLME ONAY MODALI                                             -->
+<!-- ============================================================== -->
+<div id="deleteConfirmModal" class="custom-modal-overlay" style="display: none;">
+    <div class="custom-modal-dialog" style="max-width: 420px;">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="custom-modal-title mb-0 font-weight-bold text-danger">Adresi Sil</h5>
+                <button type="button" class="close-modal-btn" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="custom-modal-body p-4 text-center">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mb-3">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p class="mb-1 text-dark font-weight-bold" id="deleteAddressTitleText">Adres</p>
+                <p class="text-muted small mb-0">Bu adresi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+            </div>
+            <div class="custom-modal-footer d-flex justify-content-end p-3 border-top bg-light">
+                <button type="button" class="btn btn-outline-secondary btn-sm" style="border-radius: 5px; width: 130px; height: 38px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; justify-content: center; margin-right: 14px;" onclick="closeDeleteModal()">
+                    İptal
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger btn-sm font-weight-bold" style="border-radius: 5px; width: 130px; height: 38px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; justify-content: center;" onclick="executeDeleteAddress()">
+                    Evet, Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .address-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 0;
+    }
+    @@media (max-width: 768px) {
+        .address-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
+    .address-card-item {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+    }
+    .swal2-container {
+        z-index: 20000 !important;
+    }
+    .address-card-item:hover {
+        border-color: #0f172a !important;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.08) !important;
+        transform: translateY(-2px);
+    }
+    .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 10050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        backdrop-filter: blur(2px);
+    }
+    .custom-modal-dialog {
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .custom-modal-content {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+    .custom-modal-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #eee;
+        background: #fafafa;
+    }
+    .custom-modal-body {
+        padding: 20px;
+        overflow-y: auto;
+    }
+    .close-modal-btn {
+        background: transparent;
+        border: none;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        color: #777;
+    }
+    .close-modal-btn:hover {
+        color: #111;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    var globalCountries = [];
+    var DEFAULT_COUNTRY_ID = "dbcf7622-7a82-4439-84d6-ff571b8ef053"; // Türkiye varsayılan Guid
+    var pendingDeleteAddressId = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        preloadCountries();
+    });
+
+    function getAntiForgeryToken() {
+        var tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+        return tokenInput ? tokenInput.value : '';
+    }
+
+    function preloadCountries(callback) {
+        if (globalCountries.length > 0) {
+            if (callback) callback();
+            return;
+        }
+
+        fetch('/Hesabim/GetCountries')
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                globalCountries = data || [];
+                if (callback) callback();
+            })
+            .catch(function (err) {
+                console.error("Ülkeler yüklenirken hata:", err);
+                if (callback) callback();
+            });
+    }
+
+    function populateCountryDropdown(selectedCountryId) {
+        var countrySelect = document.getElementById("addrCountry");
+        countrySelect.innerHTML = '<option value="">Ülke Seçiniz</option>';
+        var targetCountryId = selectedCountryId || DEFAULT_COUNTRY_ID;
+
+        globalCountries.forEach(function (c) {
+            var opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.name;
+            if (targetCountryId && c.id.toLowerCase() === targetCountryId.toLowerCase()) {
+                opt.selected = true;
+            }
+            countrySelect.appendChild(opt);
+        });
+    }
+
+    function onCountryChanged(selectedCityId, callback) {
+        var countryId = document.getElementById("addrCountry").value;
+        var citySelect = document.getElementById("addrCity");
+        var districtSelect = document.getElementById("addrDistrict");
+        var neighborhoodSelect = document.getElementById("addrNeighborhood");
+
+        citySelect.innerHTML = '<option value="">Yükleniyor...</option>';
+        citySelect.disabled = true;
+        districtSelect.innerHTML = '<option value="">Önce İl Seçiniz</option>';
+        districtSelect.disabled = true;
+        neighborhoodSelect.innerHTML = '<option value="">Önce İlçe Seçiniz</option>';
+        neighborhoodSelect.disabled = true;
+
+        if (!countryId) {
+            citySelect.innerHTML = '<option value="">Önce Ülke Seçiniz</option>';
+            return;
+        }
+
+        fetch('/Hesabim/GetCities/' + countryId)
+            .then(function (response) { return response.json(); })
+            .then(function (cities) {
+                citySelect.innerHTML = '<option value="">İl Seçiniz</option>';
+                (cities || []).forEach(function (c) {
+                    var opt = document.createElement("option");
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    if (selectedCityId && c.id.toLowerCase() === selectedCityId.toLowerCase()) {
+                        opt.selected = true;
+                    }
+                    citySelect.appendChild(opt);
+                });
+                citySelect.disabled = false;
+                if (callback) callback();
+            })
+            .catch(function (err) {
+                citySelect.innerHTML = '<option value="">İller yüklenemedi</option>';
+                console.error("İller yüklenirken hata:", err);
+            });
+    }
+
+    function onCityChanged(selectedDistrictId, callback) {
+        var cityId = document.getElementById("addrCity").value;
+        var districtSelect = document.getElementById("addrDistrict");
+        var neighborhoodSelect = document.getElementById("addrNeighborhood");
+
+        districtSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+        districtSelect.disabled = true;
+        neighborhoodSelect.innerHTML = '<option value="">Önce İlçe Seçiniz</option>';
+        neighborhoodSelect.disabled = true;
+
+        if (!cityId) {
+            districtSelect.innerHTML = '<option value="">Önce İl Seçiniz</option>';
+            return;
+        }
+
+        fetch('/Hesabim/GetDistricts/' + cityId)
+            .then(function (response) { return response.json(); })
+            .then(function (districts) {
+                districtSelect.innerHTML = '<option value="">İlçe Seçiniz</option>';
+                districts.forEach(function (d) {
+                    var opt = document.createElement("option");
+                    opt.value = d.id;
+                    opt.textContent = d.name;
+                    if (selectedDistrictId && d.id.toLowerCase() === selectedDistrictId.toLowerCase()) {
+                        opt.selected = true;
+                    }
+                    districtSelect.appendChild(opt);
+                });
+                districtSelect.disabled = false;
+                if (callback) callback();
+            })
+            .catch(function (err) {
+                districtSelect.innerHTML = '<option value="">İlçeler yüklenemedi</option>';
+                console.error("İlçeler yüklenirken hata:", err);
+            });
+    }
+
+    function onDistrictChanged(selectedNeighborhoodId, callback) {
+        var districtId = document.getElementById("addrDistrict").value;
+        var neighborhoodSelect = document.getElementById("addrNeighborhood");
+
+        neighborhoodSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+        neighborhoodSelect.disabled = true;
+
+        if (!districtId) {
+            neighborhoodSelect.innerHTML = '<option value="">Önce İlçe Seçiniz</option>';
+            return;
+        }
+
+        fetch('/Hesabim/GetNeighborhoods/' + districtId)
+            .then(function (response) { return response.json(); })
+            .then(function (neighborhoods) {
+                neighborhoodSelect.innerHTML = '<option value="">Mahalle Seçiniz (Opsiyonel)</option>';
+                (neighborhoods || []).forEach(function (n) {
+                    var opt = document.createElement("option");
+                    opt.value = n.id;
+                    opt.textContent = n.name;
+                    if (selectedNeighborhoodId && n.id.toLowerCase() === selectedNeighborhoodId.toLowerCase()) {
+                        opt.selected = true;
+                    }
+                    neighborhoodSelect.appendChild(opt);
+                });
+                neighborhoodSelect.disabled = false;
+                if (callback) callback();
+            })
+            .catch(function (err) {
+                neighborhoodSelect.innerHTML = '<option value="">Mahalleler yüklenemedi</option>';
+                console.error("Mahalleler yüklenirken hata:", err);
+            });
+    }
+
+    function toggleInvoiceFields() {
+        var isKurumsal = document.getElementById("invoiceTypeKurumsal").checked;
+        var bireyselDiv = document.getElementById("bireyselFields");
+        var kurumsalDiv = document.getElementById("kurumsalFields");
+
+        if (isKurumsal) {
+            bireyselDiv.style.display = "none";
+            kurumsalDiv.style.display = "block";
+            document.getElementById("addrTaxOffice").setAttribute("required", "required");
+            document.getElementById("addrTaxNumber").setAttribute("required", "required");
+        } else {
+            bireyselDiv.style.display = "block";
+            kurumsalDiv.style.display = "none";
+            document.getElementById("addrTaxOffice").removeAttribute("required");
+            document.getElementById("addrTaxNumber").removeAttribute("required");
+        }
+    }
+
+    function openNewAddressModal() {
+        document.getElementById("addressModalTitle").textContent = "Yeni Adres Ekle";
+        document.getElementById("addressForm").reset();
+        document.getElementById("addrId").value = "";
+        document.getElementById("invoiceTypeBireysel").checked = true;
+        toggleInvoiceFields();
+        document.getElementById("formModalError").style.display = "none";
+
+        var cardsCount = document.querySelectorAll(".address-card-item").length;
+        var defaultCheckbox = document.getElementById("addrIsDefault");
+        if (cardsCount === 0) {
+            defaultCheckbox.checked = true;
+            defaultCheckbox.disabled = true;
+        } else {
+            defaultCheckbox.checked = false;
+            defaultCheckbox.disabled = false;
+        }
+
+        preloadCountries(function () {
+            populateCountryDropdown(DEFAULT_COUNTRY_ID);
+            onCountryChanged(null, function () {
+                var districtSelect = document.getElementById("addrDistrict");
+                districtSelect.innerHTML = '<option value="">Önce İl Seçiniz</option>';
+                districtSelect.disabled = true;
+
+                var neighborhoodSelect = document.getElementById("addrNeighborhood");
+                neighborhoodSelect.innerHTML = '<option value="">Önce İlçe Seçiniz</option>';
+                neighborhoodSelect.disabled = true;
+
+                document.getElementById("addressCustomModal").style.display = "flex";
+            });
+        });
+    }
+
+    function openEditAddressModal(addressId) {
+        document.getElementById("addressModalTitle").textContent = "Adresi Düzenle";
+        document.getElementById("formModalError").style.display = "none";
+
+        fetch('/Hesabim/GetAddressDetail/' + addressId)
+            .then(function (res) {
+                if (!res.ok) throw new Error("Adres detayları alınamadı.");
+                return res.json();
+            })
+            .then(function (addr) {
+                document.getElementById("addrId").value = addr.id;
+                document.getElementById("addrTitle").value = addr.title || "";
+                document.getElementById("addrFirstName").value = addr.firstName || "";
+                document.getElementById("addrLastName").value = addr.lastName || "";
+                document.getElementById("addrPhoneNumber").value = addr.phoneNumber || "";
+                document.getElementById("addrDetail").value = addr.addressDetail || "";
+
+                if (addr.invoiceType === 1) {
+                    document.getElementById("invoiceTypeKurumsal").checked = true;
+                    document.getElementById("addrTaxOffice").value = addr.taxOffice || "";
+                    document.getElementById("addrTaxNumber").value = addr.taxNumber || "";
+                } else {
+                    document.getElementById("invoiceTypeBireysel").checked = true;
+                    document.getElementById("addrIdentityNumber").value = addr.identityNumber || "";
+                }
+                toggleInvoiceFields();
+
+                var cardsCount = document.querySelectorAll(".address-card-item").length;
+                var defaultCheckbox = document.getElementById("addrIsDefault");
+                defaultCheckbox.checked = !!addr.isDefault;
+                if (cardsCount === 1) {
+                    defaultCheckbox.disabled = true;
+                } else {
+                    defaultCheckbox.disabled = false;
+                }
+
+                var targetCountryId = addr.countryId || DEFAULT_COUNTRY_ID;
+                preloadCountries(function () {
+                    populateCountryDropdown(targetCountryId);
+                    onCountryChanged(addr.cityId, function () {
+                        onCityChanged(addr.districtId, function () {
+                            onDistrictChanged(addr.neighborhoodId, function () {
+                                document.getElementById("addressCustomModal").style.display = "flex";
+                            });
+                        });
+                    });
+                });
+            })
+            .catch(function (err) {
+                alert("Adres bilgileri getirilemedi: " + err.message);
+            });
+    }
+
+    function closeAddressModal() {
+        document.getElementById("addressCustomModal").style.display = "none";
+    }
+
+    function handleAddressSubmit(e) {
+        e.preventDefault();
+        var formError = document.getElementById("formModalError");
+        formError.style.display = "none";
+
+        var titleInput = document.getElementById("addrTitle");
+        var enteredTitle = (titleInput ? titleInput.value : "").trim();
+        var currentAddrId = document.getElementById("addrId").value;
+
+        // Sayfadaki mevcut adres başlıklarını kontrol et (Aynı Adres Başlığı ile kayıt engeli)
+        var addressCards = document.querySelectorAll(".address-card-item");
+        for (var i = 0; i < addressCards.length; i++) {
+            var cardId = addressCards[i].getAttribute("data-id");
+            var cardTitle = (addressCards[i].getAttribute("data-title") || "").trim();
+            if ((!currentAddrId || currentAddrId !== cardId) && cardTitle.toLowerCase() === enteredTitle.toLowerCase()) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Mükerrer Adres Başlığı',
+                        html: '<p style="font-size: 15px; margin-top: 6px; margin-bottom: 0;"><strong>"' + enteredTitle + '"</strong> başlıklı bir adresiniz zaten kayıtlıdır.<br>Lütfen farklı bir adres başlığı belirleyiniz.</p>',
+                        confirmButtonText: 'Tamam',
+                        confirmButtonColor: '#212529'
+                    });
+                } else {
+                    formError.textContent = "'" + enteredTitle + "' başlıklı bir adresiniz zaten kayıtlıdır. Lütfen farklı bir adres başlığı belirleyiniz.";
+                    formError.style.display = "block";
+                }
+                if (titleInput) titleInput.focus();
+                return;
+            }
+        }
+
+        var saveBtn = document.getElementById("saveAddressBtn");
+        var spinner = document.getElementById("saveBtnSpinner");
+        var btnText = document.getElementById("saveBtnText");
+
+        var formData = new FormData(document.getElementById("addressForm"));
+        formData.append("__RequestVerificationToken", getAntiForgeryToken());
+
+        var defaultCheckbox = document.getElementById("addrIsDefault");
+        if (defaultCheckbox) {
+            formData.set("IsDefault", defaultCheckbox.checked ? "true" : "false");
+        }
+
+        if (!document.getElementById("addrNeighborhood").value) {
+            formData.delete("NeighborhoodId");
+        }
+        if (!document.getElementById("addrId").value) {
+            formData.delete("Id");
+        }
+
+        saveBtn.disabled = true;
+        spinner.style.display = "inline-block";
+        btnText.textContent = "Kaydediliyor...";
+
+        fetch('/Hesabim/SaveAddress', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            saveBtn.disabled = false;
+            spinner.style.display = "none";
+            btnText.textContent = "Kaydet";
+
+            if (data.success) {
+                closeAddressModal();
+                showGlobalAlert('success', data.message || "Adres başarıyla kaydedildi.");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 900);
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Adres Kaydedilemedi',
+                        html: '<p style="font-size: 15px; margin-top: 6px; margin-bottom: 0;">' + (data.message || "Bir hata oluştu.") + '</p>',
+                        confirmButtonText: 'Tamam',
+                        confirmButtonColor: '#212529'
+                    });
+                } else {
+                    formError.textContent = data.message || "Bir hata oluştu.";
+                    formError.style.display = "block";
+                }
+            }
+        })
+        .catch(function (err) {
+            saveBtn.disabled = false;
+            spinner.style.display = "none";
+            btnText.textContent = "Kaydet";
+            formError.textContent = "Sunucu iletişim hatası: " + err.message;
+            formError.style.display = "block";
+        });
+    }
+
+    function confirmDeleteAddress(id, title) {
+        pendingDeleteAddressId = id;
+        document.getElementById("deleteAddressTitleText").textContent = '"' + title + '" Başlıklı Adres';
+        document.getElementById("deleteConfirmModal").style.display = "flex";
+    }
+
+    function setDefaultAddress(addressId) {
+        if (!addressId) return;
+
+        var formData = new FormData();
+        formData.append("__RequestVerificationToken", getAntiForgeryToken());
+
+        fetch('/Hesabim/SetDefaultAddress/' + addressId, {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Başarılı',
+                        text: data.message || 'Varsayılan teslimat adresi güncellendi.',
+                        showConfirmButton: false,
+                        timer: 1200
+                    });
+                } else {
+                    showGlobalAlert('success', data.message || 'Varsayılan teslimat adresi güncellendi.');
+                }
+                setTimeout(function () {
+                    window.location.reload();
+                }, 900);
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata',
+                        text: data.message || 'Varsayılan adres güncellenemedi.',
+                        confirmButtonText: 'Tamam',
+                        confirmButtonColor: '#212529'
+                    });
+                } else {
+                    showGlobalAlert('danger', data.message || 'Varsayılan adres güncellenemedi.');
+                }
+            }
+        })
+        .catch(function (err) {
+            console.error("Varsayılan adres güncellenirken hata:", err);
+            showGlobalAlert('danger', 'Sunucu iletişim hatası: ' + err.message);
+        });
+    }
+
+    function closeDeleteModal() {
+        pendingDeleteAddressId = null;
+        document.getElementById("deleteConfirmModal").style.display = "none";
+    }
+
+    function executeDeleteAddress() {
+        if (!pendingDeleteAddressId) return;
+
+        var deleteBtn = document.getElementById("confirmDeleteBtn");
+        deleteBtn.disabled = true;
+        deleteBtn.textContent = "Siliniyor...";
+
+        var formData = new FormData();
+        formData.append("__RequestVerificationToken", getAntiForgeryToken());
+
+        fetch('/Hesabim/DeleteAddress/' + pendingDeleteAddressId, {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = "Evet, Sil";
+            closeDeleteModal();
+
+            if (data.success) {
+                showGlobalAlert('success', data.message || "Adresiniz başarıyla silindi.");
+                var cardEl = document.getElementById("address-card-" + pendingDeleteAddressId) ||
+                             document.querySelector('.address-card-item[data-id="' + pendingDeleteAddressId + '"]');
+                if (cardEl) {
+                    cardEl.remove();
+                }
+                // Silme işleminden sonra listeyi tazelemek için sayfayı yenile
+                setTimeout(function () {
+                    window.location.reload();
+                }, 600);
+            } else {
+                showGlobalAlert('danger', data.message || "Adres silinirken bir hata oluştu.");
+            }
+        })
+        .catch(function (err) {
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = "Evet, Sil";
+            closeDeleteModal();
+            showGlobalAlert('danger', "Sunucu iletişim hatası: " + err.message);
+        });
+    }
+
+    function showGlobalAlert(type, message) {
+        var alertBox = document.getElementById("addressAlertBox");
+        alertBox.className = "alert alert-" + type + " mb-4";
+        alertBox.textContent = message;
+        alertBox.style.display = "block";
+        window.scrollTo({ top: alertBox.offsetTop - 100, behavior: 'smooth' });
+    }
+</script>

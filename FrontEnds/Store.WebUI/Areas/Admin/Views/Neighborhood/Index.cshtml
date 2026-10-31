@@ -1,0 +1,618 @@
+@model List<Store.DtoLayer.LocationDtos.NeighborhoodDtos.ResultNeighborhoodDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Mahalle Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var countries = ViewBag.Countries as List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto> ?? new List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto>();
+    var cities = ViewBag.Cities as List<Store.DtoLayer.LocationDtos.CityDtos.ResultCityDto> ?? new List<Store.DtoLayer.LocationDtos.CityDtos.ResultCityDto>();
+    var districts = ViewBag.Districts as List<Store.DtoLayer.LocationDtos.DistrictDtos.ResultDistrictDto> ?? new List<Store.DtoLayer.LocationDtos.DistrictDtos.ResultDistrictDto>();
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        MAHALLE İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Mahalle Listesi ve İşlemleri</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+    <div class="card-block">
+        <div class="row m-b-20">
+            <div class="col-md-4">
+                <label><strong>Şehir Filtresi</strong></label>
+                <select id="filter-city" class="form-control">
+                    <option value="">-- Tüm Şehirler --</option>
+                    @foreach (var city in cities)
+                    {
+                        <option value="@city.Id">@city.CityName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label><strong>İlçe Filtresi</strong></label>
+                <select id="filter-district" class="form-control">
+                    <option value="">-- Önce Şehir Seçiniz --</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end" style="padding-top:25px;">
+                <button type="button" class="tabledit-edit-button btn btn-grd-primary waves-effect waves-light"
+                        data-toggle="modal" data-target="#createNeighborhoodModal">
+                    <i class="feather icon-plus"></i> Yeni Mahalle
+                </button>
+
+                @if (ViewBag.ShowDeleted == true)
+                {
+                    <button type="button" id="btn-toggle-deleted" class="btn btn-grd-warning waves-effect waves-light" style="margin-left: 5px;" data-show-deleted="true">
+                        <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" id="btn-toggle-deleted" class="btn btn-grd-inverse waves-effect waves-light" style="margin-left: 5px;" data-show-deleted="false">
+                        <span class="feather icon-eye"> Silinenleri Göster</span>
+                    </button>
+                }
+            </div>
+        </div>
+        <hr />
+        
+        <div class="dt-responsive table-responsive">
+            <table id="neighborhood-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Ülke</th>
+                        <th>Şehir</th>
+                        <th>İlçe</th>
+                        <th>Mahalle Adı</th>
+                        <th>Posta Kodu</th>
+                        <th>Notlar</th>
+                        <th>Durum</th>
+                        <th>Ekleyen</th>
+                        <th>Ekleme Tarihi</th>
+                        <th>Güncelleyen</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th>Silen</th>
+                        <th>Silinme Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="neighborhood-tbody">
+                    <!-- Veriler AJAX ile yüklenecek -->
+                </tbody>
+            </table>
+        </div>        
+    </div>
+    <br />
+</div>
+
+<!-- Create Neighborhood Modal -->
+<div id="createNeighborhoodModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/Neighborhood/Create" class="md-float-material" id="createNeighborhoodForm">
+                <div class="card m-t-15">
+                    <div class="auth-box card-block">
+                        <label class="btn btn-inverse btn-block p-t-15 p-b-15">Yeni Mahalle</label>
+                        <div id="create-error-msg" class="alert alert-danger" style="display:none;"></div>
+                        <br />
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Ülke</strong></label>
+                            <select id="create-country" class="form-control" required>
+                                <option value="">-- Ülke Seçiniz --</option>
+                                @foreach (var country in countries)
+                                {
+                                    <option value="@country.Id">@country.CountryName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Şehir</strong></label>
+                            <select id="create-city" class="form-control" required>
+                                <option value="">-- Önce Ülke Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>İlçe</strong></label>
+                            <select name="DistrictId" id="create-district" class="form-control" required>
+                                <option value="">-- Önce Şehir Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Mahalle Adı</strong></label>
+                            <input type="text" name="NeighborhoodName" class="form-control" placeholder="Mahalle Adı" required minlength="3" />
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Posta Kodu</strong></label>
+                            @* <input type="text" name="PostalCode" class="form-control" placeholder="Posta Kodu" required pattern="\d{5,}" title="Posta kodu en az 5 rakam olmalıdır." /> *@
+                            <input type="text" name="PostalCode" class="form-control" required pattern="\d{5}" maxlength="5" title="Posta kodu en az 5 rakam olmalıdır." placeholder="Posta Kodu" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" id="edit-isactive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" class="form-control" placeholder="Notlar" rows="3"></textarea>
+                        </div>
+                        <input type="hidden" name="InsertUserId" value="00000000-0000-0000-0000-000000000000" />
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block">
+                                    <i class="icofont icofont-check-circled"></i> Kaydet
+                                </button>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block">
+                                    <i class="icofont icofont-ui-close"></i> Vazgeç
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Neighborhood Modal -->
+<div id="editNeighborhoodModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/Neighborhood/Edit" class="md-float-material" id="editNeighborhoodForm">
+                <div class="card m-t-15">
+                    <div class="modal-header text-white" style="background-color: #34495e; border-radius: 5px 5px 0 0;">
+                        <h5 class="modal-title"><i class="feather icon-info"></i> Mahalle Güncelleme</h5>
+                    </div>
+                    <div class="auth-box card-block">
+                        <div id="edit-error-msg" class="alert alert-danger" style="display:none;"></div>
+                        <input type="hidden" name="Id" id="edit-id" />
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Ülke</strong></label>
+                            <select id="edit-country" class="form-control" required>
+                                <option value="">-- Ülke Seçiniz --</option>
+                                @foreach (var country in countries)
+                                {
+                                    <option value="@country.Id">@country.CountryName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Şehir</strong></label>
+                            <select id="edit-city" class="form-control" required>
+                                <option value="">-- Önce Ülke Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>İlçe</strong></label>
+                            <select name="DistrictId" id="edit-district" class="form-control" required>
+                                <option value="">-- Önce Şehir Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Mahalle Adı</strong></label>
+                            <input type="text" name="NeighborhoodName" id="edit-name" class="form-control" required minlength="3" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Posta Kodu</strong></label>
+                            @* <input type="text" name="PostalCode" id="edit-postalcode" class="form-control" required pattern="\d{5,}" title="Posta kodu en az 5 rakam olmalıdır." /> *@
+                            <input type="text" name="PostalCode" id="edit-postalcode" class="form-control" required pattern="\d{5}" maxlength="5" title="Posta kodu en az 5 rakam olmalıdır." placeholder="Posta Kodu" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" id="edit-isactive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" id="edit-notes" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block">
+                                    <i class="icofont icofont-check-circled"></i> Güncelle
+                                </button>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block">
+                                    <i class="icofont icofont-ui-close"></i> Vazgeç
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Neighborhood Details Modal -->
+<div class="modal fade" id="detailsNeighborhoodModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">            
+                <h5 class="modal-title"><i class="feather icon-info"></i> Mahalle Detayları</h5>
+            </div>
+            <div class="modal-body p-4">
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>ID:</strong> <p id="det-id" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Mahalle Adı:</strong> <p id="det-name" class="text-muted"></p></div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Posta Kodu:</strong> <p id="det-postalcode" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>İlçe:</strong> <p id="det-district" class="text-muted"></p></div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Şehir:</strong> <p id="det-city" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Ülke:</strong> <p id="det-country" class="text-muted"></p></div>
+                    </div>
+                    <hr>
+                    <div class="row m-b-10">
+                        <div class="col-md-12"><strong>Notlar:</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                    </div>
+                    <hr/>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Ekleyen:</strong> <p id="det-insuser" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Ekleme Tarihi:</strong> <p id="det-insdate" class="text-muted"></p></div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Güncelleyen:</strong> <p id="det-upduser" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Güncelleme Tarihi:</strong> <p id="det-upddate" class="text-muted"></p></div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Silen:</strong> <p id="det-deluser" class="text-muted"></p></div>
+                        <div class="col-sm-6"><strong>Silinme Tarihi:</strong> <p id="det-deldate" class="text-muted"></p></div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-sm-6"><strong>Durum:</strong> <p id="det-active" class="text-muted"></p></div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: white;"> <i class="icofont icofont-ui-close"></i> Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var allCountries = @Html.Raw(JsonConvert.SerializeObject(countries));
+            var allCities = @Html.Raw(JsonConvert.SerializeObject(cities));
+            var allDistricts = @Html.Raw(JsonConvert.SerializeObject(districts));
+
+            function populateCities(countryId, selectElement, selectedCityId = null) {
+                selectElement.empty();
+                if (countryId) {
+                    selectElement.append('<option value="">-- Şehir Seçiniz --</option>');
+                    var filteredCities = allCities.filter(c => c.CountryId == countryId);
+                    filteredCities.forEach(function (c) {
+                        var selected = (selectedCityId && c.Id == selectedCityId) ? 'selected' : '';
+                        selectElement.append('<option value="' + c.Id + '" ' + selected + '>' + c.CityName + '</option>');
+                    });
+                } else {
+                    selectElement.append('<option value="">-- Önce Ülke Seçiniz --</option>');
+                }
+            }
+
+            function populateDistricts(cityId, selectElement, selectedDistrictId = null) {
+                selectElement.empty();
+                if (cityId) {
+                    selectElement.append('<option value="">-- İlçe Seçiniz --</option>');
+                    var filteredDistricts = allDistricts.filter(d => d.CityId == cityId);
+                    // Türkçe karakter destekli harf sıralaması
+                    filteredDistricts.sort(function (a, b) {
+                        return a.DistrictName.localeCompare(b.DistrictName, 'tr', { sensitivity: 'base' });
+                    });
+                    filteredDistricts.forEach(function (d) {
+                        var selected = (selectedDistrictId && d.Id == selectedDistrictId) ? 'selected' : '';
+                        selectElement.append('<option value="' + d.Id + '" ' + selected + '>' + d.DistrictName + '</option>');
+                    });
+                } else {
+                    selectElement.append('<option value="">-- Önce Şehir Seçiniz --</option>');
+                }
+            }
+
+            $('#create-country').change(function () {
+                populateCities($(this).val(), $('#create-city'));
+                $('#create-district').empty().append('<option value="">-- Önce Şehir Seçiniz --</option>');
+            });
+
+            $('#create-city').change(function () {
+                populateDistricts($(this).val(), $('#create-district'));
+            });
+
+            $('#edit-country').change(function () {
+                populateCities($(this).val(), $('#edit-city'));
+                $('#edit-district').empty().append('<option value="">-- Önce Şehir Seçiniz --</option>');
+            });
+
+            $('#edit-city').change(function () {
+                populateDistricts($(this).val(), $('#edit-district'));
+            });
+
+            $('#filter-city').change(function () {
+                populateDistricts($(this).val(), $('#filter-district'));
+            });
+
+            var neighborhoodTable = $('#neighborhood-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                order: [],
+                language: {
+                    emptyTable: "Mahalleleri görmek için lütfen bir İlçe seçiniz."
+                }
+            });
+
+            // showDeleted başlangıç değeri Razor'dan alınır, sonraki toggle'lar JS ile yapılır
+            var showDeletedInitial = @(ViewBag.ShowDeleted == true ? "true" : "false");
+            $('#btn-toggle-deleted').data('show-deleted', showDeletedInitial);
+
+            $('#btn-toggle-deleted').on('click', function () {
+                var btn = $(this);
+                var current = btn.data('show-deleted');
+                var next = !current;
+                btn.data('show-deleted', next);
+
+                if (next) {
+                    btn.removeClass('btn-grd-inverse').addClass('btn-grd-warning');
+                    btn.html('<span class="feather icon-eye-off"> Silinenleri Gizle</span>');
+                } else {
+                    btn.removeClass('btn-grd-warning').addClass('btn-grd-inverse');
+                    btn.html('<span class="feather icon-eye"> Silinenleri Göster</span>');
+                }
+
+                // Eğer ilçe seçiliyse, mevcut filtrelerle listeyi yenile
+                var districtId = $('#filter-district').val();
+                if (districtId) {
+                    loadNeighborhoods(districtId);
+                }
+            });
+
+            $('#filter-district').change(function () {
+                var districtId = $(this).val();
+                if (districtId) {
+                    loadNeighborhoods(districtId);
+                } else {
+                    neighborhoodTable.clear().draw();
+                }
+            });
+
+            function loadNeighborhoods(districtId) {
+                var showDeleted = $('#btn-toggle-deleted').data('show-deleted') === true ? 'true' : 'false';
+                $.ajax({
+                    url: '/Admin/Neighborhood/GetNeighborhoods?districtId=' + districtId + '&showDeleted=' + showDeleted,
+                    type: 'GET',
+                    success: function (data) {
+                        neighborhoodTable.clear();
+                        
+                        var countryId = $('#filter-city option:selected').val() ? allCities.find(c => c.Id == $('#filter-city option:selected').val()).CountryId : '';
+                        var countryName = countryId ? allCountries.find(c => c.Id == countryId)?.CountryName : '-';
+                        var cityName = $('#filter-city option:selected').text();
+                        var districtName = $('#filter-district option:selected').text();
+                        var cityId = $('#filter-city').val();
+                        
+                        $.each(data, function(index, item) {
+                            var statusHtml = '';
+                            if (item.isDeleted) {
+                                statusHtml = '<span class="label" style="background:#7b241c; color:#fff;">Silindi</span>';
+                            } else if (item.isActive) {
+                                statusHtml = '<span class="label label-success">Aktif</span>';
+                            } else {
+                                statusHtml = '<span class="label label-danger">Pasif</span>';
+                            }
+                            
+                            var buttonsHtml = `
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none;margin: 5px;"
+                                            data-toggle="modal" data-target="#detailsNeighborhoodModal"
+                                            data-id="${item.id}" data-name="${item.neighborhoodName}"
+                                            data-postalcode="${item.postalCode || ''}"
+                                            data-districtid="${item.districtId}" data-districtname="${districtName}"
+                                            data-cityid="${cityId}" data-cityname="${cityName}"
+                                            data-countryid="${countryId}" data-countryname="${countryName}"
+                                            data-active="${item.isActive}"
+                                            data-insuser="${item.insertUserId}" data-insdate="${new Date(item.insertDate).toLocaleString()}"
+                                            data-upduser="${item.updateUserId}" data-upddate="${item.updateDate ? new Date(item.updateDate).toLocaleString() : '-'}"
+                                            data-deluser="${item.deleteUserId}" data-deldate="${item.deleteDate ? new Date(item.deleteDate).toLocaleString() : '-'}"
+                                            data-notes="${item.notes || ''}">
+                                        <i class="icofont icofont-file-text"></i>
+                                    </button>
+                            `;
+                            
+                            if (item.isDeleted) {
+                                buttonsHtml += `
+                                        <a href="/Admin/Neighborhood/RestoreNeighborhood/${item.id}" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">
+                                            <i class="feather icon-rotate-ccw"></i> Geri Al
+                                        </a>
+                                `;
+                            } else {
+                                buttonsHtml += `
+                                        <button type="button" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#editNeighborhoodModal"
+                                                data-id="${item.id}" data-name="${item.neighborhoodName}"
+                                                data-postalcode="${item.postalCode || ''}"
+                                                data-districtid="${item.districtId}"
+                                                data-cityid="${cityId}"
+                                                data-countryid="${countryId}"
+                                                data-active="${item.isActive}" data-notes="${item.notes || ''}">
+                                            <span class="icofont icofont-ui-edit"></span>
+                                        </button>
+                                        <a href="/Admin/Neighborhood/DeleteNeighborhood/${item.id}" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                            <span class="feather icon-trash"></span>
+                                        </a>
+                                `;
+                            }
+                            buttonsHtml += '</div>';
+                            
+                            var rowNode = neighborhoodTable.row.add([
+                                countryName,
+                                cityName,
+                                districtName,
+                                item.neighborhoodName,
+                                item.postalCode || '',
+                                item.notes || '',
+                                statusHtml,
+                                item.insertUserId,
+                                new Date(item.insertDate).toLocaleString(),
+                                item.updateUserId || '',
+                                item.updateDate ? new Date(item.updateDate).toLocaleString() : '-',
+                                item.deleteUserId || '',
+                                item.deleteDate ? new Date(item.deleteDate).toLocaleString() : '-',
+                                buttonsHtml
+                            ]).node();
+                            
+                            if(item.isDeleted) {
+                                $(rowNode).css({"background-color":"#c0392b", "color":"#fff", "border-left":"4px solid #922b21", "font-weight":"600"});
+                                $(rowNode).find('td:lt(6)').css("text-decoration", "line-through");
+                            } else if (!item.isActive) {
+                                $(rowNode).css({"opacity":"0.5", "background-color":"#f8d7da"});
+                            }
+                        });
+                        
+                        neighborhoodTable.draw();
+                    },
+                    error: function () {
+                        showToastAlert('Mahalleler yüklenirken hata oluştu.', 'danger', '', 'animated flipInY', 'animated flipOutY');
+                    }
+                });
+            }
+
+            $('#createNeighborhoodModal').on('show.bs.modal', function () {
+                var modal = $(this);
+                modal.find('form')[0].reset();
+                $('#create-city').empty().append('<option value="">-- Önce Ülke Seçiniz --</option>');
+                $('#create-district').empty().append('<option value="">-- Önce Şehir Seçiniz --</option>');
+                modal.find('#create-error-msg').hide();
+                modal.find('button[type="submit"]').prop('disabled', false);
+            });
+
+            $('#detailsNeighborhoodModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                modal.find('#det-id').text(button.data('id'));
+                modal.find('#det-name').text(button.data('name'));
+                modal.find('#det-postalcode').text(button.data('postalcode') || '-');
+                modal.find('#det-district').text(button.data('districtname'));
+                modal.find('#det-city').text(button.data('cityname'));
+                modal.find('#det-country').text(button.data('countryname'));
+                modal.find('#det-insuser').text(button.data('insuser'));
+                modal.find('#det-insdate').text(button.data('insdate'));
+                modal.find('#det-upduser').text(button.data('upduser') || '-');
+                modal.find('#det-upddate').text(button.data('upddate') || '-');
+                modal.find('#det-deluser').text(button.data('deluser') || '-');
+                modal.find('#det-deldate').text(button.data('deldate') || '-');
+                modal.find('#det-active').text((button.data('active') && button.data('active').toString().toLowerCase() === 'true') ? 'Aktif' : 'Pasif');
+                modal.find('#det-notes').text(button.data('notes') || '-');
+            });
+
+            $('#editNeighborhoodModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                modal.find('#edit-id').val(button.data('id'));
+                modal.find('#edit-name').val(button.data('name'));
+                modal.find('#edit-postalcode').val(button.data('postalcode'));
+                modal.find('#edit-notes').val(button.data('notes'));
+                modal.find('#edit-isactive').val(button.data('active').toString().toLowerCase());
+
+                var countryId = button.data('countryid');
+                var cityId = button.data('cityid');
+                var districtId = button.data('districtid');
+
+                modal.find('#edit-country').val(countryId);
+                populateCities(countryId, modal.find('#edit-city'), cityId);
+
+                setTimeout(function () {
+                    populateDistricts(cityId, modal.find('#edit-district'), districtId);
+                }, 50);
+            });
+
+            $('#createNeighborhoodForm').on('submit', function (e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var err = $('#create-error-msg');
+                var btn = form.find('button[type="submit"]');
+                err.hide(); btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (r) {
+                        if (r.success) location.reload();
+                        else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                    },
+                    error: function () { showToastAlert('Sunucuya bağlanırken hata oluştu.', 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                });
+            });
+
+            $('#editNeighborhoodForm').on('submit', function (e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var err = $('#edit-error-msg');
+                var btn = form.find('button[type="submit"]');
+                err.hide(); btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (r) {
+                        if (r.success) location.reload();
+                        else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                    },
+                    error: function () { showToastAlert('Sunucuya bağlanırken hata oluştu.', 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                });
+            });
+        });
+    </script>
+}

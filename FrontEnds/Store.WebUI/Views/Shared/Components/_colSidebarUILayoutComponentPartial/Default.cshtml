@@ -1,0 +1,832 @@
+@using Store.WebUI.Models
+@using Store.Shared.Enums
+@using Store.DtoLayer.CatalogDtos.CategoryDtos
+@model SidebarViewModel
+
+<style>
+    .layer-navigation__head.open .layer-navigation__arrow,
+    .collections-menu__button.open .collections-menu__arrow {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+    }
+    .layer-navigation__head:not(.open) .layer-navigation__arrow,
+    .collections-menu__button:not(.open) .collections-menu__arrow {
+        transform: rotate(0deg);
+        transition: transform 0.3s ease;
+    }
+</style>
+
+@{
+    var rootCategories = Model.Categories.Where(x => x.ParentId == null || x.ParentId == Guid.Empty).ToList();
+
+    void RenderCategory(ResultCategoryDto category, List<ResultCategoryDto> allCategories)
+    {
+        var children = allCategories.Where(x => x.ParentId == category.Id).ToList();
+        var hasChildren = children.Any();
+        
+        if (hasChildren)
+        {
+            <div class="collections-menu__item" data-js-accordion="all">
+                <div class="collections-menu__button d-flex align-items-center mb-15 mb-lg-9 cursor-pointer open" data-js-accordion-button>
+                    <label class="input-checkbox d-flex align-items-center mb-0 mr-0 cursor-pointer">
+                        <span class="position-relative d-block mr-8 border"></span>
+                        <span>@category.Name</span>
+                    </label>
+                    <i class="collections-menu__arrow">
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-229" viewBox="0 0 24 24">
+                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                        </svg>
+                    </i>
+                </div>
+                <div class="collections-menu__list ml-25" data-js-accordion-content>
+                    @foreach (var child in children)
+                    {
+                        RenderCategory(child, allCategories);
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="collections-menu__item" data-js-accordion="all">
+                <div class="collections-menu__button d-flex align-items-center mb-15 mb-lg-9 cursor-pointer">
+                    <label class="input-checkbox d-flex align-items-center mb-0 mr-0 cursor-pointer">
+                        <input type="radio" class="d-none" name="collection" value="@category.Id">
+                        <span class="position-relative d-block mr-8 border">
+                            <i class="d-none">
+                                <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg>
+                            </i>
+                        </span>
+                        <span>@category.Name</span>
+                    </label>
+                </div>
+            </div>
+        }
+    }
+}
+                <div class="collections__sidebar collections__sidebar--width-md d-none col-auto d-lg-block"
+                     data-sticky-sidebar-parent>
+                    <div class="js-sticky-sidebar">
+                        <div data-js-position-desktop="sidebar" data-sticky-sidebar-inner>
+                            <div id="theme-section-collection-sidebar" class="theme-section">
+                                <div data-section-id="collection-sidebar" data-section-type="collection-sidebar">
+                                    <aside class="collection-sidebar js-position js-collection-sidebar"
+                                           data-js-collection-sidebar data-js-position-name="sidebar">
+                                        <nav class="collection-sidebar__navigation">
+
+                                            <div class="layer-navigation d-none"
+                                                 data-js-collection-nav-section="current_filters"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">CURRENT FILTERS<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div data-js-collection-replace="current-tags">
+                                                            <p class="mb-8">There are no current tags</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+
+
+                                            <!-- SİPARİŞ TÜRÜ DROP DOWN'I-->
+                                            <div class="layer-navigation" data-js-collection-nav-section="collections"
+                                                 data-js-accordion="all">
+                                                <!-- Satış -->
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">SİPARİŞ TÜRÜ<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <!-- Kiralama -->
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div class="collections-menu" data-js-collections-menu>
+                                                            <div class="collections-menu__item" data-js-accordion="all"
+                                                                 data-section-for-collection="womens">
+                                                                <div class="collections-menu__button d-flex align-items-center mb-15 mb-lg-9 cursor-pointer">
+                                                                    <label class="input-checkbox d-flex align-items-center mb-0 mr-0 cursor-pointer">
+                                                                        <input type="radio" class="d-none"
+                                                                               name="collection" value="womens"
+                                                                               checked="checked">
+                                                                        <span class="position-relative d-block mr-8 border"><i
+                                                                                class="d-none"><svg aria-hidden="true"
+                                                                                                    focusable="false"
+                                                                                                    role="presentation"
+                                                                                                    class="icon icon-theme-146"
+                                                                                                    viewBox="0 0 24 24"><path
+                                                                                d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i></span>
+                                                                        <span>Satış</span>
+                                                                    </label>
+                                                                    <!--  <span class="ml-auto">42</span>  -->  <!-- Toplam Ürün Adedi -->
+                                                                </div>
+                                                            </div> 
+                                                            <div class="collections-menu__item" data-js-accordion="all" data-section-for-collection="womens">
+                                                                <div class="collections-menu__button d-flex align-items-center mb-15 mb-lg-9 cursor-pointer">
+                                                                    <label class="input-checkbox d-flex align-items-center mb-0 mr-0 cursor-pointer">
+                                                                        <input type="radio" class="d-none"
+                                                                               name="collection" value="womens"
+                                                                               checked="checked">
+                                                                        <span class="position-relative d-block mr-8 border"><i
+                                                                                class="d-none"><svg aria-hidden="true"
+                                                                                                    focusable="false"
+                                                                                                    role="presentation"
+                                                                                                    class="icon icon-theme-146"
+                                                                                                    viewBox="0 0 24 24"><path
+                                                                                d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i></span>
+                                                                        <span>Kiralama</span>
+                                                                    </label>
+                                                                    <!--  <span class="ml-auto">42</span>  -->  <!-- Toplam Ürün Adedi -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>                                                                                       
+                                            </div>
+
+                                            <!-- KATEGORİLERİMİZ DOWN'I-->
+                                            <div class="layer-navigation" data-js-collection-nav-section="collections"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">KATEGORİLERİMİZ<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div class="collections-menu" data-js-collections-menu>
+                                                            @foreach(var root in rootCategories)
+                                                            {
+                                                                RenderCategory(root, Model.Categories);
+                                                            }
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div> <!-- Eksik div tagleri eklendi -->
+                                            
+                                            <!-- RENKLER DOWN'I-->
+                                            <div class="layer-navigation" data-js-collection-nav-section="filters"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">RENKLER<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div data-js-collection-replace="filter-1"
+                                                             data-js-collection-replace-only-full>
+
+                                                            <div class="collection-filters d-flex flex-wrap"
+                                                                 data-js-collection-filters data-property="color"><label
+                                                                    class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="red">
+                                            <span class="position-relative d-block rounded-circle standard-color-red lazyload"
+                                                  data-value="red" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="orange">
+                                            <span class="position-relative d-block rounded-circle standard-color-orange lazyload"
+                                                  data-value="orange" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="yellow">
+                                            <span class="position-relative d-block rounded-circle standard-color-yellow lazyload"
+                                                  data-value="yellow" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="green">
+                                            <span class="position-relative d-block rounded-circle standard-color-green lazyload"
+                                                  data-value="green" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="black">
+                                            <span class="position-relative d-block rounded-circle standard-color-black lazyload"
+                                                  data-value="black" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="silver">
+                                            <span class="position-relative d-block rounded-circle standard-color-silver lazyload"
+                                                  data-value="silver" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="blue">
+                                            <span class="position-relative d-block rounded-circle standard-color-blue lazyload"
+                                                  data-value="blue" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="grey">
+                                            <span class="position-relative d-block rounded-circle standard-color-grey lazyload"
+                                                  data-value="grey" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="white">
+                                            <span class="position-relative d-block rounded-circle standard-color-white lazyload"
+                                                  data-value="white" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="violet">
+                                            <span class="position-relative d-block rounded-circle standard-color-violet lazyload"
+                                                  data-value="violet" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label><label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 mr-15 mr-lg-10 input-checkbox--unbordered cursor-pointer">
+                                                                <input type="checkbox" class="d-none"
+                                                                       name="filter_by_color" value="pink">
+                                            <span class="position-relative d-block rounded-circle standard-color-pink lazyload"
+                                                  data-value="pink" data-bg="none">
+                                                <i class="d-none standard-color-arrow"><svg aria-hidden="true"
+                                                                                            focusable="false"
+                                                                                            role="presentation"
+                                                                                            class="icon icon-theme-146"
+                                                                                            viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+                                          
+                                            <!-- BEDENLER DOWN'I-->
+                                            <div class="layer-navigation" data-js-collection-nav-section="filters"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">BEDENLER<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div data-js-collection-replace="filter-2"
+                                                             data-js-collection-replace-only-full>
+
+                                                            <div class="collection-filters row" data-js-collection-filters>
+                                                                @{
+                                                                    var sizeColumns = Model.Sizes.Where(s => s.IsActive).OrderBy(s => s.DisplayOrder).Select((x, i) => new { x, i }).GroupBy(x => x.i % 2 == 0).ToList();
+                                                                    var col1 = sizeColumns.FirstOrDefault(g => g.Key)?.Select(x => x.x).ToList() ?? new List<Store.DtoLayer.CatalogDtos.SizeDtos.ResultSizeDto>();
+                                                                    var col2 = sizeColumns.FirstOrDefault(g => !g.Key)?.Select(x => x.x).ToList() ?? new List<Store.DtoLayer.CatalogDtos.SizeDtos.ResultSizeDto>();
+                                                                }
+                                                                <div class="col-6 mb-10">
+                                                                    @foreach (var item in col1)
+                                                                    {
+                                                                        <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                            <input type="checkbox" class="d-none" name="filter_by_size" value="@item.Id">
+                                                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                                                <i class="d-none"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                                                            </span><span>@item.Name</span>
+                                                                        </label>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-6 mb-10">
+                                                                    @foreach (var item in col2)
+                                                                    {
+                                                                        <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                            <input type="checkbox" class="d-none" name="filter_by_size" value="@item.Id">
+                                                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                                                <i class="d-none"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                                                            </span><span>@item.Name</span>
+                                                                        </label>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+
+                                            <!-- PRICE DOWN'I-->
+                                            <div class="layer-navigation"
+                                                 data-js-collection-nav-section="filter_by_price"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">PRICE<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div class="collection-filter-by-price">
+                                                            <input type="hidden" class="js-range-of-price"
+                                                                   name="filter_by_price" data-min="0" data-max="900"
+                                                                   data-step="10">
+                                                        </div>
+                                                        <script>
+                                                            Loader.require({
+                                                                type: "style",
+                                                                name: "plugin_ion_range_slider"
+                                                            });
+
+                                                            Loader.require({
+                                                                type: "script",
+                                                                name: "plugin_ion_range_slider"
+                                                            });
+
+                                                            Loader.require({
+                                                                type: "script",
+                                                                name: "range_of_price"
+                                                            });
+                                                        </script>
+
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+                                            <div class="layer-navigation" data-js-collection-nav-section="filters"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer open"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">BRANDS<i
+                                                            class="layer-navigation__arrow">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i></h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div data-js-collection-replace="filter-3"
+                                                             data-js-collection-replace-only-full>
+
+                                                            <div class="collection-filters row"
+                                                                 data-js-collection-filters>
+                                                                <div class="col-12 mb-10">
+                                                                    <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                        <input type="checkbox" class="d-none" name="filter_by_vendor" value="calvin-klein">
+                                                                        <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                                            <i class="d-none"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                                                        </span><span>Calvin Klein</span>
+                                                                    </label>
+                                                                    <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                        <input type="checkbox" class="d-none" name="filter_by_vendor" value="chanel">
+                                                                        <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                                            <i class="d-none"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                                                        </span><span>Chanel</span>
+                                                                    </label>
+                                                                    <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                        <input type="checkbox" class="d-none" name="filter_by_vendor" value="dior">
+                                                                        <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                                            <i class="d-none"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-146" viewBox="0 0 24 24"><path d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                                                        </span><span>Dior</span>
+                                                                    </label>
+                                                                    <label class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                        <input type="checkbox" class="d-none" name="filter_by_vendor" value="dolce-gabbana">
+                                                                        <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Dolce & Gabbana</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="gap">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Gap</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor"
+                                                                           value="giorgio-armani">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Giorgio Armani</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="lacoste">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Lacoste</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="levis">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Levi's</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="prada">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Prada</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="versace">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Versace</span></label><label
+                                                                        class="input-checkbox d-flex align-items-center mb-15 mb-lg-10 cursor-pointer">
+                                                                    <input type="checkbox" class="d-none"
+                                                                           name="filter_by_vendor" value="zara">
+                                            <span class="position-relative d-block mr-8 border lazyload" data-bg="none">
+                                                <i class="d-none"><svg aria-hidden="true" focusable="false"
+                                                                       role="presentation" class="icon icon-theme-146"
+                                                                       viewBox="0 0 24 24"><path
+                                                        d="M9.703 15.489l-2.5-2.5a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449.13-.117.28-.176.449-.176s.319.059.449.176l2.051 2.07 5.801-5.82c.13-.117.28-.176.449-.176s.319.059.449.176c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-6.25 6.25a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .93.93 0 0 1-.215-.127z"/></svg></i>
+                                            </span><span>Zara</span></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+                                            <div class="layer-navigation" data-js-collection-nav-section="products"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">FEATURED PRODUCTS</h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div class="collection-sidebar-offers">
+                                                            <div class="product-featured d-flex flex-row align-items-start mb-20">
+                                                                <div class="product-featured__image mr-20 js-product-images-hovered-end js-product-images-hover"
+                                                                     data-js-product-image-hover="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_2_1_1_f1eca011-aa7b-4d6f-b673-7d84ca013e02_{width}x.progressive.jpg?v=1542543798"
+                                                                     data-js-product-image-hover-id="4166020202548">
+                                                                    <a href="product.html?variant=13520590012468"
+                                                                       class="d-block">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:128.2307692%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                class="rimage__img rimage__img--fade-in lazyload"
+                                                                                data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_{width}x.progressive.jpg?v=1542543797"
+                                                                                data-aspect-ratio="0.7798440311937612"
+
+
+                                                                                data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_300x.progressive.jpg?v=1542543797 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_300x@2x.progressive.jpg?v=1542543797 2x"
+
+
+                                                                                alt="Blend Field Jacket">
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-featured__content d-flex flex-column align-items-start">
+                                                                    <div class="product-featured__collections mb-3">
+                                                                        <a href="collection.html">Featured
+                                                                            Products,</a>
+                                                                        <a href="collection.html">Featured
+                                                                            Products</a>
+                                                                    </div>
+                                                                    <div class="product-featured__title mb-3">
+                                                                        <h3 class="h6 m-0">
+                                                                            <a href="product.html?variant=13520590012468">Blend
+                                                                                Field Jacket</a>
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div class="product-featured__price mb-10">
+                                                                        <span class="price" data-js-product-price
+                                                                              data-js-show-sale-separator><span><span
+                                                                                class=money>$470.00</span></span></span>
+                                                                    </div>
+                                                                    <div class="product-featured__reviews">
+                                                                        <div class="spr spr--text-hide spr--empty-hide d-flex flex-column">
+                                                                            <span class="shopify-product-reviews-badge"
+                                                                                  data-id="1463888117812"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="product-featured d-flex flex-row align-items-start mb-20">
+                                                                <div class="product-featured__image mr-20 js-product-images-hovered-end js-product-images-hover"
+                                                                     data-js-product-image-hover="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_1_1_1_c19ba148-bdf2-4b2a-b45d-fcab566c6a80_{width}x.progressive.jpg?v=1543244602"
+                                                                     data-js-product-image-hover-id="4166047399988">
+                                                                    <a href="product.html?variant=13520580444212"
+                                                                       class="d-block">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:128.2307692%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                class="rimage__img rimage__img--fade-in lazyload"
+                                                                                data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_{width}x.progressive.jpg?v=1543244602"
+                                                                                data-aspect-ratio="0.7798440311937612"
+
+
+                                                                                data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_300x.progressive.jpg?v=1543244602 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_300x@2x.progressive.jpg?v=1543244602 2x"
+
+
+                                                                                alt="Jersey Graphic Tee">
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-featured__content d-flex flex-column align-items-start">
+                                                                    <div class="product-featured__collections mb-3">
+                                                                        <a href="collection.html">Featured
+                                                                            Products</a>
+                                                                    </div>
+                                                                    <div class="product-featured__title mb-3">
+                                                                        <h3 class="h6 m-0">
+                                                                            <a href="product.html?variant=13520580444212">Jersey
+                                                                                Graphic Tee</a>
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div class="product-featured__price mb-10">
+                                                                        <span class="price" data-js-product-price
+                                                                              data-js-show-sale-separator><span><span
+                                                                                class=money>$330.00</span></span></span>
+                                                                    </div>
+                                                                    <div class="product-featured__reviews">
+                                                                        <div class="spr spr--text-hide spr--empty-hide d-flex flex-column">
+                                                                            <span class="shopify-product-reviews-badge"
+                                                                                  data-id="1463887626292"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="product-featured d-flex flex-row align-items-start mb-20">
+                                                                <div class="product-featured__image mr-20 js-product-images-hovered-end js-product-images-hover"
+                                                                     data-js-product-image-hover="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2608851250_2_2_1_6dced8be-eb3f-4972-9e37-e5638fdd4483_{width}x.progressive.jpg?v=1540480331"
+                                                                     data-js-product-image-hover-id="4072878997556">
+                                                                    <a href="product.html?variant=13520570974260"
+                                                                       class="d-block">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:128.2307692%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                class="rimage__img rimage__img--fade-in lazyload"
+                                                                                data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2608851250_1_1_1_0401469c-1bd2-4f3d-846b-52b3862ccd7d_{width}x.progressive.jpg?v=1540480331"
+                                                                                data-aspect-ratio="0.7798440311937612"
+
+
+                                                                                data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2608851250_1_1_1_0401469c-1bd2-4f3d-846b-52b3862ccd7d_300x.progressive.jpg?v=1540480331 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2608851250_1_1_1_0401469c-1bd2-4f3d-846b-52b3862ccd7d_300x@2x.progressive.jpg?v=1540480331 2x"
+
+
+                                                                                alt="Cotton T-shirt with print">
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-featured__content d-flex flex-column align-items-start">
+                                                                    <div class="product-featured__collections mb-3">
+                                                                        <a href="collection.html">Featured
+                                                                            Products</a>
+                                                                    </div>
+                                                                    <div class="product-featured__title mb-3">
+                                                                        <h3 class="h6 m-0">
+                                                                            <a href="product.html?variant=13520570974260">Cotton
+                                                                                T-shirt with print</a>
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div class="product-featured__price mb-10">
+                                                                        <span class="price" data-js-product-price
+                                                                              data-js-show-sale-separator><span><span
+                                                                                class=money>$150.00</span></span></span>
+                                                                    </div>
+                                                                    <div class="product-featured__reviews">
+                                                                        <div class="spr spr--text-hide spr--empty-hide d-flex flex-column">
+                                                                            <span class="shopify-product-reviews-badge"
+                                                                                  data-id="1463886643252"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom"></div>
+                                            </div>
+                                            <div class="layer-navigation" data-js-collection-nav-section="custom_html"
+                                                 data-js-accordion="all">
+                                                <div class="layer-navigation__head py-10 cursor-pointer"
+                                                     data-js-accordion-button>
+                                                    <h5 class="d-flex align-items-center mb-0">CUSTOM CMS BLOCK</h5>
+                                                </div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+                                                        <div class="rte">
+
+
+                                                            <div class="fs">
+                                                                <div class="d-flex align-items-start mb-15">
+                                                                    <i class="mr-10">
+                                                                        <svg aria-hidden="true" focusable="false"
+                                                                             role="presentation"
+                                                                             class="icon icon-theme-116"
+                                                                             viewBox="0 0 24 24">
+                                                                            <path d="M21.93 6.088l.029.029c.007.007.01.017.01.029l.039.127a.47.47 0 0 1 .02.127v15a.6.6 0 0 1-.186.439.601.601 0 0 1-.439.186H2.652a.6.6 0 0 1-.439-.186.601.601 0 0 1-.186-.439v-15a.47.47 0 0 1 .02-.127l.039-.127c0-.013.003-.022.01-.029a.387.387 0 0 0 .029-.029.478.478 0 0 1 .049-.078.844.844 0 0 1 .049-.059l.02-.02 4.375-3.75a.776.776 0 0 1 .195-.117.575.575 0 0 1 .215-.039h10c.078 0 .149.013.215.039.065.026.13.065.195.117l4.375 3.75v.02a.19.19 0 0 1 .068.059.557.557 0 0 1 .049.078zm-1.153 14.687V7.025h-5.625v5.625a.598.598 0 0 1-.186.439.601.601 0 0 1-.439.186h-5a.6.6 0 0 1-.439-.186.6.6 0 0 1-.186-.439V7.025H3.277v13.75h17.5zM7.262 3.275l-2.93 2.5h4.805l1.25-2.5H7.262zm2.89 8.75h3.75v-5h-3.75v5zm1.641-8.75l-1.25 2.5h2.969l-1.25-2.5h-.469zm7.93 2.5l-2.93-2.5h-3.125l1.25 2.5h4.805z"/>
+                                                                        </svg>
+                                                                    </i>
+                                                                    <p class="mb-0">Free shipping all orders of $49 or
+                                                                        more of eligible items across any product
+                                                                        category qualify.</p>
+                                                                </div>
+                                                                <div class="d-flex align-items-start mb-15">
+                                                                    <i class="mr-10">
+                                                                        <svg aria-hidden="true" focusable="false"
+                                                                             role="presentation"
+                                                                             class="icon icon-theme-125"
+                                                                             viewBox="0 0 24 24">
+                                                                            <path d="M21.508 5.035c.364.365.547.808.547 1.328v11.25c0 .521-.183.964-.547 1.328a1.808 1.808 0 0 1-1.328.547H3.93c-.521 0-.964-.182-1.328-.547a1.805 1.805 0 0 1-.547-1.328V6.363c0-.521.182-.963.547-1.328a1.81 1.81 0 0 1 1.328-.547h16.25c.521 0 .964.183 1.328.547zm-18.017.889a.6.6 0 0 0-.186.439v1.25h17.5v-1.25a.6.6 0 0 0-.186-.439.598.598 0 0 0-.439-.186H3.93a.598.598 0 0 0-.439.186zm-.186 4.814h17.5V8.863h-17.5v1.875zm17.315 7.315a.6.6 0 0 0 .186-.439v-5.625h-17.5v5.625c0 .169.062.316.186.439a.6.6 0 0 0 .439.186h16.25a.605.605 0 0 0 .439-.186zM9.995 14.674a.601.601 0 0 1 .186.439.598.598 0 0 1-.186.439.601.601 0 0 1-.439.186H5.18a.598.598 0 0 1-.439-.186.6.6 0 0 1-.186-.439.6.6 0 0 1 .186-.439.6.6 0 0 1 .439-.186h4.375c.169 0 .316.062.44.186zm9.375 0a.601.601 0 0 1 .186.439.598.598 0 0 1-.186.439.601.601 0 0 1-.439.186h-1.25a.598.598 0 0 1-.439-.186.6.6 0 0 1-.186-.439.6.6 0 0 1 .186-.439.6.6 0 0 1 .439-.186h1.25c.168 0 .315.062.439.186z"/>
+                                                                        </svg>
+                                                                    </i>
+                                                                    <p class="mb-0">Credit Card: Visa, MasterCard,
+                                                                        Maestro, American Express. The total will be
+                                                                        charged to your card when the order is
+                                                                        shipped.</p>
+                                                                </div>
+                                                                <div class="d-flex align-items-start mb-15">
+                                                                    <i class="mr-10">
+                                                                        <svg aria-hidden="true" focusable="false"
+                                                                             role="presentation"
+                                                                             class="icon icon-theme-009"
+                                                                             viewBox="0 0 24 24">
+                                                                            <path d="M2.453 8.299c-.026-.039-.048-.075-.068-.107a2.896 2.896 0 0 0-.068-.107.715.715 0 0 1 0-.469 2.48 2.48 0 0 0 .068-.107c.02-.033.042-.068.068-.107l5-5a.9.9 0 0 1 .215-.128c.078-.032.156-.049.234-.049s.156.017.234.049a.93.93 0 0 1 .215.127c.117.13.176.28.176.449a.652.652 0 0 1-.176.449L4.407 7.225h10.059a6.36 6.36 0 0 1 2.549.518 6.63 6.63 0 0 1 2.09 1.406c.593.592 1.062 1.289 1.406 2.09s.518 1.65.518 2.549-.173 1.748-.518 2.549a6.63 6.63 0 0 1-1.406 2.09 6.647 6.647 0 0 1-2.09 1.406 6.373 6.373 0 0 1-2.549.518H8.528a.6.6 0 0 1-.439-.186.601.601 0 0 1-.186-.439c0-.169.062-.316.186-.439a.595.595 0 0 1 .439-.187h5.938a5.12 5.12 0 0 0 2.061-.42 5.397 5.397 0 0 0 1.689-1.143 5.454 5.454 0 0 0 1.143-1.689 5.12 5.12 0 0 0 .42-2.061c0-.729-.14-1.416-.42-2.061a5.397 5.397 0 0 0-2.832-2.832 5.116 5.116 0 0 0-2.061-.42H4.407L8.352 12.4c.117.13.176.28.176.449a.652.652 0 0 1-.176.449.652.652 0 0 1-.449.176.652.652 0 0 1-.449-.176L2.453 8.299z"/>
+                                                                        </svg>
+                                                                    </i>
+                                                                    <p class="mb-0">Returns and Refunds: You can return
+                                                                        any item purchased on Shella within 20 days of
+                                                                        the delivery date.</p>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layer-navigation" data-js-collection-nav-section="promobox"
+                                                 data-js-accordion="all">
+                                                <div class="pt-20"></div>
+                                                <div class="layer-navigation__accordion" data-js-accordion-content>
+                                                    <div class="pt-2 pb-10">
+
+
+                                                        <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                            <div class="w-100">
+                                                                <a href="product.html"
+                                                                   class="w-100">
+
+                                                                    <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:128.1481481%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                class="rimage__img rimage__img--fade-in lazyload"
+                                                                                data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_dbfb557e-a691-4822-9ece-255c7fa4a984_{width}x.progressive.png.jpg?v=1530696155"
+                                                                                data-aspect-ratio="0.7803468208092486"
+
+
+                                                                                data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_dbfb557e-a691-4822-9ece-255c7fa4a984_400x.progressive.png.jpg?v=1530696155 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_dbfb557e-a691-4822-9ece-255c7fa4a984_400x@2x.progressive.png.jpg?v=1530696155 2x"
+
+
+                                                                                data-scale-perspective="1.1"
+
+                                                                                alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                                <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                    <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                        NEW IN</p>
+                                                                    <p class="promobox__text-line-02 position-relative m-0">
+                                                                        Spring/Summer 2018 Collection</p></div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </nav>
+                                    </aside>
+                                </div>
+
+                                <script>
+                                    Loader.require({
+                                        type: "script",
+                                        name: "collection_sidebar"
+                                    });
+                                </script>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    Loader.require({
+                        type: "script",
+                        name: "plugin_sticky_sidebar"
+                    });
+
+                    Loader.require({
+                        type: "script",
+                        name: "sticky_sidebar"
+                    });
+                </script>
+
+
+

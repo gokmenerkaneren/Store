@@ -1,0 +1,150 @@
+﻿@{
+    ViewData["Title"] = "Ana Ekran Slider Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="slider-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Sıra</th>
+                        <th>Resim</th>
+                        <th>Başlık</th>
+                        <th>Kısa Açıklama</th>
+                        <th>Durum</th>
+                        <th>İşlemler </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <a href="/Admin/DefaultSlider/AddorEdit" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px; background-color: #00bcd4; border-color: #00bcd4; color: white;">
+                <span class="feather icon-plus"> Yeni Slider Ekle</span>
+            </a>
+
+            @if (ViewBag.ShowDeleted == true)
+            {
+                <a href="/Admin/DefaultSlider/Index?showDeleted=false" class="btn btn-grd-warning waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                </a>
+            }
+            else
+            {
+                <a href="/Admin/DefaultSlider/Index?showDeleted=true" class="btn btn-grd-inverse waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye"> Silinenleri Göster</span>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            $('#slider-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: '/Admin/DefaultSlider/LoadDataTables?showDeleted=' + '@ViewBag.ShowDeleted'.toLowerCase(),
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: function (d) {
+                        return JSON.stringify(d);
+                    }
+                },
+                columns: [
+                    { data: "sirano" },
+                    {
+                        data: "resimYolu",
+                        orderable: false,
+                        render: function (data) {
+                            if (data) {
+                                return '<img src="' + data + '" alt="Slider" style="height:40px; width:80px; object-fit:cover; border-radius:4px; border:1px solid #eee;" />';
+                            }
+                            return '<i class="feather icon-image" style="font-size:24px; color:#ccc;"></i>';
+                        }
+                    },
+                    { data: "baslik" },
+                    { data: "kisaAciklama" },
+                    { 
+                        data: "isActive", 
+                        render: function (data) {
+                            return data ? '<span class="label label-success">Aktif</span>' : '<span class="label label-danger">Pasif</span>';
+                        }
+                    },
+                    {
+                        data: "id",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var isDeleted = row.isDeleted;
+                            var btns = '<div class="btn-group btn-group-sm" style="float: none;">';
+                            
+                            if (isDeleted) {
+                                btns += '<a href="javascript:void(0);" data-url="/Admin/DefaultSlider/RestoreSlider/' + row.id + '" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">' +
+                                        '<i class="feather icon-rotate-ccw"></i> Geri Al</a>';
+                            } else {
+                                btns += '<a href="/Admin/DefaultSlider/AddorEdit/' + row.id + '" class="btn btn-grd-info waves-effect waves-light" style="float: none;margin: 5px;">' +
+                                        '<span class="feather icon-edit"></span></a>';
+                                btns += '<a href="javascript:void(0);" data-url="/Admin/DefaultSlider/DeleteSlider/' + row.id + '" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">' +
+                                        '<span class="feather icon-trash"></span></a>';
+                            }
+                            btns += '</div>';
+                            return btns;
+                        }
+                    }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if (data.isDeleted) {
+                        $(row).attr('style', 'background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;');
+                    } else if (!data.isActive) {
+                        $(row).attr('style', 'opacity:0.6;background-color:#f8d7da;');
+                    }
+                }
+            });
+
+            $(document).on('click', '.btn-delete-confirm', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Silmek istediğinize emin misiniz?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Evet, Sil!',
+                    cancelButtonText: 'Vazgeç'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn-restore-confirm', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu kaydı geri almak istediğinize emin misiniz?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Evet, Geri Al!',
+                    cancelButtonText: 'Vazgeç'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://postgres:sa435558@localhost:5432/StoreIdentityDB"
+      ]
+    },
+    "mongodb": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "mongodb-mcp-server",
+        "mongodb://localhost:27017/StoreMD"
+      ]
+    },
+    "redis": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-redis",
+        "redis://localhost:6379"
+      ]
+    },
+    "github": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
+    },
+    "postman": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@postman/postman-mcp-server"
+      ],
+      "env": {
+        "POSTMAN_API_KEY": ""
+      }
+    }
+  }
+}
+

@@ -1,0 +1,51 @@
+@* Notification messages from TempData *@
+@{
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var successMessage = TempData["SuccessMessage"] as string;
+    var infoMessage = TempData["InfoMessage"] as string;
+    var warningMessage = TempData["WarningMessage"] as string;
+}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <text>
+                var errMsg = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(errorMessage));
+                showToastAlert(errMsg, 'danger', '', 'animated flipInY', 'animated flipOutY');
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Başarılı',
+                    text: '@Html.Raw(successMessage)',
+                    confirmButtonText: 'Tamam'
+                });
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(infoMessage))
+        {
+            <text>
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Bilgi',
+                    text: '@Html.Raw(infoMessage)',
+                    confirmButtonText: 'Tamam'
+                });
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(warningMessage))
+        {
+            <text>
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Uyarı',
+                    text: '@Html.Raw(warningMessage)',
+                    confirmButtonText: 'Tamam'
+                });
+            </text>
+        }
+    });
+</script>

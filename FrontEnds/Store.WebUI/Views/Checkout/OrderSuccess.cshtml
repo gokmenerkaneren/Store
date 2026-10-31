@@ -1,0 +1,96 @@
+@model Store.WebUI.Models.CheckoutViewModels.OrderSuccessViewModel
+@{
+    ViewData["Title"] = "Siparişiniz Alındı!";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+}
+
+<div class="breadcrumbs mt-15">
+    <div class="container">
+        <ul class="list-unstyled d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start mb-0">
+            <li><a href="/Default/Index">Anasayfa</a></li>
+            <li><span>Sipariş Onayı</span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="order-success-container py-50 mb-60">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                
+                <div class="text-center mb-35">
+                    <div class="mb-20">
+                        <svg class="text-success" style="width: 72px; height: 72px; fill: #28a745;" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <span class="badge badge-success px-3 py-2 text-uppercase mb-10" style="letter-spacing: 1px;">Siparişiniz Başarıyla Alındı</span>
+                    <h1 class="h2 font-weight-bold mb-10">Teşekkür Ederiz, @Model.CustomerFullName!</h1>
+                    <p class="text-muted" style="font-size: 15px;">
+                        Sipariş numaranız: <strong class="text-dark">@Model.OrderCode</strong>. Sipariş detayları ve bilgilendirme <strong>@Model.CustomerEmail</strong> adresinize iletildi.
+                    </p>
+                </div>
+
+                <div class="card border rounded shadow-sm mb-30">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h5 class="mb-0 font-weight-bold" style="font-size: 16px;">Sipariş Bilgileri</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row mb-20">
+                            <div class="col-sm-6 mb-15 mb-sm-0">
+                                <span class="text-muted d-block small mb-1">Teslimat Adresi:</span>
+                                <strong class="text-dark d-block">@Model.CustomerFullName</strong>
+                                <span class="text-muted">@Model.ShippingAddress</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted d-block small mb-1">Ödeme Yöntemi:</span>
+                                <strong class="text-dark d-block">@Model.PaymentMethod</strong>
+                                <span class="text-muted d-block small mt-2">Sipariş Tarihi: @Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</span>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <h6 class="font-weight-bold mb-15">Sipariş Edilen Ürünler (@(Model.Items?.Sum(x => x.Quantity) ?? 0))</h6>
+                        <div class="order-items-list">
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.ProductName" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid #eee;" class="mr-15" />
+                                            }
+                                            <div>
+                                                <span class="font-weight-bold d-block text-dark" style="font-size: 14px;">@item.ProductName</span>
+                                                <span class="small text-muted">@item.Quantity Adet &times; @item.Price.ToString("N2") TL</span>
+                                            </div>
+                                        </div>
+                                        <div class="font-weight-bold text-dark">
+                                            @item.TotalPrice.ToString("N2") TL
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-20 mt-10">
+                            <h5 class="font-weight-bold mb-0">Toplam Tutar:</h5>
+                            <h4 class="font-weight-bold text-primary mb-0">@Model.TotalAmount.ToString("N2") TL</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="/" class="btn btn-dark px-4 py-3 font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">
+                        Alışverişe Devam Et
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

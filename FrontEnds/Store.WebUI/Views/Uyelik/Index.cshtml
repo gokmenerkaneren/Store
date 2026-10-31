@@ -1,0 +1,583 @@
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html class="no-js supports-no-cookies" lang="en">
+@await Component.InvokeAsync("_defHeadUILayoutComponentPartial")
+<style>
+    .social-btn {
+        background-color: #fff;
+        border: 1px solid #e1e1e1;
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        color: #555;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .social-btn:hover {
+        background-color: #1a1a1a !important;
+        color: #fff !important;
+        border-color: #1a1a1a !important;
+    }
+</style>
+<body id="women-39-s" class="template-product theme-css-animate" data-currency-multiple="true">
+    <div id="theme-section-header" class="theme-section">
+        <div data-section-id="header" data-section-type="header">
+            @await Component.InvokeAsync("_defHeaderUILayoutComponentPartial")
+        </div>
+    </div>
+
+    <main id="MainContent">
+        @* @await Component.InvokeAsync("_proBreadcrumbUILayoutComponentPartial") *@
+        @* @await Component.InvokeAsync("_proDetailUILayoutComponentPartial") *@
+        @* @await Component.InvokeAsync("_proRelatedUILayoutComponentPartial") *@
+
+
+        <div class="container mb-60 mt-40">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <!-- TABS HEAD -->
+                    <div class="tabs" data-js-tabs>
+                        <div class="tabs__head mb-30" datGa-js-tabs-head>
+                            <div class="tabs__slider d-flex justify-content-center" data-js-tabs-slider style="border-bottom: 1px solid #eee;">
+                                <div class="tabs__btn active" data-js-tabs-btn data-active="true" style="padding: 10px 30px; font-weight: bold; border-bottom: 2px solid #000; cursor: pointer; color: #000;">Giriş Yap</div>
+                                <div class="tabs__btn" data-js-tabs-btn style="padding: 10px 30px; font-weight: bold; border-bottom: 2px solid transparent; cursor: pointer; color: #888; position: relative;">
+                                    Üye Ol
+                                    @* <span class="position-absolute" style="top: -15px; right: -20px; background-color: #d7ff3f; color: #000; padding: 2px 8px; font-size: 10px; font-weight: bold; border-radius: 2px;">&#8378; 250 TL İndirim Kazan</span> *@
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TABS BODY -->
+                        <div class="tabs__body">
+                            
+                            <!-- GİRİŞ YAP TAB -->
+                            <div data-js-tabs-tab class="active" style="display: block;">
+                                <form asp-action="Login" asp-controller="Uyelik" method="post" id="loginForm">
+                                    <div id="loginMessageContainer" class="mb-20 text-center" style="display: none; padding: 15px; font-weight: bold; border-radius: 4px;"></div>
+                                    @if (TempData["LoginError"] != null)
+                                    {
+                                        <div class="mb-20 text-center" style="background-color: #f8d7da; color: #721c24; padding: 15px; font-weight: bold; border: 1px solid #f5c6cb; border-radius: 4px;">
+                                            @TempData["LoginError"]
+                                        </div>
+                                    }
+                                    <div class="mb-20">
+                                        <input type="text" id="loginEmailOrPhone" name="EmailOrPhone" class="form-control" placeholder="E-posta Adresi veya Telefon Numarası" style="border: 1px solid #e1e1e1; padding: 12px 15px; width: 100%; outline: none;" required autocomplete="off" />
+                                        <span id="loginEmailOrPhoneError" style="color: red; font-size: 12px; display: none; margin-top: 5px;">Lütfen geçerli bir e-posta adresi veya telefon numarası (örn: (555) 444 33 22) giriniz.</span>
+                                    </div>
+                                    
+                                    <div class="mb-20" id="loginPasswordContainer" style="display: none;">
+                                        <!-- Tarayıcının hatalı otomatik doldurmasını engellemek için autocomplete="new-password" yapıldı -->
+                                        <input type="password" id="loginPassword" name="Password" class="form-control" placeholder="Şifre" style="border: 1px solid #e1e1e1; padding: 12px 15px; width: 100%; outline: none;" autocomplete="new-password" value="" />
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" id="showLoginPasswordToggle" style="margin-right: 8px; margin-top: 0;" />
+                                                <label for="showLoginPasswordToggle" style="font-size: 13px; color: #555; margin: 0; cursor: pointer;">Şifreyi Göster</label>
+                                            </div>
+                                            <div>
+                                                <a href="#" style="color: #888; font-size: 13px; text-decoration: underline;">Şifremi Unuttum</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-30">
+                                        <button type="submit" id="loginSubmitBtn" class="btn btn--secondary btn--full w-100" style="background-color: #1a1a1a; color: #fff; padding: 12px; font-weight: bold; border: none; width: 100%;">Devam Et</button>
+                                    </div>
+
+                                    <div class="text-center position-relative mb-30">
+                                        <hr style="border-top: 1px solid #eee; margin: 0; position: absolute; top: 50%; width: 100%; z-index: 1;">
+                                        <span style="background: #fff; padding: 0 15px; position: relative; z-index: 2; color: #888; font-size: 13px;">Diğer Seçenekler</span>
+                                    </div>
+
+                                    <div class="row mb-10">
+                                        <div class="col-4" style="padding-right: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:Google" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/google.svg" style="margin-right: 8px; width: 18px;" /> Google
+                                            </a>
+                                        </div>
+                                        <div class="col-4" style="padding-left: 5px; padding-right: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:Facebook" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/facebook.svg" style="margin-right: 8px; width: 18px;" /> Facebook
+                                            </a>
+                                        </div>
+                                        <div class="col-4" style="padding-left: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:LinkedIn" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/linkedin.svg" style="margin-right: 8px; width: 18px;" /> LinkedIn
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-30 text-center" style="background-color: #f8f8f8; padding: 20px; font-size: 13px; color: #555;">
+                                        Yardıma mı ihtiyacın var?<br>
+                                        0850 333 0011 numarası üzerinden Müşteri Hizmetleri'ni arayabilirsin.
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- ÜYE OL TAB -->
+                            <div data-js-tabs-tab style="display: none;">
+                                <form asp-action="Register" asp-controller="Uyelik" method="post" id="registerForm" autocomplete="off">
+                                    <div id="registerMessageContainer" class="mb-20 text-center" style="display: none; padding: 15px; font-weight: bold;"></div>
+                                    <div class="mb-20 text-center" style="background-color: #d7ff3f; color: #000; padding: 15px; font-weight: bold;">
+                                        Yeni Üyelere Özel 250 TL İndirim Kuponu!
+                                    </div>
+                                    
+                                    <div class="row mb-20">
+                                        <div class="col-6" style="padding-right: 10px;">
+                                            <input type="text" name="FirstName" class="form-control" placeholder="Ad" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none;" required />
+                                        </div>
+                                        <div class="col-6" style="padding-left: 10px;">
+                                            <input type="text" name="LastName" class="form-control" placeholder="Soyad" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none;" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-20">
+                                        <input type="email" id="registerEmail" name="Email" class="form-control" placeholder="E-posta Adresi" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none;" required />
+                                        <span id="registerEmailError" style="color: red; font-size: 12px; display: none; margin-top: 5px;">Lütfen geçerli bir e-posta adresi formatı (örn: ornek@gmail.com) giriniz.</span>
+                                    </div>
+
+                                    <div class="row mb-20">
+                                        <div class="col-4" style="padding-right: 10px;">
+                                            <select name="CountryCode" class="form-control" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; color: #555; outline: none; height: 45px;">
+                                                <option value="+90">TR (+90)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-8" style="padding-left: 10px;">
+                                            <input type="text" id="registerPhone" name="PhoneNumber" class="form-control phone-mask" placeholder="Telefon Numarası" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none; height: 45px;" required />
+                                            <span id="registerPhoneError" style="color: red; font-size: 12px; display: none; margin-top: 5px;">Geçerli bir telefon numarası (örn: (555) 444 33 22) giriniz.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-10 position-relative">
+                                        <input type="password" id="registerPassword" name="Password" class="form-control" placeholder="Şifre" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none;" required autocomplete="new-password" />
+                                    </div>
+
+                                    <div class="mb-10 position-relative">
+                                        <input type="password" id="registerConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Şifre Tekrar" style="border: 1px solid #e1e1e1; padding: 10px 15px; width: 100%; outline: none;" required autocomplete="new-password" />
+                                        <span id="registerPasswordError" style="color: red; font-size: 12px; display: none; margin-top: 5px;">Şifre kurallara uymuyor veya eşleşmiyor.</span>
+                                    </div>
+
+                                    <div class="mb-10 d-flex align-items-center">
+                                        <input type="checkbox" id="showPasswordsToggle" style="margin-right: 8px; margin-top: 0;" />
+                                        <label for="showPasswordsToggle" style="font-size: 13px; color: #555; margin: 0; cursor: pointer;">Şifreleri Göster</label>
+                                    </div>
+                                    
+                                    <div class="mb-20" style="font-size: 12px; color: #888;">
+                                        <div style="background-color: #4a6ee0; color: #fff; display: inline-block; padding: 2px 5px; margin-bottom: 5px;">• 8-15 karakter</div><br>
+                                        • En az 1 rakam (0-9)<br>
+                                        • En az 1 büyük, 1 küçük harf
+                                    </div>
+
+@*                                     <div class="mb-5">
+                                        <label style="font-size: 13px; color: #555;">Cinsiyet (İsteğe Bağlı)</label>
+                                    </div>
+                                    <div class="row mb-20">
+                                        <div class="col-6" style="padding-right: 10px;">
+                                            <label class="btn btn--full" style="border: 1px solid #e1e1e1; width: 100%; padding: 8px; color: #555; background: #fff; cursor: pointer; text-align: center; margin: 0; font-weight: normal;">
+                                                <input type="radio" name="Gender" value="Kadin" style="display:none;" /> Kadın
+                                            </label>
+                                        </div>
+                                        <div class="col-6" style="padding-left: 10px;">
+                                            <label class="btn btn--full" style="border: 1px solid #e1e1e1; width: 100%; padding: 8px; color: #555; background: #fff; cursor: pointer; text-align: center; margin: 0; font-weight: normal;">
+                                                <input type="radio" name="Gender" value="Erkek" style="display:none;" /> Erkek
+                                            </label>
+                                        </div>
+                                    </div>
+ *@
+                                    <div class="mb-10 d-flex align-items-start">
+                                        <input type="checkbox" name="Terms" style="margin-top: 4px; margin-right: 10px;" required />
+                                        <label style="font-size: 13px; color: #555; line-height: 1.4;"><b>Üyelik Sözleşmesi</b> şartlarını okudum ve kabul ediyorum.</label>
+                                    </div>
+                                    <div class="mb-20 d-flex align-items-start">
+                                        <input type="checkbox" name="Marketing" style="margin-top: 4px; margin-right: 10px;" />
+                                        <label style="font-size: 13px; color: #555; line-height: 1.4;">Sezadan'ın bana özel sunduğu kampanya ve fırsatlardan haberdar olmak istiyorum.</label>
+                                    </div>
+
+                                    <div class="mb-30" style="font-size: 12px; color: #777;">
+                                        Kişisel verilerinizin işlenmesine yönelik detaylara <b>Aydınlatma Metni</b>'nden ulaşabilirsiniz.
+                                    </div>
+
+                                    <div class="mb-30">
+                                        <button type="submit" class="btn btn--secondary btn--full w-100" style="background-color: #1a1a1a; color: #fff; padding: 12px; font-weight: bold; border: none; width: 100%;">ÜYE OL</button>
+                                    </div>
+
+                                    <div class="text-center position-relative mb-30">
+                                        <hr style="border-top: 1px solid #eee; margin: 0; position: absolute; top: 50%; width: 100%; z-index: 1;">
+                                        <span style="background: #fff; padding: 0 15px; position: relative; z-index: 2; color: #888; font-size: 13px;">Diğer Seçenekler</span>
+                                    </div>
+
+                                    <div class="row mb-20">
+                                        <div class="col-4" style="padding-right: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:Google" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/google.svg" style="margin-right: 8px; width: 18px;" /> Google
+                                            </a>
+                                        </div>
+                                        <div class="col-4" style="padding-left: 5px; padding-right: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:Facebook" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/facebook.svg" style="margin-right: 8px; width: 18px;" /> Facebook
+                                            </a>
+                                        </div>
+                                        <div class="col-4" style="padding-left: 5px;">
+                                            <a href="https://localhost:5001/connect/authorize?client_id=StoreAdminId&response_type=id_token%20token&scope=CatalogFullPermission%20CatalogReadPermission%20DiscountFullPermission%20OrderFullPermission%20LocationFullPermission%20BasketFullPermission%20FavoriteFullPermission%20IdentityServerApi%20email%20openid%20phone%20profile&redirect_uri=http://localhost:5079/Uyelik/ExternalLoginCallback&nonce=xyz&acr_values=idp:LinkedIn" class="btn btn--full d-flex align-items-center justify-content-center social-btn">
+                                                <img src="~/Images/General/linkedin.svg" style="margin-right: 8px; width: 18px;" /> LinkedIn
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center" style="background-color: #f8f8f8; padding: 20px; font-size: 13px; color: #555;">
+                                        Yardıma mı ihtiyacın var?<br>
+                                        0850 333 0011 numarası üzerinden Müşteri Hizmetleri'ni arayabilirsin.
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    @await Component.InvokeAsync("_defFooterUILayoutComponentPartial")
+
+    @* @await Component.InvokeAsync("_proPopupUILayoutComponentPartial") *@
+
+    @await Component.InvokeAsync("_proThemeAssetsUILayoutComponentPartial")
+
+    @await Component.InvokeAsync("_proScriptsBlockUILayoutComponentPartial")
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Mask implementation for phone number
+            $('.phone-mask').mask('(000) 000 00 00');
+
+            // Form validation logic
+            const loginEmailOrPhoneInput = document.getElementById('loginEmailOrPhone');
+            const loginEmailOrPhoneError = document.getElementById('loginEmailOrPhoneError');
+
+            const regFormInit = document.getElementById('registerForm');
+            if(regFormInit) {
+                regFormInit.reset();
+            }
+
+            const emailInput = document.getElementById('registerEmail');
+            const emailError = document.getElementById('registerEmailError');
+            const phoneInput = document.getElementById('registerPhone');
+            const phoneError = document.getElementById('registerPhoneError');
+            const passInput = document.getElementById('registerPassword');
+            const confirmPassInput = document.getElementById('registerConfirmPassword');
+            const passError = document.getElementById('registerPasswordError');
+            const showPasswordsToggle = document.getElementById('showPasswordsToggle');
+
+            // Email format (requires @@ and at least 2 chars after the dot)
+            const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]{2,}$/;
+            // Phone format (must match (555) 444 33 22 strictly)
+            const phoneRegex = /^\(\d{3}\) \d{3} \d{2} \d{2}$/;
+            // Password format (8-15 chars, at least 1 digit, 1 upper, 1 lower)
+            const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
+
+            function validateLoginEmailOrPhone() {
+                const val = loginEmailOrPhoneInput.value.trim();
+                // Eğer içinde @@ varsa veya harf varsa e-posta olarak değerlendirip format kontrolü yapıyoruz.
+                // Sadece rakamlardan oluşuyorsa (telefon varsayımıyla) bu kuralı atlayabiliriz.
+                if (val.includes('@@') || /[a-zA-Z]/.test(val)) {
+                    if (!emailRegex.test(val)) {
+                        loginEmailOrPhoneError.style.display = 'block';
+                        loginEmailOrPhoneInput.style.borderColor = 'red';
+                        return false;
+                    } else {
+                        loginEmailOrPhoneError.style.display = 'none';
+                        loginEmailOrPhoneInput.style.borderColor = '#e1e1e1';
+                        return true;
+                    }
+                }
+                
+                loginEmailOrPhoneError.style.display = 'none';
+                loginEmailOrPhoneInput.style.borderColor = '#e1e1e1';
+                return true;
+            }
+
+            function validateEmail() {
+                if (!emailRegex.test(emailInput.value)) {
+                    emailError.style.display = 'block';
+                    emailInput.style.borderColor = 'red';
+                    return false;
+                } else {
+                    emailError.style.display = 'none';
+                    emailInput.style.borderColor = '#e1e1e1';
+                    return true;
+                }
+            }
+
+            function validatePhone() {
+                if (!phoneRegex.test(phoneInput.value)) {
+                    phoneError.style.display = 'block';
+                    phoneInput.style.borderColor = 'red';
+                    return false;
+                } else {
+                    phoneError.style.display = 'none';
+                    phoneInput.style.borderColor = '#e1e1e1';
+                    return true;
+                }
+            }
+
+            function validatePasswords() {
+                let isValid = true;
+                if (!passRegex.test(passInput.value)) {
+                    isValid = false;
+                }
+                if (passInput.value !== confirmPassInput.value) {
+                    isValid = false;
+                }
+                if (!isValid && (passInput.value !== "" || confirmPassInput.value !== "")) {
+                    passError.style.display = 'block';
+                    passInput.style.borderColor = 'red';
+                    confirmPassInput.style.borderColor = 'red';
+                } else {
+                    passError.style.display = 'none';
+                    passInput.style.borderColor = '#e1e1e1';
+                    confirmPassInput.style.borderColor = '#e1e1e1';
+                }
+                return isValid;
+            }
+
+            loginEmailOrPhoneInput.addEventListener('blur', validateLoginEmailOrPhone);
+            emailInput.addEventListener('blur', validateEmail);
+            phoneInput.addEventListener('blur', validatePhone);
+            passInput.addEventListener('blur', validatePasswords);
+            passInput.addEventListener('keyup', validatePasswords);
+            confirmPassInput.addEventListener('blur', validatePasswords);
+            confirmPassInput.addEventListener('keyup', validatePasswords);
+
+            // Show Passwords functionality
+            showPasswordsToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    passInput.type = 'text';
+                    confirmPassInput.type = 'text';
+                } else {
+                    passInput.type = 'password';
+                    confirmPassInput.type = 'password';
+                }
+            });
+
+            // Login Show Password functionality
+            const showLoginPasswordToggle = document.getElementById('showLoginPasswordToggle');
+            const loginPasswordInput = document.getElementById('loginPassword');
+            if (showLoginPasswordToggle && loginPasswordInput) {
+                showLoginPasswordToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        loginPasswordInput.type = 'text';
+                    } else {
+                        loginPasswordInput.type = 'password';
+                    }
+                });
+            }
+
+            // Prevent form submit if invalid
+            const loginForm = document.getElementById('loginForm');
+            let isPasswordStep = false;
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    if (!validateLoginEmailOrPhone()) {
+                        return;
+                    }
+
+                    const messageContainer = document.getElementById('loginMessageContainer');
+                    const passContainer = document.getElementById('loginPasswordContainer');
+                    const loginBtn = document.getElementById('loginSubmitBtn');
+                    const passInputLogin = document.getElementById('loginPassword');
+
+                    messageContainer.style.display = 'none';
+
+                    if (!isPasswordStep) {
+                        // 1. Adım: Kullanıcı var mı kontrol et
+                        const emailOrPhone = document.getElementById('loginEmailOrPhone').value;
+                        
+                        loginBtn.innerHTML = "Kontrol Ediliyor...";
+                        loginBtn.disabled = true;
+
+                        try {
+                            const response = await fetch('/Uyelik/CheckUser', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ EmailOrPhone: emailOrPhone })
+                            });
+
+                            loginBtn.disabled = false;
+                            loginBtn.innerHTML = "Giriş Yap";
+
+                            if (response.ok) {
+                                const result = await response.json();
+                                if (result.exists) {
+                                    // Kullanıcı bulundu, şifre alanını aç
+                                    // Tarayıcının alakasız doldurmalarını önlemek için temizliyoruz
+                                    passInputLogin.value = '';
+                                    passContainer.style.display = 'block';
+                                    passInputLogin.required = true;
+                                    isPasswordStep = true;
+                                    passInputLogin.focus();
+                                } else {
+                                    // Kullanıcı bulunamadı
+                                    messageContainer.style.display = 'block';
+                                    messageContainer.style.backgroundColor = '#f8d7da';
+                                    messageContainer.style.color = '#721c24';
+                                    messageContainer.style.border = '1px solid #f5c6cb';
+                                    messageContainer.innerHTML = "Bu e-posta veya telefon ile kayıtlı bir hesap bulunamadı.";
+                                }
+                            } else {
+                                throw new Error("API Error");
+                            }
+                        } catch (error) {
+                            loginBtn.disabled = false;
+                            loginBtn.innerHTML = "Devam Et";
+                            messageContainer.style.display = 'block';
+                            messageContainer.style.backgroundColor = '#f8d7da';
+                            messageContainer.style.color = '#721c24';
+                            messageContainer.style.border = '1px solid #f5c6cb';
+                            messageContainer.innerHTML = "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.";
+                        }
+                    } else {
+                        // 2. Adım: Şifre girildi, giriş yap
+                        if (passInputLogin.value.trim() === "") {
+                            passInputLogin.style.borderColor = 'red';
+                            return;
+                        }
+                        // Formu sunucuya normal gönder (veya login AJAX ile yapılabilir)
+                        loginForm.submit();
+                    }
+                });
+            }
+
+            const registerForm = document.getElementById('registerForm');
+            if (registerForm) {
+                registerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault(); // Varsayılan post davranışını engelle
+                    
+                    const isEmailValid = validateEmail();
+                    const isPhoneValid = validatePhone();
+                    const isPassValid = validatePasswords();
+                    if (!isEmailValid || !isPhoneValid || !isPassValid) {
+                        return; // Validasyon hatası varsa API'ye gitme
+                    }
+
+                    const messageContainer = document.getElementById('registerMessageContainer');
+                    messageContainer.style.display = 'none';
+
+                    // Formdaki verileri JSON formatına çevir
+                    const formData = new FormData(registerForm);
+                    const data = Object.fromEntries(formData.entries());
+                    // Checkbox'lar seçili değilse 'false' yap, seçiliyse 'true' yap
+                    data.Terms = formData.has('Terms');
+                    data.Marketing = formData.has('Marketing');
+
+                    try {
+                        const response = await fetch('/Uyelik/Register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        const result = await response.json().catch(() => ({}));
+                        
+                        messageContainer.style.display = 'block';
+                        
+                        if (response.ok) {
+                            messageContainer.style.backgroundColor = '#d4edda';
+                            messageContainer.style.color = '#155724';
+                            messageContainer.style.border = '1px solid #c3e6cb';
+                            messageContainer.innerHTML = result.message || "Kaydınız başarıyla tamamlandı. Lütfen giriş yapınız.";
+                            registerForm.reset(); // Başarılıysa formu temizle
+                            
+                            // 3 saniye sonra Giriş Yap sekmesine geçir
+                            setTimeout(() => {
+                                document.querySelectorAll("[data-js-tabs-btn]")[0].click();
+                                messageContainer.style.display = 'none';
+                            }, 3000);
+                        } else {
+                            messageContainer.style.backgroundColor = '#f8d7da';
+                            messageContainer.style.color = '#721c24';
+                            messageContainer.style.border = '1px solid #f5c6cb';
+                            // IdentityServer'dan dönen hata bazen bir obje bazen string olabilir, kontrol edelim.
+                            if (result.message) {
+                                messageContainer.innerHTML = result.message;
+                            } else if (result.length && result[0].description) {
+                                // IdentityResult.Errors listesi gelirse
+                                messageContainer.innerHTML = result.map(x => x.description).join('<br>');
+                            } else {
+                                messageContainer.innerHTML = "Kayıt sırasında bir hata oluştu. Lütfen bilgilerinizi kontrol ediniz.";
+                            }
+                        }
+                    } catch (error) {
+                        messageContainer.style.display = 'block';
+                        messageContainer.style.backgroundColor = '#f8d7da';
+                        messageContainer.style.color = '#721c24';
+                        messageContainer.style.border = '1px solid #f5c6cb';
+                        messageContainer.innerHTML = "Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyiniz.";
+                    }
+                });
+            }
+
+            // Cinsiyet (Gender) butonlarının seçilme efekti
+            const genderLabels = document.querySelectorAll('input[name="Gender"]');
+            genderLabels.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('input[name="Gender"]').forEach(r => {
+                        r.parentElement.style.borderColor = '#e1e1e1';
+                        r.parentElement.style.fontWeight = 'normal';
+                        r.parentElement.style.color = '#555';
+                    });
+                    if (this.checked) {
+                        this.parentElement.style.borderColor = '#000';
+                        this.parentElement.style.fontWeight = 'bold';
+                        this.parentElement.style.color = '#000';
+                    }
+                });
+            });
+
+            // Tabs JS Logic
+            var tabs = document.querySelectorAll("[data-js-tabs-btn]");
+            var contents = document.querySelectorAll("[data-js-tabs-tab]");
+            
+            tabs.forEach(function(tab, index) {
+                tab.addEventListener("click", function() {
+                    // Tüm sekmeleri inaktif yap
+                    tabs.forEach(function(t) { 
+                        t.removeAttribute("data-active");
+                        t.classList.remove("active"); 
+                        t.style.borderBottom = "2px solid transparent";
+                        t.style.color = "#888";
+                    });
+                    // Tıklanan sekmeyi aktif yap
+                    this.setAttribute("data-active", "true");
+                    this.classList.add("active");
+                    this.style.borderBottom = "2px solid #000";
+                    this.style.color = "#000";
+                    
+                    // Tüm içerikleri gizle
+                    contents.forEach(function(c) { 
+                        c.style.display = "none"; 
+                        c.classList.remove("active");
+                    });
+                    // İlgili içeriği göster
+                    if(contents[index]) {
+                        contents[index].style.display = "block";
+                        contents[index].classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

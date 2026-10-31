@@ -1,0 +1,84 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google ile Giriş Yapılıyor...</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2 id="loadingText">Hesabınız ile giriş yapılıyor...</h2>
+    <p>Lütfen bekleyin.</p>
+    <div class="loader"></div>
+
+    <form id="tokenForm" method="post" action="/Uyelik/ExternalLoginCallback" style="display:none;">
+        <input type="hidden" name="accessToken" id="accessToken" />
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var hash = window.location.hash;
+            
+            // Try to extract provider from id_token
+            if (hash && hash.includes("id_token=")) {
+                try {
+                    var idTokenMatch = hash.match(/id_token=([^&]+)/);
+                    if (idTokenMatch && idTokenMatch[1]) {
+                        var idToken = idTokenMatch[1];
+                        var payloadBase64 = idToken.split('.')[1];
+                        var payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+                        var payload = JSON.parse(payloadJson);
+                        if (payload && payload.idp) {
+                            var providerName = payload.idp.charAt(0).toUpperCase() + payload.idp.slice(1);
+                            document.getElementById("loadingText").innerText = providerName + " hesabınız ile giriş yapılıyor...";
+                            document.title = providerName + " ile Giriş Yapılıyor...";
+                        }
+                    }
+                } catch (e) {
+                    console.error("Provider parse error:", e);
+                }
+            }
+
+            if (hash && hash.includes("access_token=")) {
+                // Extract access_token from hash fragment
+                var match = hash.match(/access_token=([^&]+)/);
+                if (match && match[1]) {
+                    var token = match[1];
+                    document.getElementById("accessToken").value = token;
+                    
+                    // Clear hash from URL for security
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState("", document.title, window.location.pathname + window.location.search);
+                    } else {
+                        window.location.hash = "";
+                    }
+
+                    // Submit the form
+                    document.getElementById("tokenForm").submit();
+                } else {
+                    window.location.href = "/Uyelik/Index";
+                }
+            } else {
+                window.location.href = "/Uyelik/Index";
+            }
+        });
+    </script>
+</body>
+</html>

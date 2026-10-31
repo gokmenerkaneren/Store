@@ -1,0 +1,188 @@
+@model Store.DtoLayer.CatalogDtos.SizeDtos.UpdateSizeDto
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Beden Güncelle" : "Yeni Beden Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white"
+                     style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center">
+                        <i class="feather icon-tag" style="font-size: 45px; color: #ffffff !important;"></i>
+                        <div style="margin-left: 10px;">
+                            <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                @(isEdit ? "Beden Güncelleme" : "Yeni Beden Ekle")
+                            </h4>
+                            <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9);">
+                                Aşağıdaki form üzerinden beden bilgilerini kaydedebilirsiniz.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" asp-action="@(isEdit ? "UpdateSize" : "AddorEdit")" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                        }
+
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <!-- Beden Tipi -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">Beden Tipi</label>
+                                    <div class="col-sm-5">
+                                        <select class="form-control" asp-for="SizeType" id="sizeTypeSelect"
+                                                onchange="onSizeTypeChanged()">
+                                            <option value="1">Harf Beden (S / M / L / XL)</option>
+                                            <option value="2">Sayısal Beden (36 / 38 / 40)</option>
+                                            <option value="3">Denim / Kot (Bel / Boy — ör: 34/31)</option>
+                                            <option value="4">Ayakkabı Numarası (38 / 39 / 40)</option>
+                                        </select>
+                                        <span asp-validation-for="SizeType" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Beden Adı (görüntülenecek) -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">
+                                        Görüntüleme Adı
+                                        <small class="d-block text-muted" style="font-weight: normal; font-size: 11px;">
+                                            Sitede gösterilecek tam ad
+                                        </small>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" asp-for="Name"
+                                               id="nameInput" placeholder="Örn: M  /  38  /  34/31" required />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Ana Değer -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;" id="primaryLabel">
+                                        Ana Değer
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" asp-for="PrimaryValue"
+                                               id="primaryInput" placeholder="Örn: M  /  38  /  34" />
+                                        <small class="text-muted" id="primaryHint">
+                                            Harf/Sayı beden için tek değer yeterlidir. Denim için bel ölçüsü.
+                                        </small>
+                                        <span asp-validation-for="PrimaryValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- İkinci Değer (Denim için görünür) -->
+                                <div class="form-group row" id="secondaryRow" style="display: none;">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">
+                                        Bacak Boyu
+                                        <small class="d-block text-muted" style="font-weight: normal; font-size: 11px;">
+                                            Yalnızca Denim için
+                                        </small>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" asp-for="SecondaryValue"
+                                               id="secondaryInput" placeholder="Örn: 31, 32, 34" />
+                                        <small class="text-muted">Kot pantolonda bacak boyu (inseam)</small>
+                                        <span asp-validation-for="SecondaryValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Sıra -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">Sıra No</label>
+                                    <div class="col-sm-3">
+                                        <input type="number" class="form-control" asp-for="DisplayOrder"
+                                               min="0" value="@(Model?.DisplayOrder ?? 0)" />
+                                    </div>
+                                </div>
+
+                                <!-- Aktif -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">Durum</label>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" asp-for="IsActive">
+                                            <option value="true">Aktif</option>
+                                            <option value="false">Pasif</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success"
+                                                style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;">
+                                            <i class="icofont icofont-check-circled"></i>
+                                            @(isEdit ? "Güncelle" : "Kaydet")
+                                        </button>
+                                        <a href="/Admin/Size/Index" class="btn btn-danger ml-2"
+                                           style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;">
+                                            <i class="icofont icofont-ui-close"></i> Vazgeç
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sayfa yüklendiğinde mevcut SizeType'a göre alanları ayarla
+        document.addEventListener('DOMContentLoaded', function () {
+            onSizeTypeChanged();
+        });
+
+        function onSizeTypeChanged() {
+            var sizeType = parseInt(document.getElementById('sizeTypeSelect').value);
+            var secondaryRow = document.getElementById('secondaryRow');
+            var primaryLabel = document.getElementById('primaryLabel');
+            var primaryInput = document.getElementById('primaryInput');
+            var primaryHint = document.getElementById('primaryHint');
+            var nameInput = document.getElementById('nameInput');
+
+            if (sizeType === 3) {
+                // Denim: ikinci değer (bacak boyu) göster
+                secondaryRow.style.display = '';
+                primaryLabel.childNodes[0].textContent = 'Bel Ölçüsü ';
+                primaryInput.placeholder = 'Örn: 34';
+                primaryHint.textContent = 'Kot pantolonun bel ölçüsü (waist)';
+                nameInput.placeholder = 'Örn: 34/31 (Bel/Boy)';
+            } else {
+                secondaryRow.style.display = 'none';
+                primaryLabel.childNodes[0].textContent = 'Ana Değer ';
+                if (sizeType === 1) {
+                    primaryInput.placeholder = 'Örn: M, L, XL';
+                    nameInput.placeholder = 'Örn: M';
+                    primaryHint.textContent = 'Harf beden değeri';
+                } else if (sizeType === 2) {
+                    primaryInput.placeholder = 'Örn: 38';
+                    nameInput.placeholder = 'Örn: 38';
+                    primaryHint.textContent = 'Sayısal beden değeri';
+                } else if (sizeType === 4) {
+                    primaryInput.placeholder = 'Örn: 40';
+                    nameInput.placeholder = 'Örn: 40';
+                    primaryHint.textContent = 'Ayakkabı numarası';
+                }
+            }
+        }
+    </script>
+}

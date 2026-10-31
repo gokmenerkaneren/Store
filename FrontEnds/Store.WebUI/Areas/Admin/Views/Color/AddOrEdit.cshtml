@@ -1,0 +1,142 @@
+@model Store.DtoLayer.CatalogDtos.ColorDtos.UpdateColorDto
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Renk Güncelle" : "Yeni Renk Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white"
+                     style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center">
+                        <i class="feather icon-droplet" style="font-size: 45px; color: #ffffff !important;"></i>
+                        <div style="margin-left: 10px;">
+                            <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                @(isEdit ? "Renk Güncelleme" : "Yeni Renk Ekle")
+                            </h4>
+                            <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9);">
+                                Aşağıdaki form üzerinden renk bilgilerini kaydedebilirsiniz.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" asp-action="@(isEdit ? "UpdateColor" : "AddorEdit")" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                        }
+
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <!-- Renk Adı -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">Renk Adı</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Name"
+                                               placeholder="Örn: Kırmızı, Petrol Mavisi" required />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Renk Seçici (input type=color) -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">
+                                        Renk Kodu
+                                        <small class="d-block text-muted" style="font-weight: normal; font-size: 11px;">
+                                            Kutuya tıklayarak paletten seçin
+                                        </small>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <div class="d-flex align-items-center">
+                                            <!-- Renk paleti açan input -->
+                                            <input type="color" id="colorPicker"
+                                                   value="@(Model?.HexCode ?? "#000000")"
+                                                   style="width: 60px; height: 38px; padding: 2px; border: 1px solid #ccc;
+                                                          border-radius: 4px; cursor: pointer;"
+                                                   oninput="document.getElementById('hexInput').value = this.value;
+                                                            document.getElementById('colorPreview').style.backgroundColor = this.value;" />
+
+                                            <!-- Hex değerini manuel yazma / gösteren text input (asıl form alanı) -->
+                                            <input type="text" id="hexInput" asp-for="HexCode"
+                                                   class="form-control ml-2"
+                                                   placeholder="#000000"
+                                                   maxlength="7"
+                                                   style="max-width: 120px;"
+                                                   oninput="if(this.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+                                                                document.getElementById('colorPicker').value = this.value;
+                                                                document.getElementById('colorPreview').style.backgroundColor = this.value;
+                                                            }" />
+
+                                            <!-- Canlı önizleme dairesi -->
+                                            <span id="colorPreview"
+                                                  style="display: inline-block; width: 40px; height: 40px; border-radius: 50%;
+                                                         background-color: @(Model?.HexCode ?? "#000000");
+                                                         border: 2px solid #ccc; margin-left: 12px;
+                                                         box-shadow: 0 1px 4px rgba(0,0,0,0.25);">
+                                            </span>
+                                            <span class="ml-2 text-muted" style="font-size: 12px;">Önizleme</span>
+                                        </div>
+                                        <span asp-validation-for="HexCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Sıra -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">
+                                        Sıra No
+                                        <small class="d-block text-muted" style="font-weight: normal; font-size: 11px;">
+                                            Küçük sayı → önce görünür
+                                        </small>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <input type="number" class="form-control" asp-for="DisplayOrder"
+                                               min="0" value="@(Model?.DisplayOrder ?? 0)" />
+                                        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Aktif -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;">Durum</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" asp-for="IsActive">
+                                            <option value="true">Aktif</option>
+                                            <option value="false">Pasif</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success"
+                                                style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;">
+                                            <i class="icofont icofont-check-circled"></i>
+                                            @(isEdit ? "Güncelle" : "Kaydet")
+                                        </button>
+                                        <a href="/Admin/Color/Index" class="btn btn-danger ml-2"
+                                           style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;">
+                                            <i class="icofont icofont-ui-close"></i> Vazgeç
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

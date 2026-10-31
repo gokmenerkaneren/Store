@@ -1,0 +1,71 @@
+﻿@model Store.WebUI.Models.Rental.CreateRentalViewModel
+@{
+    ViewData["Title"] = "Ürün Kirala";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+}
+
+<div class="container mt-5 mb-5 p-4 bg-white shadow-sm rounded">
+    <h2 class="mb-4">📅 Kiralama İşlemi</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="Index" method="post">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Başlangıç Tarihi</label>
+                <input asp-for="StartDate" type="date" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Bitiş Tarihi</label>
+                <input asp-for="EndDate" type="date" class="form-control" required />
+            </div>
+        </div>
+
+        <h4 class="mt-4 mb-3">🛒 Sepetteki Kiralık Ürünler</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Ürün ID</th>
+                        <th>Adet</th>
+                        <th>Birim Fiyat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Items != null && Model.Items.Count > 0)
+                    {
+                        for (int i = 0; i < Model.Items.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="Items[i].ProductId" class="form-control" readonly />
+                                </td>
+                                <td>
+                                    <input asp-for="Items[i].Quantity" type="number" min="1" class="form-control" />
+                                </td>
+                                <td>
+                                    <input asp-for="Items[i].UnitPrice" class="form-control" readonly />
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">Kiralama listeniz boş.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-right mt-3">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-calendar-check"></i> Kiralama Talebi Oluştur</button>
+        </div>
+    </form>
+</div>

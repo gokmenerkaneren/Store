@@ -1,0 +1,23 @@
+<!doctype html>
+<!--[if IE 9]>
+<html class="ie9 no-js supports-no-cookies" lang="en"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="no-js supports-no-cookies" lang="en"> <!--<![endif]-->
+
+@await Component.InvokeAsync("_defHeadUILayoutComponentPartial")
+
+<body id="index" class="template-index theme-css-animate" data-currency-multiple="true">
+    
+   @await Component.InvokeAsync("_defHeaderUILayoutComponentPartial")
+    
+    <main id="MainContent">
+        @RenderBody()
+    </main>
+
+    @await Component.InvokeAsync("_defFooterUILayoutComponentPartial")
+    
+    @await Component.InvokeAsync("_defScriptsUILayoutComponentPartial")
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

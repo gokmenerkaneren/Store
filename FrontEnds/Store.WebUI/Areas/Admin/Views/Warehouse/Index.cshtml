@@ -1,0 +1,195 @@
+@model List<Store.DtoLayer.LocationDtos.WarehouseDtos.ResultWarehouseDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Depo İşlemleri";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var branches = ViewBag.Branches as List<Store.DtoLayer.LocationDtos.BranchDtos.ResultBranchDto> ?? new List<Store.DtoLayer.LocationDtos.BranchDtos.ResultBranchDto>();
+    var contactInfos = ViewBag.ContactInfos as List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto> ?? new List<Store.DtoLayer.LocationDtos.ContactInfoDtos.ResultContactInfoDto>();
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        DEPO İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Depo Listesi ve Yönetimi</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="card-block">
+        <div class="dt-responsive table-responsive">
+            <table id="warehouse-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Bağlı Şube</th>
+                        <th>Depo Kodu</th>
+                        <th>Depo Adı</th>
+                        <th>İletişim & Sorumlu</th>
+                        <th>Varsayılan mı?</th>
+                        <th>Aktif mi?</th>
+                        <th>Notlar</th>
+                        <th>Kayıt Tarihi</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            var branchName = branches.FirstOrDefault(x => x.Id == item.BranchId)?.Name ?? (item.BranchId.HasValue ? item.BranchId.ToString() : "-");
+                            var contact = contactInfos.FirstOrDefault(x => x.Id == item.ContactInfoId);
+                            var contactName = contact != null
+                                ? (!string.IsNullOrEmpty(contact.AuthorizedPersonName) ? $"{contact.AuthorizedPersonName} ({contact.Phone})" : contact.CompanyEmail)
+                                : (item.ContactInfoId.HasValue ? item.ContactInfoId.ToString() : "-");
+
+                            <tr style="@(item.IsDeleted ? "background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;" : (!item.IsActive ? "opacity:0.5;background-color:#f8d7da;" : ""))">
+                                <td>@branchName</td>
+                                <td>@item.Code</td>
+                                <td>@item.Name</td>
+                                <td>@contactName</td>
+                                <td><span class="label label-@(item.IsDefault ? "success" : "danger")">@(item.IsDefault ? "Evet" : "Hayır")</span></td>
+                                <td><span class="label label-@(item.IsActive ? "success" : "danger")">@(item.IsActive ? "Evet" : "Hayır")</span></td>
+                                <td>@item.Notes</td>
+                                <td>@item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#detailsModal"
+                                                data-id="@item.Id" data-name="@item.Name" data-code="@item.Code" data-contactname="@contactName" data-isDefault="@item.IsDefault" data-branchId="@branchName" data-isActive="@item.IsActive" data-notes="@item.Notes" data-insertUserId="@item.InsertUserId" data-insertDate="@(item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss"))" data-updateUserId="@item.UpdateUserId" data-updateDate="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))" data-isDeleted="@item.IsDeleted" data-deleteUserId="@item.DeleteUserId" data-deleteDate="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))">
+                                            <i class="icofont icofont-file-document"></i>
+                                        </button>
+
+                                        @if (item.IsDeleted)
+                                        {
+                                            <a href="/Admin/Warehouse/RestoreWarehouse/@item.Id" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">
+                                                <i class="feather icon-rotate-ccw"></i> Geri Al
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/Admin/Warehouse/Edit/@item.Id" class="btn btn-grd-info waves-effect waves-light" style="float: none;margin: 5px;">
+                                                <span class="feather icon-edit"></span>
+                                            </a>
+                                            <a href="/Admin/Warehouse/DeleteWarehouse/@item.Id" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                                <span class="feather icon-trash"></span>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+                            
+            <a href="/Admin/Warehouse/Add" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px; background-color: #00bcd4; border-color: #00bcd4; color: white;">
+                <span class="feather icon-plus"> Yeni Depo Ekle</span>
+            </a>
+
+            @if (ViewBag.ShowDeleted == true)
+            {
+                <a href="/Admin/Warehouse/Index?showDeleted=false" class="btn btn-grd-warning waves-effect waves-light" style="float: none;margin: 5px; background-color: #ffb64d; border-color: #ffb64d; color: white;">
+                    <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                </a>
+            }
+            else
+            {
+                <a href="/Admin/Warehouse/Index?showDeleted=true" class="btn btn-grd-inverse waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye"> Silinenleri Göster</span>
+                </a>
+            }
+
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">
+                <h5 class="modal-title"><i class="feather icon-info"></i> Depo Detayları</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-sm-6"><strong>Id:</strong> <p id="det-id" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Depo Adı:</strong> <p id="det-name" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Depo Kodu:</strong> <p id="det-code" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Bağlı Şube:</strong> <p id="det-branchId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>İletişim & Sorumlu:</strong> <p id="det-contactname" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Varsayılan mı?:</strong> <p id="det-isDefault" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Aktif mi?:</strong> <p id="det-isActive" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Notlar:</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-6"><strong>Ekleyen:</strong> <p id="det-insertUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Ekleme Tarihi:</strong> <p id="det-insertDate" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Güncelleyen:</strong> <p id="det-updateUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Güncelleme Tarihi:</strong> <p id="det-updateDate" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silinme Durumu:</strong> <p id="det-isDeleted" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silen:</strong> <p id="det-deleteUserId" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silinme Tarihi:</strong> <p id="det-deleteDate" class="text-muted"></p></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: white;"> <i class="icofont icofont-ui-close"></i> Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        $('#warehouse-table').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            order: []
+        });
+    });
+
+    $('#detailsModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#det-id').text(button.data('id'));
+        modal.find('#det-name').text(button.data('name'));
+        modal.find('#det-code').text(button.data('code'));
+        modal.find('#det-contactname').text(button.data('contactname'));
+        var ısDefault = button.data('isdefault') === 'True' || button.data('isdefault') === true || button.data('isdefault') === 'true' || button.data('ısdefault') === 'True' || button.data('ısdefault') === true || button.data('ısdefault') === 'true';
+        modal.find('#det-isDefault').text(ısDefault ? 'Evet' : 'Hayır');
+        modal.find('#det-branchId').text(button.data('branchid'));
+        var ısActive = button.data('isactive') === 'True' || button.data('isactive') === true || button.data('isactive') === 'true' || button.data('ısactive') === 'True' || button.data('ısactive') === true || button.data('ısactive') === 'true';
+        modal.find('#det-isActive').text(ısActive ? 'Evet' : 'Hayır');
+        modal.find('#det-notes').text(button.data('notes'));
+        modal.find('#det-insertUserId').text(button.data('insertuserid') || button.data('ınsertuserid'));
+        modal.find('#det-insertDate').text(button.data('insertdate') || button.data('ınsertdate'));
+        modal.find('#det-updateUserId').text(button.data('updateuserid'));
+        modal.find('#det-updateDate').text(button.data('updatedate'));
+        var isDeleted = button.data('isdeleted') === 'True' || button.data('isdeleted') === true || button.data('isdeleted') === 'true';
+        modal.find('#det-isDeleted').text(isDeleted ? 'Evet' : 'Hayır');
+        modal.find('#det-deleteUserId').text(button.data('deleteuserid'));
+        modal.find('#det-deleteDate').text(button.data('deletedate'));
+    });
+</script>
+}

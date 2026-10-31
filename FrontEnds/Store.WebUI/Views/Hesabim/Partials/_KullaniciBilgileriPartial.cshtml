@@ -1,0 +1,183 @@
+@model Store.WebUI.Models.HesabimViewModels.KullaniciBilgileriViewModel
+
+<div class="card border rounded shadow-sm bg-white p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+        <div>
+            <h3 class="h4 font-weight-bold mb-1 text-dark">Kullanıcı Bilgilerim</h3>
+            <p class="text-muted small mb-0">Kişisel bilgilerinizi buradan görüntüleyebilir ve güncelleyebilirsiniz.</p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa fa-check-circle mr-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Kapat">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa fa-exclamation-circle mr-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Kapat">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <form asp-controller="Hesabim" asp-action="KullaniciBilgilerim" method="post" id="userProfileForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="FirstName" class="font-weight-bold small text-dark mb-1">Ad <span class="text-danger">*</span></label>
+                <input asp-for="FirstName" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="Adınız" required />
+                <span asp-validation-for="FirstName" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="LastName" class="font-weight-bold small text-dark mb-1">Soyad <span class="text-danger">*</span></label>
+                <input asp-for="LastName" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="Soyadınız" required />
+                <span asp-validation-for="LastName" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email" class="font-weight-bold small text-dark mb-1">E-posta Adresi <span class="text-danger">*</span></label>
+                <input asp-for="Email" class="form-control bg-light" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="ornek@alanadi.com" readonly />
+                <small class="text-muted">Güvenliğiniz için kayıtlı e-posta adresi doğrudan değiştirilemez.</small>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhoneNumber" class="font-weight-bold small text-dark mb-1">Cep Telefonu <span class="text-danger">*</span></label>
+                <input asp-for="PhoneNumber" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="05XX XXX XX XX" required />
+                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="TCKimlik" class="font-weight-bold small text-dark mb-1">T.C. Kimlik Numarası</label>
+                <input asp-for="TCKimlik" class="form-control" style="height: 44px; border-radius: 6px; font-size: 14px;" placeholder="Bireysel faturalarınız için (İsteğe bağlı)" maxlength="11" />
+                <span asp-validation-for="TCKimlik" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="custom-control custom-checkbox my-3">
+            <input asp-for="AcceptCorporateOffers" type="checkbox" class="custom-control-input" id="acceptCorporateCheck">
+            <label class="custom-control-label small text-muted cursor-pointer" for="acceptCorporateCheck">
+                İş yeri alışverişlerim için kurumsal ve toptan satış fırsatlarından haberdar olmak istiyorum.
+            </label>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top mt-4 gap-2">
+            <button type="submit" class="btn btn-dark font-weight-bold text-uppercase px-4" style="letter-spacing: 0.5px; border-radius: 6px; font-size: 13px; height: 44px; min-width: 210px; display: inline-flex; align-items: center; justify-content: center;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2" style="vertical-align: -1px;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Güncelle
+            </button>
+            <button type="button" class="btn btn-danger font-weight-bold text-uppercase px-4 mt-2 mt-sm-0" style="background-color: #dc3545; color: #ffffff; border: 1px solid #dc3545; border-radius: 6px; font-size: 13px; letter-spacing: 0.5px; height: 44px; min-width: 190px; display: inline-flex; align-items: center; justify-content: center;" onclick="openCloseAccountModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2" style="vertical-align: -1px;">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="18" y1="8" x2="23" y2="13"></line>
+                    <line x1="23" y1="8" x2="18" y2="13"></line>
+                </svg>
+                Hesabımı Kapat
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- ============================================================== -->
+<!-- HESABI KAPAT ONAY MODALI                                       -->
+<!-- ============================================================== -->
+<div id="closeAccountModal" class="custom-modal-overlay" style="display: none;">
+    <div class="custom-modal-dialog" style="max-width: 440px;">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="custom-modal-title mb-0 font-weight-bold text-danger">Hesabı Kapat</h5>
+                <button type="button" class="close-modal-btn" onclick="closeCloseAccountModal()">&times;</button>
+            </div>
+            <div class="custom-modal-body text-center py-4">
+                <div class="mb-3">
+                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h6 class="font-weight-bold text-dark mb-2">Hesabınızı kapatmak istediğinize emin misiniz?</h6>
+                <p class="text-muted small mb-0 px-2" style="line-height: 1.5;">
+                    Hesabınızı kapattığınızda mevcut sipariş geçmişinize, kayıtlı adreslerinize ve kuponlarınıza erişemezsiniz. Bu işlem geri alınamaz.
+                </p>
+            </div>
+            <div class="custom-modal-footer d-flex justify-content-center align-items-center bg-light py-3 border-top" style="gap: 12px;">
+                <button type="button" class="btn btn-outline-secondary font-weight-bold" style="width: 120px; height: 38px; font-size: 12px; border-radius: 4px; text-transform: uppercase;" onclick="closeCloseAccountModal()">
+                    Vazgeç
+                </button>
+                <form asp-controller="Hesabim" asp-action="HesabimiKapat" method="post" style="display: inline-block; margin: 0;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger font-weight-bold" style="width: 160px; height: 38px; font-size: 12px; border-radius: 4px; text-transform: uppercase; background-color: #dc3545; color: #ffffff; border: 1px solid #dc3545;">
+                        Evet, Hesabı Kapat
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .custom-modal-dialog {
+        width: 100%;
+        max-width: 440px;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .custom-modal-header {
+        padding: 14px 20px;
+        border-bottom: 1px solid #eee;
+        background: #fafafa;
+    }
+    .close-modal-btn {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        color: #777;
+    }
+    .close-modal-btn:hover {
+        color: #111;
+    }
+</style>
+
+<script>
+    function openCloseAccountModal() {
+        document.getElementById("closeAccountModal").style.display = "flex";
+    }
+    function closeCloseAccountModal() {
+        document.getElementById("closeAccountModal").style.display = "none";
+    }
+</script>
+

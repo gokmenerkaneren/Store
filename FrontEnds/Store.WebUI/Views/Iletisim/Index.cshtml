@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "Sezadan Store";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+
+    var userName = "";
+    var userEmail = "";
+    var userPhone = "";
+    if (User.Identity.IsAuthenticated)
+    {
+        userName = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("name")?.Value ?? User.FindFirst("given_name")?.Value + " " + User.FindFirst("family_name")?.Value;
+        userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
+        userPhone = User.FindFirst(System.Security.Claims.ClaimTypes.MobilePhone)?.Value ?? User.FindFirst("phone_number")?.Value;
+    }
+}
+
+    <div class="container mb-60">
+        <div class="row mt-30">
+            <div class="col-12 col-md-7 mb-30">
+                <div class="rte">
+
+
+                    <h1 class="h3 mb-30">Yardımcı Olmaya Hazırız</h1>
+                    <p>Bir sorunuz mu var? Cevabı Sıkça Sorulan Sorular bölümümüzde bulabilirsiniz. Ancak bizimle iletişime de geçebilirsiniz:</p>
+                    <h5>Bizi Arayın : +90 542 723 41 83 <br>Kemeraltı Çarşısı, 863. Sk. No:35/37, 35250 Konak/İzmir</h5>
+                    <ul class="list-unstyled">
+                        <li>Çalışma Saatlerimiz</li>
+                        <li>Pazartesi - Cumartesi  8:30 - 19:30 </li>
+                        <li>Pazar: Kapalıyız</li>
+                    </ul>
+                </div>
+                <div class="mt-30">
+                    <div id="theme-section-contact-map" class="theme-section">
+                        <div class="contact-map position-relative">
+
+                            <iframe width="100%" height="450" style="border:0"
+                                    src="https://maps.google.com/maps?q=Kemeralt%C4%B1%20%C3%87ar%C5%9F%C4%B1s%C4%B1,%20863.%20Sk.%20No:35/37,%2035250%20Konak/%C4%B0zmir&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                                    allowfullscreen=""></iframe>
+                                    <!--allowfullscreen="" loading="lazy"></iframe>-->
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5">
+                <h2 class="h3">Bize Ulaşın</h2>
+                <p class="fs-lg">Sorularınızı yanıtlamaktan veya size bir fiyat teklifi sunmaktan memnuniyet duyarız. 
+                                 Aklınıza takılan her türlü soru için aşağıdaki form aracılığıyla bize bir mesaj göndermeniz yeterli.</p>
+                <form method="post" action="/Iletisim/SendMessage" id="contact_form" accept-charset="UTF-8"
+                      class="contact-form">
+                    
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border: 1px solid #c3e6cb; border-radius: 4px;">
+                            <strong>Başarılı!</strong> @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; border: 1px solid #f5c6cb; border-radius: 4px;">
+                            <strong>Hata!</strong> @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <label for="ContactFormName" class="label-required">ADINIZ SOYADINIZ (Gerekli)</label>
+                    <input type="text"
+                           name="NameSurname"
+                           id="ContactFormName"
+                           placeholder="Lütfen Adınızı ve Soyadınızı Giriniz"
+                           value="@userName"
+                           required="required">
+                    <label for="ContactFormEmail" class="label-required">EMAIL (Gerekli)</label>
+                    <input type="email"
+                           name="Email"
+                           id="ContactFormEmail"
+                           placeholder="Lütfen Email Adresinizi Giriniz"
+                           value="@userEmail"
+                           spellcheck="false"
+                           autocomplete="off"
+                           autocapitalize="off"
+                           required="required">
+                    <label for="ContactFormPhone" class="label-required">TELEFON NUMARASI (Gerekli)</label>
+                    <input type="tel"
+                           class="form-control"
+                           name="Phone"
+                           id="ContactFormPhone"
+                           placeholder="Lütfen Telefon Numaranızı Giriniz"
+                           value="@userPhone"
+                           required="required">
+                    <label for="ContactFormSubject" class="label-required">KONU (Gerekli)</label>
+                    <input type="text"
+                           name="Subject"
+                           id="ContactFormSubject"
+                           placeholder="Lütfen Konuyu Giriniz"
+                           required="required">
+                    <label for="ContactFormMessage" class="label-required">MESAJINIZ (Gerekli)</label>
+                    <textarea rows="11"
+                          name="Message"
+                          id="ContactFormMessage"
+                          placeholder="Lütfen Mesajınızı Giriniz"
+                          required="required"></textarea>
+
+                    <div class="pt-10">
+                        <button type="submit" class="btn btn--secondary"><i class="mr-5">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-196"
+                                 viewBox="0 0 24 24">
+                                <path d="M21.842 2.54a.601.601 0 0 1 .186.439v12.5c0 .169-.062.315-.186.439s-.271.186-.439.186h-8.535l-5.449 4.238c-.065.052-.13.088-.195.107s-.13.029-.195.029c-.052 0-.101-.007-.146-.02l-.127-.039c-.104-.052-.188-.13-.254-.234s-.098-.215-.098-.332v-3.75h-3.75c-.169 0-.315-.062-.439-.186s-.186-.271-.186-.439v-12.5c0-.169.062-.315.186-.439s.271-.186.439-.186h18.75a.606.606 0 0 1 .438.187zm-1.065 1.064h-17.5v11.25h3.75c.169 0 .315.062.439.186s.186.271.186.439v3.105l4.609-3.594c.065-.052.13-.088.195-.107s.13-.029.195-.029h8.125V3.604z"/>
+                            </svg>
+                        </i>GÖNDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

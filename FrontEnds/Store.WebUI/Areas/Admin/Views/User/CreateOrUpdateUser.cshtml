@@ -1,0 +1,414 @@
+@model Store.DtoLayer.IdentityDtos.UserDtos.UpdateUserDto
+@{
+    ViewData["Title"] = ViewBag.IsUpdate ? "Kullanıcı Düzenle" : "Yeni Kullanıcı Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    bool isUpdate = ViewBag.IsUpdate != null && (bool)ViewBag.IsUpdate;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="/ZZDenge/files/assets/pages/j-pro/css/j-pro-modern.css">
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; padding: 15px 25px;">
+        <h4 class="mb-0 text-white">@ViewData["Title"] - @(isUpdate ? Model.UserName : "Yeni")</h4>
+    </div>
+    <div class="card-body p-0">
+        <!-- Tabs Nav -->
+        <ul class="nav nav-tabs md-tabs" role="tablist" style="background-color: #f8f9fa;">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#general" role="tab"><i class="icofont icofont-user"></i> Genel Bilgiler</a>
+            </li>
+            @if (isUpdate)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#roles" role="tab"><i class="icofont icofont-shield"></i> Rol ve Yetkiler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#addresses" role="tab"><i class="icofont icofont-location-pin"></i> Adres Bilgileri</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item disabled">
+                    <a class="nav-link text-muted" href="#" title="Kullanıcı oluşturulduktan sonra aktif olur."><i class="icofont icofont-shield"></i> Rol ve Yetkiler</a>
+                </li>
+                <li class="nav-item disabled">
+                    <a class="nav-link text-muted" href="#" title="Kullanıcı oluşturulduktan sonra aktif olur."><i class="icofont icofont-location-pin"></i> Adres Bilgileri</a>
+                </li>
+            }
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content p-4">
+            <!-- Genel Bilgiler Tab -->
+            <div class="tab-pane active" id="general" role="tabpanel">
+                <form id="generalForm">
+                    <input type="hidden" id="userId" name="Id" value="@(isUpdate ? Model.Id.ToString() : "")" />
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kullanıcı Adı</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="UserName" value="@Model.UserName" required pattern="^\S+$" title="Kullanıcı adında boşluk kullanılamaz." />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Ad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="FirstName" value="@Model.FirstName" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Soyad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="LastName" value="@Model.LastName" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">TC Kimlik</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="TCKimlik" value="@Model.TCKimlik" required pattern="^\d{11}$" title="11 haneli sayı giriniz." />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="Email" value="@Model.Email" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Telefon Numarası</label>
+                            <div class="col-sm-10">
+                                <div class="j-pro" id="j-pro" style="box-shadow:none; padding:0; margin:0; border:none; background:transparent;">
+                                    <div class="j-unit" style="margin-bottom:0;">
+                                        <div class="j-input j-success-view">
+                                            <label class="j-icon-right" for="phoneMask">
+                                                <i class="icofont icofont-phone"></i>
+                                            </label>
+                                            <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" id="phoneMask" required placeholder="(555) 555-5555" oninput="formatPhoneGlobal(this)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Şifre @(isUpdate ? "(Değiştirmek istemiyorsanız boş bırakın)" : "")</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="Password" id="Password" @(isUpdate ? "" : "required") />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('Password', 'eye-Password')">
+                                        <i class="icofont icofont-eye-alt" id="eye-Password"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Şifre Tekrar</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="ConfirmPassword" @(isUpdate ? "" : "required") />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('ConfirmPassword', 'eye-ConfirmPassword')">
+                                        <i class="icofont icofont-eye-alt" id="eye-ConfirmPassword"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <small id="passwordMismatchError" class="text-danger" style="display:none;">Şifreler eşleşmiyor!</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10 offset-sm-2">
+                            <button type="button" class="btn btn-primary" onclick="saveGeneral()"><i class="icofont icofont-save"></i> Kaydet</button>
+                            <a href="/Admin/User/Index" class="btn btn-inverse">İptal</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            @if (isUpdate)
+            {
+                <!-- Rol ve Yetkiler Tab -->
+                <div class="tab-pane" id="roles" role="tabpanel">
+                    <form id="rolesForm">
+                        <input type="hidden" name="UserId" value="@Model.Id" />
+                        <div class="form-group">
+                            <label>Kullanıcıya Atanacak Roller</label>
+                            @{
+                                var allRoles = ViewBag.AllRoles as List<Store.DtoLayer.IdentityDtos.RoleDtos.ResultRoleDto>;
+                                var userRoles = ViewBag.UserRoles as List<string>;
+                            }
+                            <select class="form-control js-example-basic-multiple" name="RoleNames" multiple="multiple">
+                                @if (allRoles != null)
+                                {
+                                    foreach (var role in allRoles)
+                                    {
+                                        bool isSelected = userRoles != null && userRoles.Contains(role.Name);
+                                        if (isSelected)
+                                        {
+                                            <option value="@role.Name" selected>@role.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@role.Name">@role.Name</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="saveRoles()"><i class="icofont icofont-save"></i> Rolleri Kaydet</button>
+                    </form>
+                </div>
+
+                <!-- Adres Bilgileri Tab -->
+                <div class="tab-pane" id="addresses" role="tabpanel">
+                    <div class="row mb-3">
+                        <div class="col-12 text-right">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#addressModal"><i class="icofont icofont-plus"></i> Yeni Adres Ekle</button>
+                        </div>
+                    </div>
+                    <div id="addressListContainer">
+                        <!-- Partial View Loading... -->
+                        <div class="text-center"><div class="spinner-border text-primary" role="status"></div></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (isUpdate)
+{
+    <!-- Yeni Adres Modalı -->
+    <div class="modal fade" id="addressModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Yeni Adres Ekle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addressForm">
+                        <input type="hidden" name="CustomerId" value="@Model.Id" />
+                        <input type="hidden" name="InsertUserId" value="@Model.Id" />
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Adres Başlığı</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="Title" placeholder="Ev, İş vb." required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Yetkili Kişi</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="ContactFullName" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Telefon</label>
+                            <div class="col-sm-9">
+                                <div class="j-pro" id="j-pro-address" style="box-shadow:none; padding:0; margin:0; border:none; background:transparent;">
+                                    <div class="j-unit" style="margin-bottom:0;">
+                                        <div class="j-input j-success-view">
+                                            <label class="j-icon-right" for="addressPhoneMask">
+                                                <i class="icofont icofont-phone"></i>
+                                            </label>
+                                            <input type="text" name="PhoneNumber" id="addressPhoneMask" required placeholder="(555) 555-5555" oninput="formatPhoneGlobal(this)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Açık Adres</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" name="AddressDetail" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <!-- We will mock CityId and CountryId for now since dropdown data is needed -->
+                        <input type="hidden" name="CountryId" value="dbcf7622-7a82-4439-84d6-ff571b8ef053" />
+                        <input type="hidden" name="CityId" value="c3dcf250-fef0-4701-927c-03ca0b103ca8" />
+                        <input type="hidden" name="DistrictId" value="164281cf-d964-496b-9f85-50999a470f98" />
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Fatura Tipi</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="InvoiceType">
+                                    <option value="1">Bireysel</option>
+                                    <option value="2">Kurumsal</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="IsActive" value="true" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-success" onclick="saveAddress()">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function formatPhoneGlobal(input) {
+            var x = input.value.replace(/\D/g, ''); // Sadece rakamları al
+            if (x.length > 10) {
+                x = x.substring(0, 10);
+            }
+            if (x.length === 0) {
+                input.value = '';
+                return;
+            }
+            var match = x.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+            if (match) {
+                if (match[2].length === 0) {
+                    input.value = '(' + match[1];
+                } else if (match[3].length === 0) {
+                    input.value = '(' + match[1] + ') ' + match[2];
+                } else {
+                    input.value = '(' + match[1] + ') ' + match[2] + '-' + match[3];
+                }
+            }
+        }
+
+        $(document).ready(function() {
+            if ($('.js-example-basic-multiple').length > 0) {
+                $('.js-example-basic-multiple').select2();
+            }
+
+            if ('@isUpdate' === 'True') {
+                loadAddresses();
+            }
+        });
+
+        function togglePassword(inputId, iconId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('icofont-eye-alt');
+                icon.classList.add('icofont-eye-blocked');
+            } else {
+                input.type = "password";
+                icon.classList.remove('icofont-eye-blocked');
+                icon.classList.add('icofont-eye-alt');
+            }
+        }
+
+        function saveGeneral() {
+            var isUpdate = '@isUpdate' === 'True';
+            var url = isUpdate ? '/Admin/User/UpdateUser' : '/Admin/User/CreateUser';
+
+            // Şifre kontrolü
+            var pass = $('#Password').val();
+            var confirmPass = $('#ConfirmPassword').val();
+            if (pass !== confirmPass) {
+                $('#passwordMismatchError').show();
+                return;
+            } else {
+                $('#passwordMismatchError').hide();
+            }
+
+            // HTML5 validation tetikleme
+            var form = document.getElementById('generalForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            var formData = $('#generalForm').serialize();
+
+            $.post(url, formData, function(res) {
+                if(res.success) {
+                    Swal.fire('Başarılı!', 'Genel bilgiler kaydedildi.', 'success').then(() => {
+                        if(!isUpdate && res.userId) {
+                            window.location.href = '/Admin/User/CreateOrUpdateUser/' + res.userId;
+                        } else if (!isUpdate) {
+                            window.location.href = '/Admin/User/Index';
+                        }
+                    });
+                } else {
+                    Swal.fire('Hata!', res.message || 'Kayıt sırasında hata oluştu.', 'error');
+                }
+            });
+        }
+
+
+        function saveRoles() {
+            var formData = $('#rolesForm').serialize();
+            $.post('/Admin/User/AssignRole', formData, function(res) {
+                if(res.success) {
+                    Swal.fire('Başarılı!', 'Roller güncellendi.', 'success');
+                } else {
+                    Swal.fire('Hata!', res.message || 'Hata oluştu.', 'error');
+                }
+            });
+        }
+
+        function loadAddresses() {
+            var userId = $('#userId').val();
+            $.get('/Admin/User/GetAddressesForUser?userId=' + userId, function(data) {
+                var html = '<table class="table table-bordered">';
+                html += '<thead><tr><th>Başlık</th><th>Yetkili</th><th>Telefon</th><th>Adres</th><th>İşlemler</th></tr></thead><tbody>';
+                if(data && data.length > 0) {
+                    for(var i = 0; i < data.length; i++) {
+                        html += '<tr>';
+                        html += '<td>' + data[i].title + '</td>';
+                        html += '<td>' + data[i].contactFullName + '</td>';
+                        html += '<td>' + data[i].phoneNumber + '</td>';
+                        html += '<td>' + data[i].addressDetail + '</td>';
+                        html += '<td><button class="btn btn-sm btn-danger" onclick="deleteAddress(\'' + data[i].id + '\')"><i class="fa fa-trash"></i></button></td>';
+                        html += '</tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="5" class="text-center">Kayıtlı adres bulunamadı.</td></tr>';
+                }
+                html += '</tbody></table>';
+                $('#addressListContainer').html(html);
+            });
+        }
+
+        function saveAddress() {
+            var form = document.getElementById('addressForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            var formData = $('#addressForm').serialize();
+            $.post('/Admin/User/AddAddress', formData, function(res) {
+                if(res.success) {
+                    $('#addressModal').modal('hide');
+                    $('#addressForm')[0].reset();
+                    Swal.fire('Başarılı!', 'Adres eklendi.', 'success');
+                    loadAddresses();
+                } else {
+                    Swal.fire('Hata!', res.message || 'Hata oluştu.', 'error');
+                }
+            });
+        }
+
+        function deleteAddress(id) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/User/DeleteAddress', { id: id }, function(res) {
+                        if(res.success) {
+                            Swal.fire('Silindi!', 'Adres başarıyla silindi.', 'success');
+                            loadAddresses();
+                        } else {
+                            Swal.fire('Hata!', res.message || 'Hata oluştu.', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+    </script>
+}

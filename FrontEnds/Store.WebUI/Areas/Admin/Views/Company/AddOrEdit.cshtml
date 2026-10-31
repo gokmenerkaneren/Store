@@ -1,0 +1,227 @@
+@model Store.DtoLayer.LocationDtos.CompanyDtos.UpdateCompanyDto
+
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Firma Güncelle" : "Yeni Firma Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                        <div class="d-flex align-items-center">
+                            <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                            <div style="margin-left: 10px;">
+                                <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                    @(isEdit ? "Firma Güncelle" : "Yeni Firma Ekle")
+                                </h4>
+                                <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">
+                                    Aşağıdaki form üzerinden firma bilgilerini kaydedebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                            <ul class="list-unstyled card-option" style="margin: 0;">
+                                <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                                <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                                <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" action="@(isEdit ? "/Admin/Company/Edit" : "/Admin/Company/Add")" enctype="multipart/form-data" id="companyForm">
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="LogoUrl" />
+                        }
+                        
+                        <div class="row">
+                            <!-- Sol Sütun (Form Alanları) -->
+                            <div class="col-sm-9">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Firma Resmi Adı</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="LegalName" placeholder="Firma Resmi Adı" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Marka Adı</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="BrandName" placeholder="Marka Adı" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Vergi Dairesi</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="TaxOffice" placeholder="Vergi Dairesi" required />
+                                        <span asp-validation-for="TaxOffice" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Vergi Numarası</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="TaxNumber" required pattern="\d{11,}" minlength="11" placeholder="Vergi Numarası" title="Vergi numarası en az 11 hane olmalı ve sadece sayı girilebilmeli." oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                                        <span asp-validation-for="TaxNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Ticaret Sicil No</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="TradeRegistryNumber" placeholder="Ticaret Sicil No" pattern="\d{16}" minlength="16" maxlength="16" title="Ticaret Sicil No 16 hane sayı olmalıdır." />
+                                        <span asp-validation-for="TradeRegistryNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Mersis Numarası</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="MersisNumber" placeholder="Mersis No" pattern="\d{16}" minlength="16" maxlength="16" title="Mersis Numarası 16 hane sayı olmalıdır." />
+                                        <span asp-validation-for="MersisNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Web Sitesi</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="url" class="form-control" asp-for="Website" placeholder="Web Sitesi (örn: www.sezadan.com)" />
+                                        <span asp-validation-for="Website" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Firma Sahibi</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="MainContactName" placeholder="Firma Sahibi" required />
+                                        <span asp-validation-for="MainContactName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>E-Posta</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" asp-for="Email" placeholder="E-Posta Adresi" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Telefon</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="tel" class="form-control" asp-for="Phone" placeholder="Telefon Numarası" />
+                                        <span asp-validation-for="Phone" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Fatura Tipi</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="InvoiceType">
+                                            <option value="0">Bireysel</option>
+                                            <option value="1">Kurumsal</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>E-Fatura Mükellefi</strong></label>
+                                    <div class="col-sm-10 d-flex align-items-center">
+                                        <div class="checkbox-fade fade-in-primary">
+                                            <label>
+                                                <input type="checkbox" asp-for="IsEInvoiceUser" />
+                                                <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                <span>Evet, E-Fatura kullanıcısıdır.</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>ERP / Cari Kodu</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="ErpCode" placeholder="Logo, Mikro vb. cari kodu" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Durum</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="IsActive">
+                                            <option value="true">Aktif</option>
+                                            <option value="false">Pasif</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Notlar</strong></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" asp-for="Notes" rows="3" placeholder="Notlarım"></textarea>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sağ Sütun (Firma Logosu) -->
+                            <div class="col-sm-3">
+                                <div style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff; min-height: 200px;" class="d-flex flex-column align-items-center justify-content-center">
+                                    <h6 class="mb-3" style="font-weight: 600;"><strong>Firma Logosu</strong></h6>
+                                    
+                                    <img id="logoPreview" src="@(string.IsNullOrEmpty(Model?.LogoUrl) ? "" : Model.LogoUrl)" alt="Firma Logosu" style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 15px; border: 1px solid #eee; padding: 5px; background: white; display: @(string.IsNullOrEmpty(Model?.LogoUrl) ? "none" : "block");" />
+                                    
+                                    <div id="noLogoIcon" style="font-size: 50px; color: #ccc; margin-bottom: 10px; display: @(string.IsNullOrEmpty(Model?.LogoUrl) ? "block" : "none");"><i class="feather icon-image"></i></div>
+                                    <p id="noLogoText" class="text-muted" style="font-size: 12px; text-align: center; display: @(string.IsNullOrEmpty(Model?.LogoUrl) ? "block" : "none");">Henüz logo yüklenmedi.</p>
+                                    
+                                    <input type="file" id="logoFileInput" name="logoFile" class="form-control-file mt-2" style="font-size: 12px;" accept="image/*" />
+                                    <p class="text-muted mt-3" style="font-size: 11px; text-align: center;">Logoyu değiştirmek için yeni bir görsel seçin.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success" style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;"><i class="icofont icofont-check-circled"></i>@(isEdit ? "Güncelle" : "Kaydet")</button>
+                                        <a href="/Admin/Company/Index" class="btn btn-danger ml-2" style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;"><i class="icofont icofont-ui-close"></i>Vazgeç</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#logoFileInput').on('change', function(e) {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#logoPreview').attr('src', e.target.result).show();
+                        $('#noLogoIcon').hide();
+                        $('#noLogoText').hide();
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+    </script>
+}

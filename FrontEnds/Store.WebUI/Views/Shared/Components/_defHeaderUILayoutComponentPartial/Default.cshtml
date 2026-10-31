@@ -1,0 +1,1678 @@
+<div id="theme-section-header" class="theme-section">
+    <div data-section-id="header" data-section-type="header">
+        <header id="header" class="header position-lg-relative js-header-sticky" data-js-sticky="desktop_and_mobile"
+                data-js-desktop-sticky-sidebar="true">
+            <div class="d-none js-header-tape" data-js-show-once="true" data-js-delay="0" data-js-cookies-life="1">
+                <div class="header__tape d-flex py-5">
+                    <div class="container d-flex flex-center">
+                        <div class="position-relative d-flex align-items-start align-items-lg-center px-35">
+                            <p class="m-0 px-30 px-lg-0 text-center">SON FIRSAT: % 20 İndirim Fırsatını kaçırmayın</p>
+                            <i class="header__tape-close position-absolute right-0 cursor-pointer"
+                               data-js-action="close">
+                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                     class="icon icon-theme-190" viewBox="0 0 24 24">
+                                    <path d="M7.718 15.966a.65.65 0 0 1-.176-.449c0-.169.059-.318.176-.449l3.32-3.301-3.32-3.301a.65.65 0 0 1-.176-.449c0-.169.059-.318.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.131.176.28.176.449a.65.65 0 0 1-.176.449l-3.32 3.301 3.32 3.301c.117.131.176.28.176.449a.65.65 0 0 1-.176.449.846.846 0 0 1-.215.127.596.596 0 0 1-.468 0 .846.846 0 0 1-.215-.127l-3.301-3.32-3.301 3.32a.846.846 0 0 1-.215.127.596.596 0 0 1-.468 0 .813.813 0 0 1-.215-.127z"/>
+                                </svg>
+                            </i>
+                        </div>
+                    </div>
+                </div>
+                <div class="header__border border-bottom d-none d-lg-block"></div>
+            </div>
+            <div class="header__content" data-js-mobile-sticky>
+                <div class="header__line-top position-relative d-flex px-10 px-lg-0 py-lg-2">
+                    <div class="container d-flex align-items-center">
+                        <span class="header__btn-menu d-flex align-items-center d-lg-none mr-20 cursor-pointer js-popup-button"
+                              data-js-popup-button="navigation">
+                <i><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-191"
+                        viewBox="0 0 24 24"><path
+                        d="M3.438 5.479h17.375v1.25H3.438zM3.438 11.104h17.375v1.25H3.438zM3.438 16.729h17.375v1.25H3.438z"/></svg></i>
+            </span>
+                        <div class="header__logo header__logo--sticky-hidden d-flex align-items-center w-100"
+                             style="max-width: 64px;">
+                            <h1 class="logo h6 w-100 m-0 text-hide" itemscope itemtype="http://schema.org/Organization"
+                                data-js-sticky-replace-element="logo"><a href="/Default/Index" itemprop="url"
+                                                                         class="d-block text-hide">
+                            <img src="~/Images/Logolar/SEZADAN_seffaf.bmp" />
+
+
+
+                               
+
+
+                                shella-demo
+                            </a></h1>
+                        </div>
+                        <div class="header__sidebar d-flex align-items-center ml-auto">
+                            @{
+                                var isAuthenticated = User.Identity?.IsAuthenticated == true;
+                                var userName = isAuthenticated ? (User.Claims.FirstOrDefault(c => c.Type == "FirstName" || c.Type == "given_name" || c.Type.Contains("givenname") || c.Type == "name")?.Value ?? User.Identity?.Name ?? "Hesabım") : "Giriş Yap";
+                                var accountLink = isAuthenticated ? "/Hesabim/Index" : "/Uyelik/Index";
+                            }
+
+                            <!-- 1) Favorilerim (Wishlist) -->
+                            <div>
+                                <a href="#"
+                                   class="header__btn-wishlist d-flex align-items-center position-relative text-nowrap js-popup-button"
+                                   data-js-popup-button="wishlist" data-js-sticky-replace-element="wishlist"
+                                   data-js-tooltip
+                                   data-tippy-content="Favoriler"
+                                   data-tippy-placement="bottom"
+                                   data-tippy-distance="6">
+                                    <i class="mr-lg-7">
+                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                             class="icon icon-theme-180" viewBox="0 0 24 24">
+                                            <path d="M21.486 6.599a5.661 5.661 0 0 0-1.25-1.865c-.56-.56-1.191-.979-1.895-1.26a5.77 5.77 0 0 0-4.326 0c-.71.28-1.345.7-1.904 1.26-.026.039-.056.075-.088.107l-.107.107-.107-.107a.706.706 0 0 1-.088-.107c-.56-.56-1.194-.979-1.904-1.26s-1.433-.42-2.168-.42-1.455.14-2.158.42-1.335.7-1.895 1.26c-.547.546-.964 1.168-1.25 1.865s-.43 1.429-.43 2.197.144 1.501.43 2.197.703 1.318 1.25 1.865l7.871 7.871c.003.003.007.004.011.006l.439.436.439-.437c.003-.002.007-.003.01-.006l7.871-7.871c.547-.547.964-1.169 1.25-1.865s.43-1.429.43-2.197-.145-1.5-.431-2.196zm-1.162 3.916a4.436 4.436 0 0 1-.967 1.445l-7.441 7.441-7.441-7.441c-.417-.417-.739-.898-.967-1.445s-.342-1.12-.342-1.719.114-1.172.342-1.719.55-1.035.967-1.465c.442-.43.94-.755 1.494-.977s1.116-.332 1.689-.332a4.496 4.496 0 0 1 3.467 1.641c.098.117.186.241.264.371.117.169.293.254.527.254s.41-.085.527-.254c.078-.13.166-.254.264-.371s.198-.228.303-.332a4.5 4.5 0 0 1 3.164-1.309c.573 0 1.136.11 1.689.332s1.052.547 1.494.977c.417.43.739.918.967 1.465s.342 1.12.342 1.719-.114 1.172-.342 1.719z"/>
+                                        </svg>
+                                    </i>
+                                    <span class="d-none d-lg-inline mt-lg-3" data-js-wishlist-count-desktop="0">Favorilerim (0)</span>
+                                    <span class="header__counter d-lg-none" data-js-wishlist-count="0">0</span>
+                                </a>
+                            </div>
+
+                            <!-- 2) Sepetim (Cart / Bag) - 2 karakter mesafe -->
+                            <div style="margin-left: 14px;">
+                                <a href="/Sepetim/Index"
+                                   class="header__btn-cart position-relative d-flex align-items-center text-nowrap js-popup-button"
+                                   data-js-popup-button="cart" data-js-sticky-replace-element="cart">
+                                    <i class="mr-lg-7">
+                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                             class="icon icon-theme-109" viewBox="0 0 24 24">
+                                            <path d="M19.884 21.897a.601.601 0 0 1-.439.186h-15a.6.6 0 0 1-.439-.186.601.601 0 0 1-.186-.439v-15a.6.6 0 0 1 .186-.439.601.601 0 0 1 .439-.186h3.75c0-1.028.368-1.911 1.104-2.646.735-.735 1.618-1.104 2.646-1.104s1.911.368 2.646 1.104c.735.736 1.104 1.618 1.104 2.646h3.75a.6.6 0 0 1 .439.186.601.601 0 0 1 .186.439v15a.604.604 0 0 1-.186.439zM18.819 7.083h-3.125v2.5a.598.598 0 0 1-.186.439c-.124.124-.271.186-.439.186s-.315-.062-.439-.186a.6.6 0 0 1-.186-.439v-2.5h-5v2.5a.598.598 0 0 1-.186.439c-.124.124-.271.186-.439.186s-.315-.062-.439-.186a.6.6 0 0 1-.186-.439v-2.5H5.069v13.75h13.75V7.083zm-8.642-3.018a2.409 2.409 0 0 0-.733 1.768h5c0-.69-.244-1.279-.732-1.768s-1.077-.732-1.768-.732-1.279.244-1.767.732z"/>
+                                        </svg>
+                                    </i>
+                                    <span class="d-none d-lg-inline mt-lg-3"
+                                          data-js-cart-count-desktop="0">Sepetim (0)</span>
+                                    <span class="header__counter d-lg-none" data-js-cart-count-mobile="0">0</span>
+                                </a>
+                            </div>
+
+
+
+                            <!-- 3) Kullanıcı Hesabı (Gökmen / Giriş Yap) -->
+                            <div class="ml-25 ml-lg-15">
+                                @if (!isAuthenticated)
+                                {
+                                    <a href="@accountLink"
+                                       class="header__btn-account d-flex align-items-center position-relative"
+                                       data-js-tooltip
+                                       data-tippy-content="Giriş Yap / Üye Ol"
+                                       data-tippy-placement="bottom"
+                                       data-tippy-distance="6">
+                                        <span class="mr-2" style="font-size: 14px; font-weight: bold; margin-right: 5px;">@userName</span>
+                                        <i>
+                                            <svg aria-hidden="true" focusable="false" role="presentation"
+                                                 class="icon icon-theme-201" viewBox="0 0 24 24">
+                                                <path d="M4.023 22.167h-1.25v-.625c0-1.042.163-2.034.488-2.979a9.524 9.524 0 0 1 1.357-2.588 9.366 9.366 0 0 1 2.061-2.031 9.58 9.58 0 0 1 2.598-1.328 5.588 5.588 0 0 1-1.992-2.002 5.413 5.413 0 0 1-.762-2.822c0-.781.146-1.51.439-2.188A5.707 5.707 0 0 1 9.96 2.606c.677-.293 1.406-.439 2.188-.439s1.51.146 2.188.439a5.724 5.724 0 0 1 2.998 2.998c.293.677.439 1.406.439 2.188 0 1.029-.254 1.97-.762 2.822a5.588 5.588 0 0 1-1.992 2.002 9.623 9.623 0 0 1 2.598 1.328 9.41 9.41 0 0 1 3.418 4.619c.325.944.488 1.937.488 2.979v.625h-1.25v-.625c0-1.12-.212-2.174-.635-3.164A8.172 8.172 0 0 0 17.9 15.79a8.172 8.172 0 0 0-2.588-1.738 7.966 7.966 0 0 0-3.164-.635c-1.12 0-2.175.212-3.164.635a8.15 8.15 0 0 0-2.588 1.738 8.155 8.155 0 0 0-1.738 2.588 7.966 7.966 0 0 0-.635 3.164v.625zM8.115 9.491a4.364 4.364 0 0 0 2.334 2.334 4.28 4.28 0 0 0 1.699.342 4.375 4.375 0 0 0 4.033-2.676 4.28 4.28 0 0 0 .342-1.699 4.28 4.28 0 0 0-.342-1.699 4.392 4.392 0 0 0-.938-1.396 4.4 4.4 0 0 0-1.396-.937 4.284 4.284 0 0 0-1.699-.342c-.599 0-1.166.114-1.699.342-.534.228-1 .541-1.396.937-.397.397-.71.863-.938 1.396a4.28 4.28 0 0 0-.342 1.699c0 .599.114 1.165.342 1.699z"/>
+                                            </svg>
+                                        </i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="position-lg-relative d-none d-lg-block">
+                                        <div class="js-position js-dropdown js-account-list" data-js-position-name="account-menu">
+                                            <div class="header__btn-account position-relative d-none d-lg-flex align-items-lg-center cursor-pointer"
+                                                 data-js-dropdown-button
+                                                 data-js-tooltip
+                                                 data-tippy-content="Hesabınız"
+                                                 data-tippy-placement="bottom"
+                                                 data-tippy-distance="6">
+                                                <span class="mr-2" style="font-size: 14px; font-weight: bold; margin-right: 5px;">@userName</span>
+                                                <i>
+                                                    <svg aria-hidden="true" focusable="false" role="presentation"
+                                                         class="icon icon-theme-201" viewBox="0 0 24 24">
+                                                        <path d="M4.023 22.167h-1.25v-.625c0-1.042.163-2.034.488-2.979a9.524 9.524 0 0 1 1.357-2.588 9.366 9.366 0 0 1 2.061-2.031 9.58 9.58 0 0 1 2.598-1.328 5.588 5.588 0 0 1-1.992-2.002 5.413 5.413 0 0 1-.762-2.822c0-.781.146-1.51.439-2.188A5.707 5.707 0 0 1 9.96 2.606c.677-.293 1.406-.439 2.188-.439s1.51.146 2.188.439a5.724 5.724 0 0 1 2.998 2.998c.293.677.439 1.406.439 2.188 0 1.029-.254 1.97-.762 2.822a5.588 5.588 0 0 1-1.992 2.002 9.623 9.623 0 0 1 2.598 1.328 9.41 9.41 0 0 1 3.418 4.619c.325.944.488 1.937.488 2.979v.625h-1.25v-.625c0-1.12-.212-2.174-.635-3.164A8.172 8.172 0 0 0 17.9 15.79a8.172 8.172 0 0 0-2.588-1.738 7.966 7.966 0 0 0-3.164-.635c-1.12 0-2.175.212-3.164.635a8.15 8.15 0 0 0-2.588 1.738 8.155 8.155 0 0 0-1.738 2.588 7.966 7.966 0 0 0-.635 3.164v.625zM8.115 9.491a4.364 4.364 0 0 0 2.334 2.334 4.28 4.28 0 0 0 1.699.342 4.375 4.375 0 0 0 4.033-2.676 4.28 4.28 0 0 0 .342-1.699 4.28 4.28 0 0 0-.342-1.699 4.392 4.392 0 0 0-.938-1.396 4.4 4.4 0 0 0-1.396-.937 4.284 4.284 0 0 0-1.699-.342c-.599 0-1.166.114-1.699.342-.534.228-1 .541-1.396.937-.397.397-.71.863-.938 1.396a4.28 4.28 0 0 0-.342 1.699c0 .599.114 1.165.342 1.699z"/>
+                                                        </svg>
+                                                    </i>
+                                                    <i class="ml-1">
+                                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                        </svg>
+                                                    </i>
+                                                </div>
+                                                <div class="header__dropdown dropdown d-lg-none position-lg-absolute top-lg-100 right-lg-0"
+                                                     data-js-dropdown>
+                                                    <ul class="list-unstyled w-100 px-15 py-30 py-lg-15">
+                                                        <li><a href="/Hesabim/Index">Hesabım</a></li>
+                                                        <li><a href="/Hesabim/Favorilerim">Favorilerim</a></li>
+                                                        <li><a href="/Sepetim/Index">Sepetim</a></li>
+                                                        <li><a href="/Uyelik/Logout">Hesaptan Çık</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Mobile account link (Authenticated) -->
+                                        <a href="@accountLink"
+                                           class="header__btn-account d-flex d-lg-none align-items-center position-relative"
+                                           data-js-tooltip
+                                           data-tippy-content="Hesabınız"
+                                           data-tippy-placement="bottom"
+                                           data-tippy-distance="6">
+                                            <span class="mr-2" style="font-size: 14px; font-weight: bold; margin-right: 5px;">@userName</span>
+                                            <i>
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-201" viewBox="0 0 24 24">
+                                                    <path d="M4.023 22.167h-1.25v-.625c0-1.042.163-2.034.488-2.979a9.524 9.524 0 0 1 1.357-2.588 9.366 9.366 0 0 1 2.061-2.031 9.58 9.58 0 0 1 2.598-1.328 5.588 5.588 0 0 1-1.992-2.002 5.413 5.413 0 0 1-.762-2.822c0-.781.146-1.51.439-2.188A5.707 5.707 0 0 1 9.96 2.606c.677-.293 1.406-.439 2.188-.439s1.51.146 2.188.439a5.724 5.724 0 0 1 2.998 2.998c.293.677.439 1.406.439 2.188 0 1.029-.254 1.97-.762 2.822a5.588 5.588 0 0 1-1.992 2.002 9.623 9.623 0 0 1 2.598 1.328 9.41 9.41 0 0 1 3.418 4.619c.325.944.488 1.937.488 2.979v.625h-1.25v-.625c0-1.12-.212-2.174-.635-3.164A8.172 8.172 0 0 0 17.9 15.79a8.172 8.172 0 0 0-2.588-1.738 7.966 7.966 0 0 0-3.164-.635c-1.12 0-2.175.212-3.164.635a8.15 8.15 0 0 0-2.588 1.738 8.155 8.155 0 0 0-1.738 2.588 7.966 7.966 0 0 0-.635 3.164v.625zM8.115 9.491a4.364 4.364 0 0 0 2.334 2.334 4.28 4.28 0 0 0 1.699.342 4.375 4.375 0 0 0 4.033-2.676 4.28 4.28 0 0 0 .342-1.699 4.28 4.28 0 0 0-.342-1.699 4.392 4.392 0 0 0-.938-1.396 4.4 4.4 0 0 0-1.396-.937 4.284 4.284 0 0 0-1.699-.342c-.599 0-1.166.114-1.699.342-.534.228-1 .541-1.396.937-.397.397-.71.863-.938 1.396a4.28 4.28 0 0 0-.342 1.699c0 .599.114 1.165.342 1.699z"/>
+                                                </svg>
+                                            </i>
+                                        </a>
+                                    }
+                                </div>
+
+
+@* 
+                            <div class="position-lg-relative d-none d-lg-block ml-lg-15"
+                                 data-js-position-desktop="currencies">
+                                <div class="js-position js-dropdown js-currencies-list"
+                                     data-js-position-name="currencies">
+                                    <div class="header__btn-currency position-relative d-none d-lg-flex align-items-lg-center cursor-pointer"
+                                         data-js-dropdown-button>
+                                        <span class="mt-lg-3" data-current-currency>US($)</span><i>
+                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                        </svg>
+                                    </i></div>
+                                    <div class="header__dropdown dropdown d-lg-none position-lg-absolute top-lg-100 right-lg-0"
+                                         data-js-dropdown>
+                                        <ul class="list-unstyled w-100 px-15 py-30 py-lg-15">
+                                            <li class="active" data-button-name="US($)" data-currency-code="USD"><a
+                                                    href="#USD">USD - US Dollar</a></li>
+                                            <li data-button-name="UE(€)" data-currency-code="EUR"><a href="#EUR">EUR -
+                                                Euro</a></li>
+                                            <li data-button-name="BP(£)" data-currency-code="GBP"><a href="#GBP">GBP -
+                                                British Pound</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            <div class="position-lg-relative d-none d-lg-block ml-lg-15"
+                                 data-js-position-desktop="languages">
+                                <div class="js-position js-dropdown js-languages-list"
+                                     data-js-position-name="languages">
+                                    <div class="header__btn-language position-relative d-none d-lg-flex align-items-lg-center cursor-pointer"
+                                         data-js-dropdown-button=""><span class="mt-lg-3">English</span> <i>
+                                        <svg aria-hidden="true" focusable="false" role="presentation"
+                                             class="icon icon-theme-229" viewBox="0 0 24 24">
+                                            <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"></path>
+                                        </svg>
+                                    </i></div>
+                                    <div class="header__dropdown dropdown d-lg-none position-lg-absolute top-lg-100 right-lg-0"
+                                         data-js-dropdown="">
+                                        <ul class="list-unstyled w-100 px-15 pb-30 py-lg-15">
+                                            <li class="active" data-l="en"><span>English</span></li>
+                                            <li data-l="fr"><span>Français</span></li>
+                                            <li data-l="de"><span>Deutsch</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+*@
+
+                        </div>
+                    </div>
+                </div>
+                <div class="header__border border-bottom d-none d-lg-block"></div>
+                <div data-js-desktop-sticky>
+                    <div class="header__line-bottom position-relative d-lg-flex py-lg-6">
+                        <div class="header__sticky-logo d-none align-items-lg-center w-100 h-100 header__sticky-logo--displaced position-absolute top-0 left-0 py-6 ml-15"
+                             data-js-sticky-replace-here="logo" style="max-width: 64px;"></div>
+                        <div class="container d-lg-flex">
+                            <div class="header__nav d-none d-lg-flex" data-js-position-desktop="menu">
+                                <nav class="menu js-menu js-position" data-js-position-name="menu">
+                                    <div class="menu__panel menu__list menu__level-01 d-flex flex-column flex-lg-row flex-lg-wrap menu__panel--bordered">
+                                        <div class="menu__curtain d-none position-lg-absolute"></div>
+                                        <div class="menu__item menu__item--has-children">
+                                
+                                            <a href="index.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Layouts</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__megamenu d-lg-none position-lg-absolute">
+                                                <div class="container py-lg-40">
+                                                    <div class="menu__grid menu__list menu__level-02 row">
+                                
+                                
+                                                        <div class="menu__item menu__back d-lg-none"><a
+                                                                href="index.html">Layouts</a>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-3">
+                                
+                                                            <a href="index.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Frontpage Layouts</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="index.html">Frontpage
+                                                                    Layouts</a></div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="index.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V1</span><span
+                                                                                class="menu__label menu__label--hot px-3 ml-5 order-1">HOT</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-02.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V2</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-03.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V3</span><span
+                                                                                class="menu__label menu__label--hot px-3 ml-5 order-1">HOT</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-04.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V4</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-05.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V5</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-06.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V6</span><span
+                                                                                class="menu__label menu__label--hot px-3 ml-5 order-1">HOT</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-07.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V7</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-08.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V8</span><span
+                                                                                class="menu__label menu__label--new px-3 ml-5 order-1">SLIDER</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-09.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V9</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-10.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V10</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="index-11.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V11</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-12.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V12</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-13.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V13</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-14.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V14</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="index-15.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Home V15</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-1 d-none d-lg-block mb-lg-30">
+                                                        </div>
+                                                        <div class="col-lg-4 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                            <div class="promobox promobox--type-01 d-flex flex-column align-items-center text-center">
+                                                                <a href="collection.html" class="w-100">
+                                
+                                                                    <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:72.97297297297297%;">
+                                                                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                 data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/01_77aed88e-38bb-4f19-a1e3-7d99dccda052_{width}x.progressive.png.jpg?v=1552403452"
+                                                                                 data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                 data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/01_77aed88e-38bb-4f19-a1e3-7d99dccda052_400x.progressive.png.jpg?v=1552403452 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/01_77aed88e-38bb-4f19-a1e3-7d99dccda052_400x@2x.progressive.png.jpg?v=1552403452 2x"
+                                
+                                
+                                                                                 data-scale-perspective="1.1"
+                                
+                                                                                 alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </a><a href="collection.html"
+                                                                       class="promobox__text-line-01 mt-15"><p
+                                                                    class="h5 mb-0">NEW IN</p></a><a
+                                                                    href="collection.html"><p
+                                                                    class="promobox__text-line-02 m-0">Spring/Summer
+                                                                2019 Collection</p></a></div>
+                                                        </div>
+                                                        <div class="col-lg-4 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                            <div class="promobox promobox--type-01 d-flex flex-column align-items-center text-center">
+                                                                <a href="collection.html" class="w-100">
+                                
+                                                                    <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:72.97297297297297%;">
+                                                                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                 data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/02_94da7ef8-77bf-4355-9c75-dddabfa361b3_{width}x.progressive.png.jpg?v=1552403485"
+                                                                                 data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                 data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/02_94da7ef8-77bf-4355-9c75-dddabfa361b3_400x.progressive.png.jpg?v=1552403485 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/02_94da7ef8-77bf-4355-9c75-dddabfa361b3_400x@2x.progressive.png.jpg?v=1552403485 2x"
+                                
+                                
+                                                                                 data-scale-perspective="1.1"
+                                
+                                                                                 alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </a><a href="collection.html"
+                                                                       class="promobox__text-line-01 mt-15"><p
+                                                                    class="h5 mb-0">SALE & SPECIAL OFFERS</p></a><a
+                                                                    href="collection.html"><p
+                                                                    class="promobox__text-line-02 m-0">Get up to 20%
+                                                                off</p></a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children">
+                                
+                                            <a href="collection.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Shop</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__megamenu d-lg-none position-lg-absolute">
+                                                <div class="container py-lg-40">
+                                                    <div class="menu__grid menu__list menu__level-02 row">
+                                
+                                
+                                                        <div class="menu__item menu__back d-lg-none"><a
+                                                                href="collection.html">Shop</a></div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Collection Layouts</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Collection Layouts</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-list.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>List Collection V1</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-list-02.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>List Collections V2</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-2-products-per-row.html?products-view=reset"
+                                                                                class="d-flex align-items-center px-lg-5"><span>2 Products per Row</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html?products-view=reset"
+                                                                                class="d-flex align-items-center px-lg-5"><span>3 Products per Row</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-4-products-per-row.html?products-view=reset"
+                                                                                class="d-flex align-items-center px-lg-5"><span>4 Products per Row</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-list-products.html?products-view=reset"
+                                                                                class="d-flex align-items-center px-lg-5"><span>List Products</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-left-sidebar.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Left Sidebar</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-right-sidebar.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Right Sidebar</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-without-sidebar.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Without Sidebar</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-without-sidebar-with-banner.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Without Sidebar with Banner</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-look-book.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Look Book</span><span
+                                                                                class="menu__label menu__label--hot px-3 ml-5 order-1">HOT</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-look-book-02.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Look Book V2</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection-catalog-mode.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Catalog Mode</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="product.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Single Product Layouts</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="product.html">Single Product Layouts</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="product.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V1 — Classic</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-02.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V2 — Thumbs List</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-03.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V3 — 3 Columns</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-04.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V4 — Sticky Side</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-06.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V6 — Slider</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-02-with-column.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V2 — With Column</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="product-with-column.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Product V1 — With Column</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="other-login.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>User Account Pages</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="other-login.html">User Account Pages</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item">
+                                                                            <a href="other-login.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Login</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="other-register.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Register</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="other-account.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Account</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="/Sepetim/Index"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Cart</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="other-wishlist.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Wishlist</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="other-compare.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Compare</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item">
+                                                                            <a href="other-search.html"
+                                                                               class="d-flex align-items-center px-lg-5"><span>Search</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 d-none d-lg-block mb-lg-30"><a
+                                                                href="product.html"
+                                                                class="menu__title mb-lg-10">Featured products</a>
+                                                            <div class="menu__products row">
+                                                                <div class="col-lg-6">
+                                
+                                                                    <div class="product-search d-flex flex-row flex-lg-column align-items-start align-items-lg-stretch mb-10">
+                                                                        <div class="product-search__image position-relative mr-10 mr-lg-0">
+                                                                            <a href="product.html"
+                                                                               class="d-block">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:128.2307692%;">
+                                                                                    <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                         data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_{width}x.progressive.jpg?v=1542543797"
+                                                                                         data-aspect-ratio="0.7798440311937612"
+                                
+                                
+                                                                                         data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_200x.progressive.jpg?v=1542543797 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/products/3410534250_1_1_1_67eb2dce-35d8-4dfa-8d93-fee6c4b56c49_200x@2x.progressive.jpg?v=1542543797 2x"
+                                
+                                
+                                                                                         alt="Blend Field Jacket">
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="product-search__content d-flex flex-column align-items-start mt-lg-15">
+                                                                            <div class="product-search__title mb-3">
+                                                                                <h3 class="h6 m-0">
+                                                                                    <a href="product.html">Blend
+                                                                                        Field Jacket</a>
+                                                                                </h3>
+                                                                            </div>
+                                                                            <div class="product-search__price mb-10">
+                                                                                                                <span class="price"
+                                                                                                                      data-js-product-price><span><span
+                                                                                                                        class=money>$470.00</span></span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                
+                                                                    <div class="product-search d-flex flex-row flex-lg-column align-items-start align-items-lg-stretch mb-10">
+                                                                        <div class="product-search__image position-relative mr-10 mr-lg-0">
+                                                                            <a href="product.html"
+                                                                               class="d-block">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:128.2307692%;">
+                                                                                    <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                         data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_{width}x.progressive.jpg?v=1543244602"
+                                                                                         data-aspect-ratio="0.7798440311937612"
+                                
+                                
+                                                                                         data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_200x.progressive.jpg?v=1543244602 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/products/2121900600_2_3_1_86b90065-d75b-4519-a95e-a02ae468f4e9_200x@2x.progressive.jpg?v=1543244602 2x"
+                                
+                                
+                                                                                         alt="Jersey Graphic Tee">
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="product-search__content d-flex flex-column align-items-start mt-lg-15">
+                                                                            <div class="product-search__title mb-3">
+                                                                                <h3 class="h6 m-0">
+                                                                                    <a href="product.html">Jersey
+                                                                                        Graphic Tee</a>
+                                                                                </h3>
+                                                                            </div>
+                                                                            <div class="product-search__price mb-10">
+                                                                                                                <span class="price"
+                                                                                                                      data-js-product-price><span><span
+                                                                                                                        class=money>$330.00</span></span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2 d-none d-lg-block mb-lg-30"><a
+                                                                href="collection.html" class="menu__title mb-lg-10">Top
+                                                            brands</a>
+                                                            <div class="menu__group menu__group--offset-small row">
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand1_{width}x.png?v=1540454668"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand1_80x.png?v=1540454668 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand1_80x@2x.png?v=1540454668 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand2_{width}x.png?v=1540454864"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand2_80x.png?v=1540454864 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand2_80x@2x.png?v=1540454864 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand3_{width}x.png?v=1540454883"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand3_80x.png?v=1540454883 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand3_80x@2x.png?v=1540454883 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand4_{width}x.png?v=1540454899"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand4_80x.png?v=1540454899 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand4_80x@2x.png?v=1540454899 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand5_{width}x.png?v=1540454917"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand5_80x.png?v=1540454917 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand5_80x@2x.png?v=1540454917 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block px-lg-5 mb-lg-10">
+                                
+                                
+                                                                    <div class="promobox promobox--type-03 d-flex justify-content-center">
+                                                                        <a href="collection.html"
+                                                                           class="image-animation-trigger position-relative w-100">
+                                
+                                                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                                                <div class="rimage"
+                                                                                     style="padding-top:100.0%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                        class="rimage__img rimage__img--fade-in lazyload"
+                                                                                        data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand6_{width}x.png?v=1540454931"
+                                                                                        data-aspect-ratio="1.0"
+                                
+                                
+                                                                                        data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand6_80x.png?v=1540454931 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/brand6_80x@2x.png?v=1540454931 2x"
+                                
+                                
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promobox__border absolute-stretch"></div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children position-lg-relative">
+                                
+                                            <a href="blog.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Blog</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__dropdown d-lg-none position-lg-absolute">
+                                                <div class="menu__list menu__list--styled menu__level-02 menu__level-02 p-lg-20">
+                                                    <div class="menu__item menu__back d-lg-none"><a href="blog.html">Blog</a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="blog.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Blog V1 — Classic</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="blog-02.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Blog V2 — Grid</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="blog-03.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Blog V3 — Masonry</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="blog-04.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Blog V4 — With Sidebar</span></a>
+                                                    </div>
+                                                    <div class="menu__item menu__item--has-children position-lg-relative">
+                                                        <a href="blog-post.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Single Post</span>
+                                                            <i class="ml-auto">
+                                                                <svg aria-hidden="true" focusable="false"
+                                                                     role="presentation" class="icon icon-theme-231"
+                                                                     viewBox="0 0 24 24">
+                                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                </svg>
+                                                            </i></a>
+                                                        <div class="menu__list menu__level-03 position-lg-absolute p-lg-15">
+                                                            <div class="menu__item menu__back d-lg-none"><a
+                                                                    href="blog-post.html">Single
+                                                                Post</a></div>
+                                                            <div class="menu__item"><a
+                                                                    href="blog-post.html"
+                                                                    class="d-flex align-items-center px-lg-5"><span>Default</span></a>
+                                                            </div>
+                                                            <div class="menu__item"><a
+                                                                    href="blog-post-02.html"
+                                                                    class="d-flex align-items-center px-lg-5"><span>With Video</span></a>
+                                                            </div>
+                                                            <div class="menu__item"><a
+                                                                    href="blog-post-03.html"
+                                                                    class="d-flex align-items-center px-lg-5"><span>With Image Slider</span></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children position-lg-relative">
+                                
+                                            <a href="gallery.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Gallery</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__dropdown d-lg-none position-lg-absolute">
+                                                <div class="menu__list menu__list--styled menu__level-02 menu__level-02 p-lg-20">
+                                                    <div class="menu__item menu__back d-lg-none"><a
+                                                            href="gallery.html">Gallery</a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="gallery.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Gallery V1 — Masonry (3 Col)</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="gallery-02.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Gallery V2 — Masonry (4 Col)</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="gallery-03.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Gallery V3 — Grid (3 in row)</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="gallery-04.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Gallery V4 — Grid (4 in row)</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children position-lg-relative">
+                                
+                                            <a href="page-about-us.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Pages</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__dropdown d-lg-none position-lg-absolute">
+                                                <div class="menu__list menu__list--styled menu__level-02 menu__level-02 p-lg-20">
+                                                    <div class="menu__item menu__back d-lg-none"><a
+                                                            href="page-about-us.html">Pages</a></div>
+                                                    <div class="menu__item">
+                                                        <a href="page-about-us.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>About Us</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-customer-service.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Customer Service</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-sizing-guide.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Sizing Guide</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-faqs.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>FAQs</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-contact-us.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Contact Us</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-coming-soon.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Coming Soon</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-privacy-policy.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Privacy Policy</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-cookie-policy.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Cookie Policy</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-404.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Page 404</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-style.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Style</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="page-icons.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Icons</span></a>
+                                                    </div>
+                                                    <div class="menu__item">
+                                                        <a href="../../html-documentation/index.html"
+                                                           class="d-flex align-items-center px-lg-5"><span>Documentation</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children">
+                                
+                                            <a href="collection.html"
+                                               class="d-flex align-items-center px-lg-7"><span>Women's</span> <i
+                                                    class="d-none d-lg-inline position-lg-relative">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                    <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                </svg>
+                                            </i><i class="d-lg-none ml-auto">
+                                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                                     class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                    <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                </svg>
+                                            </i></a>
+                                            <div class="menu__megamenu d-lg-none position-lg-absolute">
+                                                <div class="container py-lg-40">
+                                                    <div class="menu__grid menu__list menu__level-02 row">
+                                
+                                
+                                                        <div class="menu__item menu__back d-lg-none"><a
+                                                                href="collection.html">Women's</a></div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Clothing</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Clothing</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Coats</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Jackets</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Blazers</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Dresses</span><span
+                                                                                class="menu__label menu__label--new px-3 ml-5 order-1">NEW</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Playsuits & Jumpsuits</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Trousers</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Jeans</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Knitwear</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Sweatshirts & Hoodies</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>T-Shirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Bodysuits</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Shirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Skirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Shorts</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Shoes</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Shoes</a></div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Trainers</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Boots & Ankle Boots</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Heels</span><span
+                                                                                class="menu__label menu__label--hot px-3 ml-5 order-1">HOT</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Flats</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Platforms</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Heeled Sandals</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Accessories</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Accessories</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Bags</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Backpacks</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Glasses</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Jewellery</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Earrings</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>iPhone Cases</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Gadgets</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Hats & Beanie</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Purses</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Belts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Socks</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 d-none d-lg-block mb-lg-30">
+                                                            <div class="menu__group row">
+                                                                <div class="col-lg-6 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                                    <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                                        <div class="w-100">
+                                                                            <a href="collection.html" class="w-100">
+                                
+                                                                                <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                                    <div class="rimage"
+                                                                                         style="padding-top:72.97297297297297%;">
+                                                                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                             data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/04_2f27b276-6fed-4f96-8559-7b6b8c57af0e_{width}x.progressive.png.jpg?v=1552403570"
+                                                                                             data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                             data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/04_2f27b276-6fed-4f96-8559-7b6b8c57af0e_400x.progressive.png.jpg?v=1552403570 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/04_2f27b276-6fed-4f96-8559-7b6b8c57af0e_400x@2x.progressive.png.jpg?v=1552403570 2x"
+                                
+                                
+                                                                                             data-scale-perspective="1.1"
+                                
+                                                                                             alt="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                            <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                                <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                                    NEW IN</p>
+                                                                                <p class="promobox__text-line-02 position-relative m-0">
+                                                                                    Spring/Summer 2019 Collection</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                                    <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                                        <div class="w-100">
+                                                                            <a href="collection.html" class="w-100">
+                                
+                                                                                <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                                    <div class="rimage"
+                                                                                         style="padding-top:72.97297297297297%;">
+                                                                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                             data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/03_4780b01c-0a2c-4054-b73e-f7611bccd652_{width}x.progressive.png.jpg?v=1552403582"
+                                                                                             data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                             data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/03_4780b01c-0a2c-4054-b73e-f7611bccd652_400x.progressive.png.jpg?v=1552403582 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/03_4780b01c-0a2c-4054-b73e-f7611bccd652_400x@2x.progressive.png.jpg?v=1552403582 2x"
+                                
+                                
+                                                                                             data-scale-perspective="1.1"
+                                
+                                                                                             alt="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                            <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                                <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                                    SALE & SPECIAL OFFERS</p>
+                                                                                <p class="promobox__text-line-02 position-relative m-0">
+                                                                                    Get up to 20% off</p></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                                    <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                                        <div class="w-100">
+                                                                            <a href="collection.html" class="w-100">
+                                
+                                                                                <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                                    <div class="rimage"
+                                                                                         style="padding-top:72.97297297297297%;">
+                                                                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                             data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/06_de144e07-89ea-473c-bfa4-ce41f091ba0b_{width}x.progressive.png.jpg?v=1552403597"
+                                                                                             data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                             data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/06_de144e07-89ea-473c-bfa4-ce41f091ba0b_400x.progressive.png.jpg?v=1552403597 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/06_de144e07-89ea-473c-bfa4-ce41f091ba0b_400x@2x.progressive.png.jpg?v=1552403597 2x"
+                                
+                                
+                                                                                             data-scale-perspective="1.1"
+                                
+                                                                                             alt="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                            <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                                <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                                    FEATURED</p>
+                                                                                <p class="promobox__text-line-02 position-relative m-0">
+                                                                                    Popular Items</p></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                                    <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                                        <div class="w-100">
+                                                                            <a href="collection.html" class="w-100">
+                                
+                                                                                <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                                    <div class="rimage"
+                                                                                         style="padding-top:72.97297297297297%;">
+                                                                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                                             data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/05_6cb404e2-636f-466d-88cf-13340b2c190a_{width}x.progressive.png.jpg?v=1552403608"
+                                                                                             data-aspect-ratio="1.3703703703703705"
+                                
+                                
+                                                                                             data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/05_6cb404e2-636f-466d-88cf-13340b2c190a_400x.progressive.png.jpg?v=1552403608 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/05_6cb404e2-636f-466d-88cf-13340b2c190a_400x@2x.progressive.png.jpg?v=1552403608 2x"
+                                
+                                
+                                                                                             data-scale-perspective="1.1"
+                                
+                                                                                             alt="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                            <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                                <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                                    COMING SOON</p>
+                                                                                <p class="promobox__text-line-02 position-relative m-0">
+                                                                                    Autumn 2019 Collection</p></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item menu__item--has-children">
+                                
+                                            <a href="collection.html" class="d-flex align-items-center px-lg-7"><span>Men's</span>
+                                                <i class="d-none d-lg-inline position-lg-relative">
+                                                    <svg aria-hidden="true" focusable="false" role="presentation"
+                                                         class="icon icon-theme-229" viewBox="0 0 24 24">
+                                                        <path d="M11.783 14.088l-3.75-3.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l3.301 3.32 3.301-3.32a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .841.841 0 0 1-.215-.127z"/>
+                                                    </svg>
+                                                </i><i class="d-lg-none ml-auto">
+                                                    <svg aria-hidden="true" focusable="false" role="presentation"
+                                                         class="icon icon-theme-231" viewBox="0 0 24 24">
+                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                    </svg>
+                                                </i></a>
+                                            <div class="menu__megamenu d-lg-none position-lg-absolute">
+                                                <div class="container py-lg-40">
+                                                    <div class="menu__grid menu__list menu__level-02 row">
+                                                        <div class="col-lg-3 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                            <div class="promobox promobox--type-01 d-flex flex-column align-items-center text-center">
+                                                                <a href="collection.html" class="w-100">
+                                
+                                                                    <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                        <div class="rimage"
+                                                                             style="padding-top:128.1481481%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                class="rimage__img rimage__img--fade-in lazyload"
+                                                                                data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_a2bc5350-5e78-460c-be3d-839d426fae28_{width}x.progressive.png.jpg?v=1552403624"
+                                                                                data-aspect-ratio="0.7803468208092486"
+                                
+                                
+                                                                                data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_a2bc5350-5e78-460c-be3d-839d426fae28_400x.progressive.png.jpg?v=1552403624 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/08_a2bc5350-5e78-460c-be3d-839d426fae28_400x@2x.progressive.png.jpg?v=1552403624 2x"
+                                
+                                
+                                                                                data-scale-perspective="1.1"
+                                
+                                                                                alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </a><a href="collection.html"
+                                                                       class="promobox__text-line-01 mt-15"><p
+                                                                    class="h5 mb-0">NEW IN</p></a><a
+                                                                    href="collection.html"><p
+                                                                    class="promobox__text-line-02 m-0">Spring/Summer
+                                                                2019 Collection</p></a></div>
+                                                        </div>
+                                
+                                                        <div class="menu__item menu__back d-lg-none"><a
+                                                                href="collection.html">Men's</a></div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Clothing</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a><a href="collection.html"
+                                                                           class="d-none d-lg-block mb-10">
+                                                            <div class="rimage" style="padding-top:72.94117647058825%;">
+                                                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                     data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/09_c7be3217-13ff-491e-ab9d-1254c9f909ce_{width}x.progressive.png.jpg?v=1552403647"
+                                                                     data-aspect-ratio="1.3709677419354838"
+                                
+                                
+                                                                     data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/09_c7be3217-13ff-491e-ab9d-1254c9f909ce_170x.progressive.png.jpg?v=1552403647 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/09_c7be3217-13ff-491e-ab9d-1254c9f909ce_170x@2x.progressive.png.jpg?v=1552403647 2x"
+                                
+                                
+                                                                     alt="">
+                                                            </div>
+                                                        </a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Clothing</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Coats</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Jackets</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Jeans</span><span
+                                                                                class="menu__label menu__label--sale px-3 ml-5 order-1">SALE</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>T-Shirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Sweatshirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Knitwear</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Shirts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Trousers</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Shorts</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Shoes</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a><a href="collection.html"
+                                                                           class="d-none d-lg-block mb-10">
+                                                            <div class="rimage" style="padding-top:72.94117647058825%;">
+                                                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                     data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/10_87681560-d4ea-462d-83fd-296a0417d5d6_{width}x.progressive.png.jpg?v=1552403657"
+                                                                     data-aspect-ratio="1.3709677419354838"
+                                
+                                
+                                                                     data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/10_87681560-d4ea-462d-83fd-296a0417d5d6_170x.progressive.png.jpg?v=1552403657 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/10_87681560-d4ea-462d-83fd-296a0417d5d6_170x@2x.progressive.png.jpg?v=1552403657 2x"
+                                
+                                
+                                                                     alt="">
+                                                            </div>
+                                                        </a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Shoes</a></div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Trainers</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Boots & Ankle Boots</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Shoes</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Sandals</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu__item menu__item--has-children col-lg-2">
+                                
+                                                            <a href="collection.html"
+                                                               class="menu__title d-flex align-items-center mb-lg-10"><span>Accessories</span>
+                                                                <i class="d-lg-none ml-auto">
+                                                                    <svg aria-hidden="true" focusable="false"
+                                                                         role="presentation" class="icon icon-theme-231"
+                                                                         viewBox="0 0 24 24">
+                                                                        <path d="M10.806 7.232l3.75 3.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-3.75 3.75a.877.877 0 0 1-.215.127.596.596 0 0 1-.468 0 .877.877 0 0 1-.215-.127.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l3.32-3.301L9.907 8.13a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.652.652 0 0 1 .449-.176c.169 0 .319.058.45.176z"/>
+                                                                    </svg>
+                                                                </i></a><a href="collection.html"
+                                                                           class="d-none d-lg-block mb-10">
+                                                            <div class="rimage" style="padding-top:72.94117647058825%;">
+                                                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--fade-in lazyload"
+                                                                     data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/11_9b629d9c-ffbe-4100-8413-5d12132122b8_{width}x.progressive.png.jpg?v=1552403665"
+                                                                     data-aspect-ratio="1.3709677419354838"
+                                
+                                
+                                                                     data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/11_9b629d9c-ffbe-4100-8413-5d12132122b8_200x.progressive.png.jpg?v=1552403665 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/11_9b629d9c-ffbe-4100-8413-5d12132122b8_200x@2x.progressive.png.jpg?v=1552403665 2x"
+                                
+                                
+                                                                     alt="">
+                                                            </div>
+                                                        </a>
+                                                            <div class="menu__list menu__level-03 row">
+                                                                <div class="menu__item menu__back d-lg-none"><a
+                                                                        href="collection.html">Accessories</a>
+                                                                </div>
+                                                                <div class="col-lg">
+                                                                    <div class="menu__list--styled">
+                                
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Backpacks</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Hats</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Belts</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Glasses</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Mobile Accessories</span></a>
+                                                                        </div>
+                                                                        <div class="menu__item"><a
+                                                                                href="collection.html"
+                                                                                class="d-flex align-items-center px-lg-5"><span>Socks</span></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 d-none d-lg-block mb-lg-30">
+                                
+                                
+                                                            <div class="promobox promobox--type-02 position-relative d-flex flex-column align-items-center text-center">
+                                                                <div class="w-100">
+                                                                    <a href="collection.html" class="w-100">
+                                
+                                                                        <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                                                            <div class="rimage"
+                                                                                 style="padding-top:128.1481481%;"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                                                                    class="rimage__img rimage__img--fade-in lazyload"
+                                                                                    data-master="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/07_6f8b51cb-d2f4-451e-bfee-32ab5d5e6645_{width}x.progressive.png.jpg?v=1552403636"
+                                                                                    data-aspect-ratio="0.7803468208092486"
+                                
+                                
+                                                                                    data-srcset="https://cdn.shopify.com/s/files/1/0026/2910/7764/files/07_6f8b51cb-d2f4-451e-bfee-32ab5d5e6645_400x.progressive.png.jpg?v=1552403636 1x, https://cdn.shopify.com/s/files/1/0026/2910/7764/files/07_6f8b51cb-d2f4-451e-bfee-32ab5d5e6645_400x@2x.progressive.png.jpg?v=1552403636 2x"
+                                
+                                
+                                                                                    data-scale-perspective="1.1"
+                                
+                                                                                    alt="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="promobox__plate position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                                                        <p class="promobox__text-line-01 h5 position-relative m-0">
+                                                                            SALE & SPECIAL OFFERS</p>
+                                                                        <p class="promobox__text-line-02 position-relative m-0">
+                                                                            Get up to 20% off</p></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                        <div class="menu__item ">
+                                
+                                            <a href="http://bit.ly/2UXO8zH"
+                                               class="d-flex align-items-center px-lg-7"><span>Buy Now!</span></a></div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <a href="search.html"
+                               class="header__btn-search d-none d-lg-flex align-items-lg-center ml-lg-auto js-popup-button"
+                               data-js-popup-button="navigation"><span class="mr-lg-7">SEARCH</span><i>
+                                <svg aria-hidden="true" focusable="false" role="presentation"
+                                     class="icon icon-theme-168" viewBox="0 0 24 24">
+                                    <path d="M13.261 2.475a8.177 8.177 0 0 1 2.588 1.738 8.172 8.172 0 0 1 1.738 2.588 7.97 7.97 0 0 1 .635 3.164 7.836 7.836 0 0 1-.527 2.861 8.355 8.355 0 0 1-1.426 2.412l4.902 4.902c.117.131.176.28.176.449s-.059.319-.176.449c-.065.052-.137.095-.215.127s-.156.049-.234.049-.156-.017-.234-.049-.149-.075-.215-.127l-4.902-4.902c-.703.6-1.507 1.074-2.412 1.426s-1.859.528-2.862.528a7.945 7.945 0 0 1-3.164-.635 8.144 8.144 0 0 1-2.588-1.738 8.15 8.15 0 0 1-1.738-2.588 7.962 7.962 0 0 1-.635-3.164 7.97 7.97 0 0 1 .635-3.164 8.172 8.172 0 0 1 1.738-2.588 8.15 8.15 0 0 1 2.588-1.738c.989-.423 2.044-.635 3.164-.635s2.174.212 3.164.635zM3.759 12.641c.358.834.85 1.563 1.475 2.188s1.354 1.117 2.188 1.475c.833.358 1.726.537 2.676.537s1.843-.179 2.676-.537c.833-.357 1.563-.85 2.188-1.475s1.116-1.354 1.475-2.188a6.705 6.705 0 0 0 .537-2.676c0-.95-.179-1.842-.537-2.676-.358-.833-.85-1.563-1.475-2.188s-1.354-1.116-2.188-1.475c-.835-.356-1.727-.536-2.677-.536s-1.843.18-2.676.537c-.833.358-1.563.85-2.188 1.475S4.117 6.456 3.759 7.289a6.694 6.694 0 0 0-.537 2.676c0 .951.178 1.843.537 2.676z"/>
+                                </svg>
+                            </i>
+                            </a>
+                        </div>
+                        <div class="header__sticky-sidebar position-absolute d-none align-items-lg-center top-0 right-0 h-100 mr-15">
+                            <div class="ml-lg-15" data-js-sticky-replace-here="wishlist"></div>
+                            <div class="ml-lg-15" data-js-sticky-replace-here="compare"></div>
+                            <div class="ml-lg-15" data-js-sticky-replace-here="cart"></div>
+                        </div>
+                    </div>
+                    <div class="header__border border-bottom d-none d-lg-block"></div>
+                </div>
+                <div class="header__border border-bottom d-lg-none"></div>
+            </div>
+        </header>
+    </div>
+
+    <script>Loader.require({
+        type: "script",
+        name: "sticky_header"
+    });
+    Loader.require({
+        type: "script",
+        name: "header"
+    });
+    </script>
+
+
+</div>

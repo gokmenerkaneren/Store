@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # -----------------------------------------------------
+  # 1. CATALOG MICROSERVICE DATABASE (MongoDB Replica Set)
+  # -----------------------------------------------------
+  catalogdb:
+    image: mongo:latest
+    container_name: store_catalogdb
+    ports: 
+      - "27018:27017"
+    # Replica Set 'rs0' olarak başlatılır. Multi-Document Transaction için zorunludur.
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - catalogdb_data:/data/db
+    restart: always
+
+  # MongoDB Replica Set'i (rs0) ilk ayağa kalktığında otomatik olarak başlatan (init) geçici servis.
+  mongo-init:
+    image: mongo:latest
+    depends_on:
+      - catalogdb
+    restart: "no"
+    command: >
+      bash -c "
+        sleep 5;
+        mongosh --host catalogdb:27017 --eval 'try { rs.status().ok } catch(e) { rs.initiate({_id: \"rs0\", members: [{_id: 0, host: \"catalogdb:27017\"}]}) }'
+      "
+
+  # -----------------------------------------------------
+  # 2. POSTGRESQL MICROSERVICE DATABASE (Multi-Database)
+  # -----------------------------------------------------
+  postgresdb:
+    image: postgres:16
+    container_name: store_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sa435558
+    ports: 
+      - "5434:5432"
+    volumes:
+      - postgresdb_data:/var/lib/postgresql/data
+      - ./Scripts/PostgreSQL:/docker-entrypoint-initdb.d
+    restart: always
+
+volumes:
+  catalogdb_data:
+  postgresdb_data:

@@ -1,0 +1,108 @@
+<!--  Ana Sayfa Slider Resimler ve Yazıları Burada hazırlanıyor. -->
+<div data-section-id="1551844786848" data-section-type="home-builder">
+    <div class="overflow-x-hidden">
+        <div class="row mt-0 mb-0 justify-content-start align-items-start">
+            <div class="col-12 col-md-12 mt-0 mb-0">
+                <div class="slider position-relative">
+                    <div class="slider__prev d-none d-lg-block position-absolute cursor-pointer"
+                         data-js-slider-prev>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation"
+                                 class="icon icon-theme-006" viewBox="0 0 24 24">
+                                <path d="M16.736 3.417a.652.652 0 0 1-.176.449l-8.32 8.301 8.32 8.301c.117.13.176.28.176.449s-.059.319-.176.449a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.93.93 0 0 1-.215-.127l-8.75-8.75a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449l8.75-8.75a.652.652 0 0 1 .449-.176c.169 0 .319.059.449.176.117.13.176.28.176.449z" />
+                            </svg>
+                        </i>
+                    </div>
+                    <div class="slider__slick"
+                         data-js-slider-slick
+                         data-arrows="true"
+                         data-bullets="true"
+                         data-speed="7">
+
+                        @model List<Store.DtoLayer.CatalogDtos.DefaultSlider1Dtos.ResultDefaultSlider1Dto>
+                        <!-- Veritabanından gelen dinamik slider içerikleri -->
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var slider in Model)
+                            {
+                                <div class="slider__slide">
+                                    <div class="promobox promobox--type-07 promobox--is-slider position-relative d-flex flex-column align-items-center text-center overflow-hidden">
+                                        <div class="image-animation-trigger w-100">
+                                            <div class="w-100">
+                                                <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                    <div class="rimage" style="min-height: 550px;">
+                                                        <div class="d-sm-none" style="padding-top: 550px;"></div>
+                                                        <div class="d-none d-sm-block d-md-none" style="padding-top: 550px;"></div>
+                                                        <div class="d-none d-md-block d-lg-none" style="padding-top: 550px;"></div>
+                                                        <div class="d-none d-lg-block d-xl-none" style="padding-top: 550px;"></div>
+                                                        <div class="d-none d-xl-block" style="padding-top: 550px;"></div>
+                                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="rimage__img rimage__img--cover rimage__img--fade-in lazyload w-100"
+                                                             data-master="@slider.ResimYolu"
+                                                             data-aspect-ratio="2"
+                                                             data-srcset="@slider.ResimYolu 1x, @slider.ResimYolu 2x"
+                                                             alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="promobox__content promobox__content--animation-scale-in absolute-stretch d-flex flex-column flex-center px-15 py-7 overflow-hidden">
+                                                <div class="promobox__content_inner position-absolute d-flex flex-column flex-center w-100"
+                                                     style="max-width: 650px; margin-top: -10px;">
+                                                    <div class="promo-text mx-auto" style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px;">
+                                                        <h1 class="mb-15 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">@slider.Baslik</h1>
+                                                        <h4 class="mb-25 text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">@slider.KisaAciklama</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <!-- Slider boşsa gösterilecek varsayılan yapı -->
+                            <div class="slider__slide">
+                                <div class="promobox promobox--type-07 promobox--is-slider position-relative d-flex flex-column align-items-center text-center overflow-hidden">
+                                    <div class="image-animation-trigger w-100">
+                                        <div class="w-100">
+                                            <div class="image-animation image-animation--from-default image-animation--to-default">
+                                                <div class="rimage" style="min-height: 550px; background-color: #f8f9fa;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="promobox__content promobox__content--animation-scale-in absolute-stretch d-flex flex-column flex-center px-15 py-7 overflow-hidden">
+                                            <div class="promobox__content_inner position-absolute d-flex flex-column flex-center w-100"
+                                                 style="max-width: 450px;margin-top: -10px;">
+                                                <div class="promo-text mx-auto">
+                                                    <h1 class="mb-15" style="color: #666;">HENÜZ SLIDER EKLENMEDİ</h1>
+                                                    <h4 class="mb-25" style="color: #888;">Yönetim panelinden yeni slider ekleyebilirsiniz.</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="slider__next d-none d-lg-block position-absolute cursor-pointer"
+                         data-js-slider-next>
+                        <i>
+                            <svg aria-hidden="true" focusable="false" role="presentation"
+                                 class="icon icon-theme-007" viewBox="0 0 24 24">
+                                <path d="M6.708 20.917c0-.169.059-.319.176-.449l8.32-8.301-8.32-8.301a.652.652 0 0 1-.176-.449c0-.169.059-.319.176-.449a.65.65 0 0 1 .449-.176c.169 0 .318.059.449.176l8.75 8.75c.117.13.176.28.176.449a.652.652 0 0 1-.176.449l-8.75 8.75a.91.91 0 0 1-.215.127c-.078.032-.156.049-.234.049s-.156-.017-.234-.049a.91.91 0 0 1-.215-.127.652.652 0 0 1-.176-.449z" />
+                            </svg>
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<script>
+    Loader.require({
+        type: "script",
+        name: "home_builder"
+    });
+</script>
+

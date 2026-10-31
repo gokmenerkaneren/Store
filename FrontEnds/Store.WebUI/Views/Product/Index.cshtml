@@ -1,0 +1,32 @@
+@model Store.WebUI.Models.ProductDetailViewModel
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html class="no-js supports-no-cookies" lang="en">
+@await Component.InvokeAsync("_defHeadUILayoutComponentPartial")
+<body id="women-39-s" class="template-product theme-css-animate" data-currency-multiple="true">
+    <div id="theme-section-header" class="theme-section">
+        <div data-section-id="header" data-section-type="header">
+            @await Component.InvokeAsync("_defHeaderUILayoutComponentPartial")
+        </div>
+    </div>
+
+    <main id="MainContent">
+        @await Component.InvokeAsync("_proBreadcrumbUILayoutComponentPartial", Model.Name)
+
+        @await Component.InvokeAsync("_proDetailUILayoutComponentPartial", Model)
+
+        @* @await Component.InvokeAsync("_proRelatedUILayoutComponentPartial") *@
+    </main>
+
+    @await Component.InvokeAsync("_defFooterUILayoutComponentPartial")
+
+    @await Component.InvokeAsync("_proPopupUILayoutComponentPartial")
+
+    @await Component.InvokeAsync("_proThemeAssetsUILayoutComponentPartial")
+
+    @await Component.InvokeAsync("_proScriptsBlockUILayoutComponentPartial")
+</body>
+</html>

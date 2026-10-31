@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\CQRS\Commands\AddressBaseCommands\" />
+    <Folder Include="Features\CQRS\Commands\BaseEntityCommands\" />
+    <Folder Include="Features\CQRS\Commands\BranchAddressCommands\" />
+    <Folder Include="Features\CQRS\Commands\BranchCommands\" />
+    <Folder Include="Features\CQRS\Commands\CityCommands\" />
+    <Folder Include="Features\CQRS\Commands\CompanyCommands\" />
+    <Folder Include="Features\CQRS\Commands\ContactInfoCommands\" />
+    <Folder Include="Features\CQRS\Commands\DealerCommands\" />
+    <Folder Include="Features\CQRS\Commands\DistrictCommands\" />
+    <Folder Include="Features\CQRS\Commands\InvoiceTypeCommands\" />
+    <Folder Include="Features\CQRS\Commands\NeighborhoodCommands\" />
+    <Folder Include="Features\CQRS\Commands\PriceTypeCommands\" />
+    <Folder Include="Features\CQRS\Commands\UserAddressCommands\" />
+    <Folder Include="Features\CQRS\Commands\WarehouseCommands\" />
+    <Folder Include="Features\CQRS\Handlers\AddressBaseHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\BaseEntityHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\BranchAddressHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\CityHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\CompanyHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\ContactInfoHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\DealerHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\DistrictHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\InvoiceTypeHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\NeighborhoodHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\PriceTypeHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\UserAddressHandlers\" />
+    <Folder Include="Features\CQRS\Handlers\WarehouseHandlers\" />
+    <Folder Include="Features\CQRS\Queries\AddressBaseQueries\" />
+    <Folder Include="Features\CQRS\Queries\BaseEntityQueries\" />
+    <Folder Include="Features\CQRS\Queries\BranchAddress\" />
+    <Folder Include="Features\CQRS\Queries\BranchQueries\" />
+    <Folder Include="Features\CQRS\Queries\CityQueries\" />
+    <Folder Include="Features\CQRS\Queries\CompanyQueries\" />
+    <Folder Include="Features\CQRS\Queries\ContactInfoQueries\" />
+    <Folder Include="Features\CQRS\Queries\CountryQueries\" />
+    <Folder Include="Features\CQRS\Queries\DealerQueries\" />
+    <Folder Include="Features\CQRS\Queries\DistrictQueries\" />
+    <Folder Include="Features\CQRS\Queries\InvoiceTypeQueries\" />
+    <Folder Include="Features\CQRS\Queries\NeighborhoodQueries\" />
+    <Folder Include="Features\CQRS\Queries\PriceTypeQueries\" />
+    <Folder Include="Features\CQRS\Queries\UserAddressQueries\" />
+    <Folder Include="Features\CQRS\Queries\WarehouseQueries\" />
+    <Folder Include="Features\CQRS\Results\BranchResults\" />
+    <Folder Include="Features\CQRS\Results\BranchAddressResults\" />
+    <Folder Include="Features\CQRS\Results\CityResults\" />
+    <Folder Include="Features\CQRS\Results\CompanyResults\" />
+    <Folder Include="Features\CQRS\Results\NeighborhoodResults\" />
+    <Folder Include="Features\CQRS\Results\InvoiceTypeResults\" />
+    <Folder Include="Features\CQRS\Results\DistrictResults\" />
+    <Folder Include="Features\CQRS\Results\DealerResults\" />
+    <Folder Include="Features\CQRS\Results\ContactInfoResults\" />
+    <Folder Include="Features\CQRS\Results\BaseEntityResults\" />
+    <Folder Include="Features\CQRS\Results\AddressBaseResults\" />
+    <Folder Include="Features\CQRS\Results\PriceTypeResults\" />
+    <Folder Include="Features\CQRS\Results\UserAddressResults\" />
+    <Folder Include="Features\CQRS\Results\WarehouseResults\" />
+    <Folder Include="Features\Mediator\Handlers\ContactInfo2Handlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Store.Location.Domain\Store.Location.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\Store.DtoLayer\Store.DtoLayer.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Store.Shared\Store.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

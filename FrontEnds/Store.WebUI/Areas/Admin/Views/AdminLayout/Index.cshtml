@@ -1,0 +1,58 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    @await Component.InvokeAsync("_AdminLayoutComponentHeadPartial")
+    <style>
+            .swal-above-modal {
+                z-index: 9999 !important;
+            }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+
+
+    @await Component.InvokeAsync("_AdminLayoutComponentPreLoaderPartial")
+
+    <div id="pcoded" class="pcoded">
+
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+
+            @await Component.InvokeAsync("_AdminLayoutComponentSideBarPartial")
+
+            <div class="pcoded-main-container">
+                <div class="pcoded-wrapper">
+
+                    @await Component.InvokeAsync("_AdminLayoutComponentLeftMenuPartial")
+
+                    <div class="pcoded-content">
+                        <div class="pcoded-inner-content">
+                            <!-- Main-body start -->
+                            <div class="main-body">
+                              @*   <div class="page-wrapper"> *@
+                                   @*  @await Component.InvokeAsync("_AdminLayoutComponentHeaderPartial") *@
+                                    <div class="page-body">
+                                        @RenderBody()
+
+                                       @*  @await Component.InvokeAsync("_AdminLayoutComponentCardPartial") *@
+                                    </div>
+                                @* </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@await Component.InvokeAsync("_AdminLayoutComponentScriptPartial");
+@await Html.PartialAsync("_SweetAlertMessages")
+@RenderSection("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Sezadan Store";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+}
+
+@await Component.InvokeAsync("_SliderDefaultComponentPartial")
+@* @await Component.InvokeAsync("_CategoriesDefaultComponentPartial") 
+    2026.10.29 - Perşembe günü tek kaldığı için çok göründüğü için ekrandan kaldırdım.
+*@
+
+@* Ürün Sekmeleri: En Çok Satanlar ve Yeni Ürünler yan yana tab olarak gösterilir *@
+@await Component.InvokeAsync("_ProductTabsDefaultComponentPartial")
+
+@* @await Component.InvokeAsync("_BannerDefaultComponentPartial")   2026.10.27 - Kapattım*@    
+@await Component.InvokeAsync("_TrendsDefaultComponentPartial")
+@* @await Component.InvokeAsync("_BrandsDefaultComponentPartial") 
+@await Component.InvokeAsync("_BlogDefaultComponentPartial")  *@ 
+@await Component.InvokeAsync("_InstagramDefaultComponentPartial")
+
+@if (ViewBag.OfflineServicesJson != null)
+{
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var offlineServices = @Html.Raw(ViewBag.OfflineServicesJson);
+                if (!offlineServices || offlineServices.length === 0) return;
+
+                var listHtml = '<div style="text-align: left; max-height: 280px; overflow-y: auto; font-size: 13px; line-height: 1.5;">' +
+                    '<p style="color: #495057; margin-bottom: 12px;">Store mikroservislerinden <strong>' + offlineServices.length + ' tanesine</strong> bağlantı sağlanamadı:</p>' +
+                    '<ul style="list-style-type: none; padding-left: 0; margin-bottom: 15px;">';
+
+                offlineServices.forEach(function (s) {
+                    listHtml += '<li style="margin-bottom: 8px; padding: 8px 12px; background-color: #fff5f5; border-left: 4px solid #dc3545; border-radius: 4px;">' +
+                        '<div style="font-weight: 700; color: #721c24; display: flex; justify-content: space-between;">' +
+                        '<span>' + s.ServiceName + '</span>' +
+                        '<span style="color: #6c757d; font-size: 11px;">Port: ' + s.Port + '</span>' +
+                        '</div>' +
+                        '<div style="font-size: 11px; color: #e83e8c; word-break: break-all;">' + s.Url + '</div>' +
+                        '<div style="font-size: 11px; color: #856404; margin-top: 2px;">' + s.Message + '</div>' +
+                        '</li>';
+                });
+
+                var today = new Date();
+                var y = today.getFullYear();
+                var m = String(today.getMonth() + 1).padStart(2, '0');
+                var d = String(today.getDate()).padStart(2, '0');
+                var logFile = 'ServisLog_' + y + m + d + '.txt';
+
+                listHtml += '</ul>' +
+                    '<div style="background-color: #e8f4fd; border-radius: 4px; padding: 8px 12px; font-size: 12px; color: #0c5460;">' +
+                    'ℹ️ <strong>Bilgi:</strong> Sepet servisi kapalı olsa dahi sepetiniz yerel yedek modunda (In-Memory Fallback) çalışmaktadır. Detaylı servis logları <code>C:\\User\\Projects\\Store\\Loglar\\' + logFile + '</code> dosyasına yazılmıştır.' +
+                    '</div></div>';
+
+                function showModal() {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '⚠️ Servis Bağlantı Durumu',
+                            html: listHtml,
+                            confirmButtonText: 'Tamam, Anladım',
+                            confirmButtonColor: '#212529',
+                            width: '600px'
+                        });
+                    } else {
+                        setTimeout(showModal, 200);
+                    }
+                }
+                showModal();
+            });
+        </script>
+    }
+}

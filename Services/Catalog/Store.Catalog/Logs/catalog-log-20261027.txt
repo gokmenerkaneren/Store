@@ -1,0 +1,1082 @@
+2026-10-27 16:52:57.954 +03:00 [INF] Catalog Service is starting...
+2026-10-27 16:52:58.013 +03:00 [INF] User profile is available. Using 'C:\Users\devel\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-10-27 16:52:58.101 +03:00 [INF] Now listening on: http://localhost:7301
+2026-10-27 16:52:58.190 +03:00 [INF] Starting Hangfire Server using job storage: 'Connection string: mongodb://<username>:<password>@localhost:27017, database name: StoreMD, prefix: hangfire.mongo'
+2026-10-27 16:52:58.192 +03:00 [INF] Using the following options for Mongo DB job storage:
+2026-10-27 16:52:58.194 +03:00 [INF]     Prefix: hangfire.mongo.
+2026-10-27 16:52:58.195 +03:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2026-10-27 16:52:58.236 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-10-27 16:52:58.237 +03:00 [INF] Hosting environment: Development
+2026-10-27 16:52:58.239 +03:00 [INF] Content root path: C:\User\Projects\Store\Services\Catalog\Store.Catalog
+2026-10-27 16:52:58.273 +03:00 [INF] Server developer:27784:05c52d4a successfully announced in 37,6739 ms
+2026-10-27 16:52:58.277 +03:00 [INF] Server developer:27784:05c52d4a is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, MongoExpirationManager, MongoJobQueueWatcher, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2026-10-27 16:52:58.305 +03:00 [INF] 1 servers were removed due to timeout
+2026-10-27 16:52:58.331 +03:00 [INF] Server developer:27784:05c52d4a all the dispatchers started
+2026-10-27 16:52:58.361 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 16:52:59.425 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 16:53:03.439 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 16:53:12.445 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 16:53:28.455 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 16:53:28.457 +03:00 [ERR] Execution MongoJobQueueWatcher is in the Failed state now due to an exception, execution will be retried in no more than 00:00:25
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(BackgroundProcessContext context)
+   at Hangfire.Server.BackgroundProcessDispatcherBuilder.ExecuteProcess(Guid executionId, Object state) in C:\projects\hangfire-525\src\Hangfire.Core\Server\BackgroundProcessDispatcherBuilder.cs:line 82
+   at Hangfire.Processing.BackgroundExecution.Run(Action`2 callback, Object state) in C:\projects\hangfire-525\src\Hangfire.Core\Processing\BackgroundExecution.cs:line 118
+2026-10-27 16:53:37.009 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/defaultslider1?showDeleted=False - null null
+2026-10-27 16:53:37.049 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-10-27 16:53:37.819 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog)'
+2026-10-27 16:53:37.840 +03:00 [INF] Route matched with {action = "GetAll", controller = "DefaultSlider1"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(Boolean) on controller Store.Catalog.Controllers.DefaultSlider1Controller (Store.Catalog).
+2026-10-27 16:53:37.947 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-10-27 16:53:38.065 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.DefaultSlider1Dtos.ResultDefaultSlider1Dto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.092 +03:00 [INF] Executed action Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog) in 247.0504ms
+2026-10-27 16:53:38.094 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog)'
+2026-10-27 16:53:38.097 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/defaultslider1?showDeleted=False - 200 null application/json; charset=utf-8 1087.7755ms
+2026-10-27 16:53:38.129 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/categories - null null
+2026-10-27 16:53:38.137 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 16:53:38.141 +03:00 [INF] Route matched with {action = "CategoryList", controller = "Categories"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CategoryList(Boolean) on controller Store.Catalog.Controllers.CategoriesController (Store.Catalog).
+2026-10-27 16:53:38.167 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CategoryDtos.ResultCategoryDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.172 +03:00 [INF] Executed action Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog) in 29.986ms
+2026-10-27 16:53:38.174 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 16:53:38.178 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/categories - 200 null application/json; charset=utf-8 49.1514ms
+2026-10-27 16:53:38.200 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - null null
+2026-10-27 16:53:38.206 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 16:53:38.210 +03:00 [INF] Route matched with {action = "ProductList", controller = "Products"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductList(Boolean) on controller Store.Catalog.Controllers.ProductsController (Store.Catalog).
+2026-10-27 16:53:38.213 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-10-27 16:53:38.244 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductDtos.ResultProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.266 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog) in 54.4758ms
+2026-10-27 16:53:38.267 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 16:53:38.269 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - 200 null application/json; charset=utf-8 68.9207ms
+2026-10-27 16:53:38.291 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - null null
+2026-10-27 16:53:38.294 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 16:53:38.297 +03:00 [INF] Route matched with {action = "ProductImageList", controller = "ProductImages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductImageList(Boolean) on controller Store.Catalog.Controllers.ProductImagesController (Store.Catalog).
+2026-10-27 16:53:38.314 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductImageDtos.ResultProductImageDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.318 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog) in 18.8086ms
+2026-10-27 16:53:38.320 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 16:53:38.321 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - 200 null application/json; charset=utf-8 29.8942ms
+2026-10-27 16:53:38.329 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 16:53:38.332 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 16:53:38.336 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 16:53:38.351 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.355 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 17.2341ms
+2026-10-27 16:53:38.357 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 16:53:38.358 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 28.9203ms
+2026-10-27 16:53:38.367 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/bestsellers - null null
+2026-10-27 16:53:38.370 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog)'
+2026-10-27 16:53:38.374 +03:00 [INF] Route matched with {action = "BestSellerList", controller = "BestSellers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] BestSellerList() on controller Store.Catalog.Controllers.BestSellersController (Store.Catalog).
+2026-10-27 16:53:38.450 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.BestSellerDtos.ResultBestSellerDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.453 +03:00 [INF] Executed action Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog) in 78.1229ms
+2026-10-27 16:53:38.455 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog)'
+2026-10-27 16:53:38.456 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/bestsellers - 200 null application/json; charset=utf-8 88.4592ms
+2026-10-27 16:53:38.464 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 16:53:38.468 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.472 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.525 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.529 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 54.6063ms
+2026-10-27 16:53:38.530 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.532 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 66.9989ms
+2026-10-27 16:53:38.541 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 16:53:38.544 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.545 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.552 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.553 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.9082ms
+2026-10-27 16:53:38.555 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.556 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 15.0741ms
+2026-10-27 16:53:38.559 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - null null
+2026-10-27 16:53:38.562 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.563 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.570 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.571 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 7.3618ms
+2026-10-27 16:53:38.573 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.574 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - 200 null application/json; charset=utf-8 15.1895ms
+2026-10-27 16:53:38.577 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 16:53:38.579 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.580 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.586 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.588 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.5791ms
+2026-10-27 16:53:38.589 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.590 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 13.7878ms
+2026-10-27 16:53:38.597 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/newproducts - null null
+2026-10-27 16:53:38.600 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog)'
+2026-10-27 16:53:38.604 +03:00 [INF] Route matched with {action = "NewProductList", controller = "NewProducts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] NewProductList() on controller Store.Catalog.Controllers.NewProductsController (Store.Catalog).
+2026-10-27 16:53:38.630 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.NewProductDtos.ResultNewProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.634 +03:00 [INF] Executed action Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog) in 28.9984ms
+2026-10-27 16:53:38.636 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog)'
+2026-10-27 16:53:38.638 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/newproducts - 200 null application/json; charset=utf-8 40.3263ms
+2026-10-27 16:53:38.644 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 16:53:38.647 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.647 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.654 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.656 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.7724ms
+2026-10-27 16:53:38.657 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.658 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 13.8923ms
+2026-10-27 16:53:38.661 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - null null
+2026-10-27 16:53:38.663 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.664 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.670 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.672 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.4062ms
+2026-10-27 16:53:38.673 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.674 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - 200 null application/json; charset=utf-8 13.6212ms
+2026-10-27 16:53:38.677 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 16:53:38.680 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.681 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.687 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.688 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.2942ms
+2026-10-27 16:53:38.690 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.691 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 13.6699ms
+2026-10-27 16:53:38.695 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 16:53:38.698 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.698 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.704 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.706 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.2756ms
+2026-10-27 16:53:38.707 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.709 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 13.8222ms
+2026-10-27 16:53:38.733 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/defaulttrends - null null
+2026-10-27 16:53:38.735 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog)'
+2026-10-27 16:53:38.739 +03:00 [INF] Route matched with {action = "DefaultTrendList", controller = "DefaultTrends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DefaultTrendList() on controller Store.Catalog.Controllers.DefaultTrendsController (Store.Catalog).
+2026-10-27 16:53:38.783 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.DefaultTrendDtos.ResultDefaultTrendDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.787 +03:00 [INF] Executed action Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog) in 46.4334ms
+2026-10-27 16:53:38.788 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog)'
+2026-10-27 16:53:38.789 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/defaulttrends - 200 null application/json; charset=utf-8 56.7831ms
+2026-10-27 16:53:38.796 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - null null
+2026-10-27 16:53:38.799 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 16:53:38.800 +03:00 [INF] Route matched with {action = "ProductList", controller = "Products"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductList(Boolean) on controller Store.Catalog.Controllers.ProductsController (Store.Catalog).
+2026-10-27 16:53:38.808 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductDtos.ResultProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.810 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog) in 7.9577ms
+2026-10-27 16:53:38.811 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 16:53:38.812 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - 200 null application/json; charset=utf-8 16.4174ms
+2026-10-27 16:53:38.816 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - null null
+2026-10-27 16:53:38.819 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 16:53:38.820 +03:00 [INF] Route matched with {action = "ProductImageList", controller = "ProductImages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductImageList(Boolean) on controller Store.Catalog.Controllers.ProductImagesController (Store.Catalog).
+2026-10-27 16:53:38.827 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductImageDtos.ResultProductImageDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.829 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog) in 6.8198ms
+2026-10-27 16:53:38.830 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 16:53:38.831 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - 200 null application/json; charset=utf-8 14.5608ms
+2026-10-27 16:53:38.837 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 16:53:38.840 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 16:53:38.841 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 16:53:38.848 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.850 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 6.8782ms
+2026-10-27 16:53:38.852 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 16:53:38.854 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 16.728ms
+2026-10-27 16:53:38.858 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/50daceb5-4117-4869-9964-428157510b4c - null null
+2026-10-27 16:53:38.861 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.862 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.869 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.872 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 7.7752ms
+2026-10-27 16:53:38.873 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.874 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/50daceb5-4117-4869-9964-428157510b4c - 200 null application/json; charset=utf-8 16.2556ms
+2026-10-27 16:53:38.878 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 16:53:38.881 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.882 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.888 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.890 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 7.0863ms
+2026-10-27 16:53:38.892 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.893 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 14.6814ms
+2026-10-27 16:53:38.896 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 16:53:38.898 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.899 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.906 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.907 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.5761ms
+2026-10-27 16:53:38.908 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.910 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 14.0634ms
+2026-10-27 16:53:38.913 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - null null
+2026-10-27 16:53:38.916 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.917 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.923 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.925 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.5357ms
+2026-10-27 16:53:38.926 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.927 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - 200 null application/json; charset=utf-8 13.9065ms
+2026-10-27 16:53:38.930 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - null null
+2026-10-27 16:53:38.932 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.933 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.939 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.941 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.5432ms
+2026-10-27 16:53:38.942 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.943 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - 200 null application/json; charset=utf-8 13.6815ms
+2026-10-27 16:53:38.946 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 16:53:38.949 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.951 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 16:53:38.958 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.959 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.8336ms
+2026-10-27 16:53:38.961 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 16:53:38.962 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 15.4336ms
+2026-10-27 16:53:38.977 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/InstagramPosts/GetActiveInstagramPosts - null null
+2026-10-27 16:53:38.979 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog)'
+2026-10-27 16:53:38.983 +03:00 [INF] Route matched with {action = "GetActiveInstagramPosts", controller = "InstagramPosts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveInstagramPosts() on controller Store.Catalog.Controllers.InstagramPostsController (Store.Catalog).
+2026-10-27 16:53:38.996 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.InstagramPostDtos.ResultInstagramPostDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 16:53:38.998 +03:00 [INF] Executed action Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog) in 14.134ms
+2026-10-27 16:53:39.000 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog)'
+2026-10-27 16:53:39.001 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/InstagramPosts/GetActiveInstagramPosts - 200 null application/json; charset=utf-8 23.9978ms
+2026-10-27 16:53:53.511 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:03.525 +03:00 [INF] Catalog Service is starting...
+2026-10-27 18:10:03.597 +03:00 [INF] User profile is available. Using 'C:\Users\devel\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-10-27 18:10:03.705 +03:00 [INF] Now listening on: http://localhost:7301
+2026-10-27 18:10:03.807 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/categories?showDeleted=false - null null
+2026-10-27 18:10:03.839 +03:00 [INF] Starting Hangfire Server using job storage: 'Connection string: mongodb://<username>:<password>@localhost:27017, database name: StoreMD, prefix: hangfire.mongo'
+2026-10-27 18:10:03.840 +03:00 [INF] Using the following options for Mongo DB job storage:
+2026-10-27 18:10:03.842 +03:00 [INF]     Prefix: hangfire.mongo.
+2026-10-27 18:10:03.843 +03:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2026-10-27 18:10:03.861 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-10-27 18:10:03.891 +03:00 [INF] Hosting environment: Development
+2026-10-27 18:10:03.892 +03:00 [INF] Content root path: C:\User\Projects\Store\Services\Catalog\Store.Catalog
+2026-10-27 18:10:03.898 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-10-27 18:10:03.946 +03:00 [INF] Server developer:28428:04c6ad39 successfully announced in 52,8934 ms
+2026-10-27 18:10:04.150 +03:00 [INF] Server developer:28428:04c6ad39 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, MongoExpirationManager, MongoJobQueueWatcher, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2026-10-27 18:10:04.170 +03:00 [INF] 1 servers were removed due to timeout
+2026-10-27 18:10:04.773 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:04.964 +03:00 [INF] Server developer:28428:04c6ad39 all the dispatchers started
+2026-10-27 18:10:05.038 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.047 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.055 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:10:05.086 +03:00 [INF] Route matched with {action = "CategoryList", controller = "Categories"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CategoryList(Boolean) on controller Store.Catalog.Controllers.CategoriesController (Store.Catalog).
+2026-10-27 18:10:05.214 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-10-27 18:10:05.344 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CategoryDtos.ResultCategoryDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.367 +03:00 [INF] Executed action Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog) in 275.0115ms
+2026-10-27 18:10:05.369 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:10:05.373 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/categories?showDeleted=false - 200 null application/json; charset=utf-8 1567.3967ms
+2026-10-27 18:10:05.418 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/brands?showDeleted=false - null null
+2026-10-27 18:10:05.429 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.433 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.434 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog)'
+2026-10-27 18:10:05.439 +03:00 [INF] Route matched with {action = "BrandList", controller = "Brands"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] BrandList(Boolean) on controller Store.Catalog.Controllers.BrandsController (Store.Catalog).
+2026-10-27 18:10:05.474 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.BrandDtos.ResultBrandDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.479 +03:00 [INF] Executed action Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog) in 37.3489ms
+2026-10-27 18:10:05.481 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog)'
+2026-10-27 18:10:05.485 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/brands?showDeleted=false - 200 null application/json; charset=utf-8 67.521ms
+2026-10-27 18:10:05.498 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/measurements?showDeleted=false - null null
+2026-10-27 18:10:05.503 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.506 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.508 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog)'
+2026-10-27 18:10:05.512 +03:00 [INF] Route matched with {action = "MeasurementList", controller = "Measurements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MeasurementList(Boolean) on controller Store.Catalog.Controllers.MeasurementsController (Store.Catalog).
+2026-10-27 18:10:05.527 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.MeasurementDtos.ResultMeasurementDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.532 +03:00 [INF] Executed action Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog) in 16.9775ms
+2026-10-27 18:10:05.533 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog)'
+2026-10-27 18:10:05.535 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/measurements?showDeleted=false - 200 null application/json; charset=utf-8 37.2842ms
+2026-10-27 18:10:05.544 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/currencies?showDeleted=false - null null
+2026-10-27 18:10:05.548 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.551 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.552 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog)'
+2026-10-27 18:10:05.556 +03:00 [INF] Route matched with {action = "CurrencyList", controller = "Currencies"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CurrencyList(Boolean) on controller Store.Catalog.Controllers.CurrenciesController (Store.Catalog).
+2026-10-27 18:10:05.575 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CurrencyDtos.ResultCurrencyDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.580 +03:00 [INF] Executed action Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog) in 21.2619ms
+2026-10-27 18:10:05.582 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog)'
+2026-10-27 18:10:05.584 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/currencies?showDeleted=false - 200 null application/json; charset=utf-8 39.6512ms
+2026-10-27 18:10:05.591 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 18:10:05.595 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.598 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.600 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.603 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 18:10:05.617 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.621 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 15.5491ms
+2026-10-27 18:10:05.623 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.625 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 34.3123ms
+2026-10-27 18:10:05.632 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 18:10:05.636 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.639 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.641 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.643 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 18:10:05.651 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.653 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 8.2036ms
+2026-10-27 18:10:05.655 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.657 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 24.661ms
+2026-10-27 18:10:05.668 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/categories?showDeleted=True - null null
+2026-10-27 18:10:05.672 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.675 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.676 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:10:05.678 +03:00 [INF] Route matched with {action = "CategoryList", controller = "Categories"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CategoryList(Boolean) on controller Store.Catalog.Controllers.CategoriesController (Store.Catalog).
+2026-10-27 18:10:05.688 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CategoryDtos.ResultCategoryDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.690 +03:00 [INF] Executed action Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog) in 9.8667ms
+2026-10-27 18:10:05.692 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:10:05.694 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/categories?showDeleted=True - 200 null application/json; charset=utf-8 26.5318ms
+2026-10-27 18:10:05.700 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/brands?showDeleted=True - null null
+2026-10-27 18:10:05.704 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.707 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.708 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog)'
+2026-10-27 18:10:05.710 +03:00 [INF] Route matched with {action = "BrandList", controller = "Brands"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] BrandList(Boolean) on controller Store.Catalog.Controllers.BrandsController (Store.Catalog).
+2026-10-27 18:10:05.717 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.BrandDtos.ResultBrandDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.719 +03:00 [INF] Executed action Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog) in 6.8154ms
+2026-10-27 18:10:05.721 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.BrandsController.BrandList (Store.Catalog)'
+2026-10-27 18:10:05.723 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/brands?showDeleted=True - 200 null application/json; charset=utf-8 22.5658ms
+2026-10-27 18:10:05.728 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/measurements?showDeleted=True - null null
+2026-10-27 18:10:05.732 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.735 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.736 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog)'
+2026-10-27 18:10:05.737 +03:00 [INF] Route matched with {action = "MeasurementList", controller = "Measurements"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MeasurementList(Boolean) on controller Store.Catalog.Controllers.MeasurementsController (Store.Catalog).
+2026-10-27 18:10:05.745 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.MeasurementDtos.ResultMeasurementDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.747 +03:00 [INF] Executed action Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog) in 7.2528ms
+2026-10-27 18:10:05.749 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.MeasurementsController.MeasurementList (Store.Catalog)'
+2026-10-27 18:10:05.750 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/measurements?showDeleted=True - 200 null application/json; charset=utf-8 22.017ms
+2026-10-27 18:10:05.755 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=True - null null
+2026-10-27 18:10:05.759 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.762 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.764 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.765 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 18:10:05.773 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.775 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 7.7282ms
+2026-10-27 18:10:05.777 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:10:05.778 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=True - 200 null application/json; charset=utf-8 23.3204ms
+2026-10-27 18:10:05.784 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/currencies?showDeleted=True - null null
+2026-10-27 18:10:05.788 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.791 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.792 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog)'
+2026-10-27 18:10:05.793 +03:00 [INF] Route matched with {action = "CurrencyList", controller = "Currencies"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CurrencyList(Boolean) on controller Store.Catalog.Controllers.CurrenciesController (Store.Catalog).
+2026-10-27 18:10:05.801 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CurrencyDtos.ResultCurrencyDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.803 +03:00 [INF] Executed action Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog) in 7.017ms
+2026-10-27 18:10:05.804 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CurrenciesController.CurrencyList (Store.Catalog)'
+2026-10-27 18:10:05.806 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/currencies?showDeleted=True - 200 null application/json; charset=utf-8 22.2311ms
+2026-10-27 18:10:05.812 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - null null
+2026-10-27 18:10:05.816 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.818 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.819 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:10:05.823 +03:00 [INF] Route matched with {action = "ProductImageList", controller = "ProductImages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductImageList(Boolean) on controller Store.Catalog.Controllers.ProductImagesController (Store.Catalog).
+2026-10-27 18:10:05.839 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductImageDtos.ResultProductImageDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.843 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog) in 18.2373ms
+2026-10-27 18:10:05.845 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:10:05.847 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - 200 null application/json; charset=utf-8 35.2592ms
+2026-10-27 18:10:05.858 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - null null
+2026-10-27 18:10:05.863 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:10:05.865 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:10:05'.
+2026-10-27 18:10:05.866 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:10:05.870 +03:00 [INF] Route matched with {action = "ProductList", controller = "Products"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductList(Boolean) on controller Store.Catalog.Controllers.ProductsController (Store.Catalog).
+2026-10-27 18:10:05.876 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-10-27 18:10:05.911 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductDtos.ResultProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:10:05.935 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog) in 61.7573ms
+2026-10-27 18:10:05.937 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:10:05.938 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - 200 null application/json; charset=utf-8 79.7068ms
+2026-10-27 18:10:06.010 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:10.021 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:19.035 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:35.047 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:10:35.052 +03:00 [ERR] Execution MongoJobQueueWatcher is in the Failed state now due to an exception, execution will be retried in no more than 00:00:25
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(BackgroundProcessContext context)
+   at Hangfire.Server.BackgroundProcessDispatcherBuilder.ExecuteProcess(Guid executionId, Object state) in C:\projects\hangfire-525\src\Hangfire.Core\Server\BackgroundProcessDispatcherBuilder.cs:line 82
+   at Hangfire.Processing.BackgroundExecution.Run(Action`2 callback, Object state) in C:\projects\hangfire-525\src\Hangfire.Core\Processing\BackgroundExecution.cs:line 118
+2026-10-27 18:11:00.081 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:11:02.077 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/defaultslider1?showDeleted=False - null null
+2026-10-27 18:11:02.083 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.085 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.086 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog)'
+2026-10-27 18:11:02.090 +03:00 [INF] Route matched with {action = "GetAll", controller = "DefaultSlider1"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(Boolean) on controller Store.Catalog.Controllers.DefaultSlider1Controller (Store.Catalog).
+2026-10-27 18:11:02.112 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.DefaultSlider1Dtos.ResultDefaultSlider1Dto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.117 +03:00 [INF] Executed action Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog) in 26.2184ms
+2026-10-27 18:11:02.119 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.DefaultSlider1Controller.GetAll (Store.Catalog)'
+2026-10-27 18:11:02.120 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/defaultslider1?showDeleted=False - 200 null application/json; charset=utf-8 42.7775ms
+2026-10-27 18:11:02.140 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/categories - null null
+2026-10-27 18:11:02.143 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.145 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.146 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:11:02.147 +03:00 [INF] Route matched with {action = "CategoryList", controller = "Categories"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CategoryList(Boolean) on controller Store.Catalog.Controllers.CategoriesController (Store.Catalog).
+2026-10-27 18:11:02.155 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.CategoryDtos.ResultCategoryDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.156 +03:00 [INF] Executed action Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog) in 7.6833ms
+2026-10-27 18:11:02.158 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.CategoriesController.CategoryList (Store.Catalog)'
+2026-10-27 18:11:02.159 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/categories - 200 null application/json; charset=utf-8 18.8421ms
+2026-10-27 18:11:02.186 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - null null
+2026-10-27 18:11:02.189 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.192 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.193 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:11:02.193 +03:00 [INF] Route matched with {action = "ProductList", controller = "Products"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductList(Boolean) on controller Store.Catalog.Controllers.ProductsController (Store.Catalog).
+2026-10-27 18:11:02.201 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductDtos.ResultProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.203 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog) in 8.1725ms
+2026-10-27 18:11:02.204 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:11:02.206 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - 200 null application/json; charset=utf-8 19.6282ms
+2026-10-27 18:11:02.209 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - null null
+2026-10-27 18:11:02.211 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.213 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.214 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:11:02.215 +03:00 [INF] Route matched with {action = "ProductImageList", controller = "ProductImages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductImageList(Boolean) on controller Store.Catalog.Controllers.ProductImagesController (Store.Catalog).
+2026-10-27 18:11:02.221 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductImageDtos.ResultProductImageDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.222 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog) in 6.0098ms
+2026-10-27 18:11:02.224 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:11:02.225 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - 200 null application/json; charset=utf-8 16.1617ms
+2026-10-27 18:11:02.228 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 18:11:02.231 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.232 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.233 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:11:02.234 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 18:11:02.239 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.241 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 5.5061ms
+2026-10-27 18:11:02.242 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:11:02.243 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 15.7733ms
+2026-10-27 18:11:02.252 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/bestsellers - null null
+2026-10-27 18:11:02.255 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.256 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.257 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog)'
+2026-10-27 18:11:02.260 +03:00 [INF] Route matched with {action = "BestSellerList", controller = "BestSellers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] BestSellerList() on controller Store.Catalog.Controllers.BestSellersController (Store.Catalog).
+2026-10-27 18:11:02.328 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.BestSellerDtos.ResultBestSellerDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.331 +03:00 [INF] Executed action Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog) in 68.645ms
+2026-10-27 18:11:02.332 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.BestSellersController.BestSellerList (Store.Catalog)'
+2026-10-27 18:11:02.333 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/bestsellers - 200 null application/json; charset=utf-8 81.2282ms
+2026-10-27 18:11:02.341 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 18:11:02.344 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.346 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.347 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.350 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.385 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.388 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 35.9904ms
+2026-10-27 18:11:02.389 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.390 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 49.2892ms
+2026-10-27 18:11:02.399 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 18:11:02.404 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.405 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.406 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.407 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.413 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.415 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.3655ms
+2026-10-27 18:11:02.416 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.417 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 17.9359ms
+2026-10-27 18:11:02.420 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - null null
+2026-10-27 18:11:02.423 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.425 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.426 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.426 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.432 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.434 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.3805ms
+2026-10-27 18:11:02.435 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.436 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - 200 null application/json; charset=utf-8 16.3746ms
+2026-10-27 18:11:02.439 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 18:11:02.442 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.444 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.445 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.446 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.451 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.453 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 5.7755ms
+2026-10-27 18:11:02.454 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.455 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 15.8391ms
+2026-10-27 18:11:02.462 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/newproducts - null null
+2026-10-27 18:11:02.465 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.467 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.468 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog)'
+2026-10-27 18:11:02.471 +03:00 [INF] Route matched with {action = "NewProductList", controller = "NewProducts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] NewProductList() on controller Store.Catalog.Controllers.NewProductsController (Store.Catalog).
+2026-10-27 18:11:02.500 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.NewProductDtos.ResultNewProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.502 +03:00 [INF] Executed action Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog) in 29.4953ms
+2026-10-27 18:11:02.504 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.NewProductsController.NewProductList (Store.Catalog)'
+2026-10-27 18:11:02.505 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/newproducts - 200 null application/json; charset=utf-8 42.3853ms
+2026-10-27 18:11:02.511 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 18:11:02.513 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.515 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.516 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.517 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.523 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.525 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 5.7741ms
+2026-10-27 18:11:02.526 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.527 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 16.3442ms
+2026-10-27 18:11:02.530 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - null null
+2026-10-27 18:11:02.532 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.534 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.535 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.536 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.542 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.544 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.3024ms
+2026-10-27 18:11:02.545 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.546 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - 200 null application/json; charset=utf-8 16.7148ms
+2026-10-27 18:11:02.550 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 18:11:02.553 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.556 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.556 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.557 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.563 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.566 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 7.4489ms
+2026-10-27 18:11:02.568 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.569 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 18.9813ms
+2026-10-27 18:11:02.572 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 18:11:02.575 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.577 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.578 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.579 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.585 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.587 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.4245ms
+2026-10-27 18:11:02.588 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.590 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 18.0076ms
+2026-10-27 18:11:02.623 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/defaulttrends - null null
+2026-10-27 18:11:02.626 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.628 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.629 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog)'
+2026-10-27 18:11:02.632 +03:00 [INF] Route matched with {action = "DefaultTrendList", controller = "DefaultTrends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DefaultTrendList() on controller Store.Catalog.Controllers.DefaultTrendsController (Store.Catalog).
+2026-10-27 18:11:02.667 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.DefaultTrendDtos.ResultDefaultTrendDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.670 +03:00 [INF] Executed action Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog) in 37.0547ms
+2026-10-27 18:11:02.672 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.DefaultTrendsController.DefaultTrendList (Store.Catalog)'
+2026-10-27 18:11:02.673 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/defaulttrends - 200 null application/json; charset=utf-8 49.9065ms
+2026-10-27 18:11:02.679 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - null null
+2026-10-27 18:11:02.683 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.685 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.686 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:11:02.687 +03:00 [INF] Route matched with {action = "ProductList", controller = "Products"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductList(Boolean) on controller Store.Catalog.Controllers.ProductsController (Store.Catalog).
+2026-10-27 18:11:02.695 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductDtos.ResultProductDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.696 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog) in 6.7894ms
+2026-10-27 18:11:02.697 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductsController.ProductList (Store.Catalog)'
+2026-10-27 18:11:02.698 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/Products?showDeleted=False - 200 null application/json; charset=utf-8 18.7452ms
+2026-10-27 18:11:02.702 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - null null
+2026-10-27 18:11:02.704 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.706 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.707 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:11:02.708 +03:00 [INF] Route matched with {action = "ProductImageList", controller = "ProductImages"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ProductImageList(Boolean) on controller Store.Catalog.Controllers.ProductImagesController (Store.Catalog).
+2026-10-27 18:11:02.714 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductImageDtos.ResultProductImageDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.715 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog) in 6.16ms
+2026-10-27 18:11:02.717 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductImagesController.ProductImageList (Store.Catalog)'
+2026-10-27 18:11:02.718 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductImages?showDeleted=False - 200 null application/json; charset=utf-8 15.795ms
+2026-10-27 18:11:02.720 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - null null
+2026-10-27 18:11:02.723 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.725 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.726 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:11:02.727 +03:00 [INF] Route matched with {action = "GetAllPriceTypes", controller = "PriceTypes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllPriceTypes(Boolean) on controller Store.Catalog.Controllers.PriceTypesController (Store.Catalog).
+2026-10-27 18:11:02.732 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.PriceTypeDtos.ResultPriceTypeDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.733 +03:00 [INF] Executed action Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog) in 5.038ms
+2026-10-27 18:11:02.734 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.PriceTypesController.GetAllPriceTypes (Store.Catalog)'
+2026-10-27 18:11:02.736 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/PriceTypes?showDeleted=false - 200 null application/json; charset=utf-8 15.2318ms
+2026-10-27 18:11:02.739 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/50daceb5-4117-4869-9964-428157510b4c - null null
+2026-10-27 18:11:02.742 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.744 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.745 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.745 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.750 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.752 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 5.4546ms
+2026-10-27 18:11:02.753 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.754 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/50daceb5-4117-4869-9964-428157510b4c - 200 null application/json; charset=utf-8 15.5676ms
+2026-10-27 18:11:02.758 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - null null
+2026-10-27 18:11:02.761 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.763 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.764 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.765 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.770 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.771 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 5.4513ms
+2026-10-27 18:11:02.772 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.774 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/10a497af-f5d9-4e4d-8b8d-82139de75123 - 200 null application/json; charset=utf-8 15.2592ms
+2026-10-27 18:11:02.776 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - null null
+2026-10-27 18:11:02.779 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.781 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.782 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.783 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.787 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.789 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 3.9842ms
+2026-10-27 18:11:02.790 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.792 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/fea11bc3-3d13-4c29-91dd-639d67a4fa54 - 200 null application/json; charset=utf-8 15.1932ms
+2026-10-27 18:11:02.795 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - null null
+2026-10-27 18:11:02.798 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.800 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.801 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.803 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.808 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.811 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.7012ms
+2026-10-27 18:11:02.812 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.814 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/c875241c-d1b6-41f1-a768-61d93b510235 - 200 null application/json; charset=utf-8 18.866ms
+2026-10-27 18:11:02.817 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - null null
+2026-10-27 18:11:02.820 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.822 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.824 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.825 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.830 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.832 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 6.231ms
+2026-10-27 18:11:02.834 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.835 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/f3e5fe07-104a-4235-994d-104d3e0b883e - 200 null application/json; charset=utf-8 17.8795ms
+2026-10-27 18:11:02.838 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - null null
+2026-10-27 18:11:02.842 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.844 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.845 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.846 +03:00 [INF] Route matched with {action = "GetByProductId", controller = "ProductPrices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetByProductId(System.Guid, Boolean) on controller Store.Catalog.Controllers.ProductPricesController (Store.Catalog).
+2026-10-27 18:11:02.851 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.ProductPriceDtos.ResultProductPriceDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.853 +03:00 [INF] Executed action Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog) in 5.8754ms
+2026-10-27 18:11:02.854 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.ProductPricesController.GetByProductId (Store.Catalog)'
+2026-10-27 18:11:02.856 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/ProductPrices/GetByProductId/45d1ccfa-e1d3-4bd9-80a2-70f333266866 - 200 null application/json; charset=utf-8 17.2757ms
+2026-10-27 18:11:02.870 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:7301/api/InstagramPosts/GetActiveInstagramPosts - null null
+2026-10-27 18:11:02.873 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2026-10-27 18:11:02.875 +03:00 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '27.10.2026 14:53:34', Current time (UTC): '27.10.2026 15:11:02'.
+2026-10-27 18:11:02.876 +03:00 [INF] Executing endpoint 'Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog)'
+2026-10-27 18:11:02.879 +03:00 [INF] Route matched with {action = "GetActiveInstagramPosts", controller = "InstagramPosts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetActiveInstagramPosts() on controller Store.Catalog.Controllers.InstagramPostsController (Store.Catalog).
+2026-10-27 18:11:02.891 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Store.Catalog.Dtos.InstagramPostDtos.ResultInstagramPostDto, Store.Catalog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-10-27 18:11:02.894 +03:00 [INF] Executed action Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog) in 13.3501ms
+2026-10-27 18:11:02.895 +03:00 [INF] Executed endpoint 'Store.Catalog.Controllers.InstagramPostsController.GetActiveInstagramPosts (Store.Catalog)'
+2026-10-27 18:11:02.896 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:7301/api/InstagramPosts/GetActiveInstagramPosts - 200 null application/json; charset=utf-8 26.1722ms
+2026-10-27 18:11:36.094 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:12:25.111 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:13:29.121 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:14:50.140 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:16:30.156 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:18:31.167 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:20:55.179 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)
+2026-10-27 18:23:44.186 +03:00 [ERR] Current db does not support change stream (not a replica set, https://docs.mongodb.com/manual/reference/method/db.collection.watch/)
+if you need instant (almost) handling of enqueued jobs, please set 'CheckQueuedJobsStrategy' to 'TailNotificationsCollection' in MongoStorageOptions
+MongoDB.Driver.MongoCommandException: Command aggregate failed: The $changeStream stage is only supported on replica sets or mongos.
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.Execute[TResult](OperationContext operationContext, IRetryableReadOperation`1 operation, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.Execute(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ExecuteAggregateOperation(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.Execute(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperation[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperation[TResult](IClientSessionHandle session, IReadOperation`1 operation, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.Watch[TResult](PipelineDefinition`2 pipeline, ChangeStreamOptions options, CancellationToken cancellationToken)
+   at Hangfire.Mongo.MongoJobQueueWatcher.Execute(CancellationToken cancellationToken)

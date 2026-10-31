@@ -1,0 +1,169 @@
+@model List<Store.DtoLayer.CatalogDtos.NewProductDtos.ResultNewProductDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<style>
+    /* .modal-huge sınıfı: Ekranın dört bir yanından 1cm boşluk bırakır */
+    .modal-huge {
+        max-width: calc(100vw - 2cm) !important;
+        margin: 1cm auto !important;
+    }
+    .modal-huge .modal-content {
+        height: calc(100vh - 2cm) !important;
+    }
+    .modal-huge .modal-body {
+        overflow-y: auto;
+    }
+</style>
+
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Yeni Ürünler Yönetimi</h4>
+                        <p class="card-title-desc">Ana sayfada sergilenecek yeni ürünleri buradan ekleyebilir ve kaldırabilirsiniz.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sıra</th>
+                                        <th>Resim</th>
+                                        <th>Ürün Adı</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.OrderIndex</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                {
+                                                    <img src="@item.ImageUrl" style="height: 50px; width: 50px; object-fit: cover;" class="rounded" />
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Resim Yok</span>
+                                                }
+                                            </td>
+                                            <td>@item.ProductName</td>
+                                            <td>
+                                                <a href="/Admin/NewProducts/DeleteNewProduct/@item.Id" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Sil</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewProductModal">
+                                <i class="fa fa-plus"></i> Yeni Ürün Ekle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add NewProduct Modal -->
+<div class="modal fade" id="addNewProductModal" tabindex="-1" aria-labelledby="addNewProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-huge">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewProductModalLabel">Yeni Ürünler Listesine Ekle</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="productsTable" class="table table-bordered table-striped dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Resim</th>
+                                <th>Ürün Kodu</th>
+                                <th>Ürün Adı</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dolacak -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Datatable ve AJAX işlemleri -->
+    <script>
+        $(document).ready(function () {
+            // DataTables Türkçe karakter arama (Büyük/Küçük harf duyarlılığı) çözümü
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                var searchInput = $('.dataTables_filter input').val();
+                if (!searchInput) return true;
+                
+                var searchTerm = searchInput.toLocaleLowerCase('tr-TR');
+                
+                // Tüm sütunlarda ara
+                for (var i = 0; i < data.length; i++) {
+                    var columnData = data[i] ? data[i].toLocaleLowerCase('tr-TR') : "";
+                    if (columnData.includes(searchTerm)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            var table = $('#productsTable').DataTable({
+                "ajax": {
+                    "url": "/Admin/NewProducts/GetProductsForModal",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { 
+                        "data": "imageUrl", 
+                        "render": function (data) {
+                            if(data) {
+                                return '<img src="' + data + '" style="height: 40px; width: 40px; object-fit: cover;" class="rounded" />';
+                            }
+                            return '<span class="badge badge-secondary">Resim Yok</span>';
+                        },
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    { "data": "productCode", "name": "ProductCode" },
+                    { "data": "name", "name": "Name" },
+                    { 
+                        "data": "isActive", 
+                        "render": function (data) {
+                            return data ? '<span class="badge badge-success bg-success">Aktif</span>' : '<span class="badge badge-danger bg-danger">Pasif</span>';
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "render": function (data) {
+                            return '<form method="post" action="/Admin/NewProducts/Create"><input type="hidden" name="productId" value="' + data + '" /><button type="submit" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Ekle</button></form>';
+                        },
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json"
+                }
+            });
+        });
+    </script>
+}

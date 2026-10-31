@@ -1,0 +1,6 @@
+@Store.B2B.WebApi_HostAddress = http://localhost:7305
+
+GET {{Store.B2B.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

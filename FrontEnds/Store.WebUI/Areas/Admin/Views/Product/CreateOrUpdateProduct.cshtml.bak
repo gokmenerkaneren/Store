@@ -1,0 +1,1485 @@
+@model Store.DtoLayer.CatalogDtos.ProductDtos.UpdateProductDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+
+@{
+    ViewData["Title"] = ViewBag.IsUpdate ? "Ürün Güncelleme" : "Yeni Ürün";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var isUpdate = ViewBag.IsUpdate;
+    var prices = ViewBag.ProductPrices as List<Store.DtoLayer.CatalogDtos.ProductPriceDtos.ResultProductPriceDto>;
+    var images = ViewBag.ProductImages as List<Store.DtoLayer.CatalogDtos.ProductImageDtos.ResultProductImageDto>;
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        ÜRÜN İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Firma Listesi</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="card-block">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-block tab-icon">
+                        <ul class="nav nav-tabs md-tabs wizard-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-genel-link" data-toggle="tab" href="#general" role="tab">
+                                    <span class="step-number">1</span>
+                                    <i class="icofont icofont-info-square"></i> Genel Bilgiler
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-detay-link" data-toggle="@(isUpdate ? "tab" : "")" href="#detail" role="tab">
+                                    <span class="step-number">2</span>
+                                    <i class="icofont icofont-listine-dots"></i> Detaylar
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-fiyat-link" data-toggle="@(isUpdate ? "tab" : "")" href="#prices" role="tab">
+                                    <span class="step-number">3</span>
+                                    <i class="icofont icofont-money-bag"></i> Fiyatlandırma
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-resim-link" data-toggle="@(isUpdate ? "tab" : "")" href="#images" role="tab">
+                                    <span class="step-number">4</span>
+                                    <i class="icofont icofont-image"></i> Görseller
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content card-block p-t-30">
+
+                            <!-- 1. Tab : Genel Bilgiler -->
+                            <div class="tab-pane active" id="general" role="tabpanel">
+                                <form id="generalForm" action="@(isUpdate ? "/Admin/Product/UpdateGeneral" : "/Admin/Product/CreateProduct")" method="post">
+                                    <input type="hidden" name="Id" id="productId" value="@Model.Id" />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Ürün Kodu</strong> <span class="text-danger">*</span></label>
+                                                <input type="text" name="ProductCode" value="@Model.ProductCode" class="form-control" placeholder="Örn: 101" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Barkod</strong></label>
+                                                <input type="text" name="Barcode" value="@Model.Barcode" class="form-control" placeholder="EAN-13 Barkodu" maxlength="13" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Ürün Adı</strong> <span class="text-danger">*</span></label>
+                                        <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Ürün Başlığı" required />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Kategori</strong></label>
+                                                <select name="CategoryId" class="form-control" required>
+                                                    <option value="">Seçiniz...</option>
+                                                    @if (ViewBag.Categories != null)
+                                                    {
+                                                        foreach (var item in (List<SelectListItem>)ViewBag.Categories)
+                                                        {
+                                                            <option value="@item.Value" selected="@(Model.CategoryId.ToString() == item.Value)">@item.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                         </div>
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <label class="f-w-600"><strong>Ölçü Birimi</strong></label>
+                                                 <select name="MeasurementId" class="form-control" required>
+                                                     <option value="">Seçiniz...</option>
+                                                     @if (ViewBag.Measurements != null)
+                                                     {
+                                                         foreach (var item in (List<SelectListItem>)ViewBag.Measurements)
+                                                         {
+                                                             <option value="@item.Value" selected="@(Model.MeasurementId.ToString() == item.Value)">@item.Text</option>
+                                                         }
+                                                     }
+                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Vergi Oranı (%)</strong></label>
+                                                <input type="number" name="TaxRate" value="@Model.TaxRate" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Ağırlık (kg)</strong></label>
+                                                <input type="number" step="0.01" name="Weight" value="@Model.Weight" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Desi</strong></label>
+                                                <input type="number" step="0.01" name="Desi" value="@Model.Desi" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Kısa Açıklama</strong></label>
+                                        <textarea name="ShortDescription" class="form-control" rows="2" placeholder="Ürün liste ekranında görünecek kısa metin">@Model.ShortDescription</textarea>
+                                    </div>
+
+                                    <hr />
+                                    <div class="text-right">
+                                        <a href="/Admin/Product/Index" class="btn btn-inverse m-r-10"><i class="icofont icofont-arrow-left"></i> Listeye Dön</a>
+                                        <button type="submit" class="btn btn-primary btn-wizard-next">
+                                            <i class="icofont icofont-save"></i> @(isUpdate ? "Güncelle ve Devam Et" : "Kaydet ve Detaylara Geç") <i class="icofont icofont-arrow-right"></i>
+                                        </button>
+                                    </div>
+
+                                    <input type="hidden" name="InsertUserId" value="1" />
+                                    <input type="hidden" name="IsActive" value="true" />
+                                    <input type="hidden" name="IsPublished" value="true" />
+                                    <input type="hidden" name="IsRentalEnabled" value="true" />
+                                    <input type="hidden" name="IsSaleEnabled" value="true" />
+                                    <input type="hidden" name="Slug" value="@(string.IsNullOrEmpty(Model.Slug) ? "temp-slug" : Model.Slug)" />
+                                </form>
+                            </div>
+
+                            <!-- 4. Tab : Detaylar -->
+                            <div class="tab-pane" id="detail" role="tabpanel">
+                                <form id="detailForm" action="/Admin/Product/UpdateDetail" method="post">
+                                    <input type="hidden" name="ProductId" id="detailProductId" value="@Model.Id" />
+                                    <input type="hidden" name="InsertUserId" value="1" />
+                                    <input type="hidden" name="IsActive" value="true" />
+                                    <input type="hidden" name="IsPublished" value="true" />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Marka</strong> <span class="text-danger">*</span></label>
+                                                <select name="BrandId" class="form-control" required>
+                                                    <option value="">Seçiniz...</option>
+                                                    @if (ViewBag.Brands != null)
+                                                    {
+                                                        foreach (var item in (List<SelectListItem>)ViewBag.Brands)
+                                                        {
+                                                            <option value="@item.Value" selected="@(Model.BrandId?.ToString() == item.Value)">@item.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Etiketler</strong> <span class="text-danger">*</span></label>
+                                                <input type="text" name="Tag" value="@(Model.Tags != null ? string.Join(", ", Model.Tags) : "")" class="form-control" placeholder="Etiket girip Enter'a basın" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Genişletilmiş Ürün Açıklaması</strong> <span class="text-danger">*</span></label>
+                                        <textarea name="Description" class="form-control" rows="6" placeholder="Ürün sayfasında görünecek detaylı teknik bilgiler ve açıklamalar..." required>@Model.Description</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Öne Çıkan Özellikler</strong> <span class="text-danger">*</span></label>
+                                                <textarea name="Notes" class="form-control" rows="3" required>@Model.Notes</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="f-w-600"><strong>Boyut Bilgileri (cm)</strong></label>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Width" value="@Model.Width" class="form-control" placeholder="En" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Height" value="@Model.Height" class="form-control" placeholder="Boy" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Depth" value="@Model.Depth" class="form-control" placeholder="Derinlik" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Genel Bilgilere Dön</button>
+                                        <button type="submit" class="btn btn-success btn-wizard-next">
+                                            <i class="icofont icofont-save"></i> Detayları Kaydet ve Fiyatlara Geç <i class="icofont icofont-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 4. Tab : Fiyatlar -->
+                            <div class="tab-pane" id="prices" role="tabpanel">
+
+                                                                <div class="card bg-light border-0">
+                                    <div class="card-block">
+                                        <h5 class="m-b-20 f-w-700 text-secondary"><i class="icofont icofont-plus-circle"></i> Yeni Fiyat Tanımı Ekle</h5>
+                                        <form id="priceForm" action="/Admin/Product/AddPrice" method="post">
+                                            <input type="hidden" name="ProductId" id="priceProductId" value="@Model.Id" />
+                                            <input type="hidden" name="InsertUserId" value="1" />
+                                            <input type="hidden" name="IsActive" value="true" />
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Fiyat Tipi</strong></label>
+                                                        <select name="PriceType" class="form-control">
+                                                            <option value="">Bir Fiyat Tipi seçiniz!.....</option>
+                                                            <option value="1">Satış</option>
+                                                            <option value="2">Kiralama</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Tutar</strong></label>
+                                                        <input type="number" step="0.01" name="Amount" class="form-control" placeholder="0.00" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Para Birimi</strong></label>
+                                                        <select name="CurrencyId" class="form-control">
+                                                            <option value="">Seçiniz...</option>
+                                                            @if (ViewBag.Currencies != null)
+                                                            {
+                                                                foreach (var item in (List<SelectListItem>)ViewBag.Currencies)
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Başlangıç Tarihi</strong></label>
+                                                        <input type="text" name="ValidFrom" class="form-control" placeholder="Seçiniz..." readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Bitiş Tarihi</strong></label>
+                                                        <input type="text" name="ValidTo" class="form-control" placeholder="Seçiniz..." readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-info shadow-sm"><i class="icofont icofont-plus"></i> Listeye Ekle</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="text-right m-t-20">
+                                    <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Detaya Dön</button>
+                                    <button type="button" class="btn btn-info btn-wizard-next">
+                                        Fiyatları Kaydet ve Resimlere Geç <i class="icofont icofont-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <hr />
+                                <div class="table-responsive m-b-30">
+                                    <table id="priceTable" class="table table-hover table-bordered shadow-sm">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <th><i class="icofont icofont-tag"></i> Fiyat Tipi</th>
+                                                <th><i class="icofont icofont-money"></i> Tutar</th>
+                                                <th><i class="icofont icofont-world"></i> Para Birimi</th>
+                                                <th><i class="icofont icofont-calendar"></i> Başlangıç</th>
+                                                <th><i class="icofont icofont-calendar"></i> Bitiş</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="priceTableBody">
+                                            @if (prices != null && prices.Count > 0)
+                                            {
+                                                @foreach (var p in prices)
+                                                {
+                                                    <tr>
+                                                        <td><span class="badge @(p.PriceType == 1 ? "badge-info" : "badge-warning")">@(p.PriceType == 1 ? "Satış" : "Kiralama")</span></td>
+                                                        <td class="font-weight-bold text-dark">@p.Amount.ToString("N2")</td>
+                                                        @{
+                                                            var currencies = ViewBag.Currencies as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+                                                            var currencyName = currencies?.FirstOrDefault(c => string.Equals(c.Value, p.CurrencyId.ToString(), StringComparison.OrdinalIgnoreCase))?.Text ?? p.CurrencyId.ToString();
+                                                        }
+                                                        <td>@currencyName</td>
+                                                        <td>@(p.ValidFrom?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                        <td>@(p.ValidTo?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 4. Tab : Resim İşlemleri -->
+                            <div class="tab-pane" id="images" role="tabpanel">
+
+                                <div class="card bg-light border-0">
+                                    <div class="card-block">
+                                        <form id="imageForm" enctype="multipart/form-data">
+                                            <input type="hidden" name="productId" id="imageProductId" value="@Model.Id" />
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Dosya Seçin</strong></label>
+                                                        <input type="file" name="file" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Alt Metin (SEO)</strong></label>
+                                                        <input type="text" name="altText" class="form-control" placeholder="Ürün görsel açıklaması" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <div class="checkbox-fade fade-in-primary" style="margin-top:32px;">
+                                                        <label>
+                                                            <input type="checkbox" name="isMain" value="true">
+                                                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                            <span class="f-w-600"><strong>Ana Resim?</strong></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" id="btnUpload" class="btn btn-success shadow-sm"><i class="icofont icofont-upload-alt"></i> Görseli Yükle</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="text-right m-t-20">
+                                    <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Fiyatlandırmaya Dön</button>
+                                    <a href="/Admin/Product/Index" class="btn btn-primary shadow"><i class="icofont icofont-check-circled"></i> Tamamla ve Listeye Dön</a>
+                                </div>
+
+                                <hr />
+
+                                <div class="row m-b-30" id="imageGallery">
+                                    @if (images != null && images.Count > 0)
+                                    {
+                                        @foreach (var img in images.OrderByDescending(x => x.IsMain))
+                                        {
+                                            <div class="col-md-3 col-sm-6 mb-4 image-card-container">
+                                                <div class="card h-100 shadow-sm border overflow-hidden">
+                                                    <img src="@img.ImageUrl" class="card-img-top" style="height: 180px; object-fit: cover;" alt="@img.AltText">
+                                                    <div class="card-body p-2 text-center bg-white">
+                                                        <span class="badge @(img.IsMain ? "badge-success" : "badge-secondary") m-b-5 main-badge">@(img.IsMain ? "Ana Resim" : "Ek Resim")</span>
+                                                        <div class="m-t-5 btn-group w-100" role="group">
+                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteImage('@img.Id', this)"><i class="icofont icofont-ui-delete"></i> Sil</button>
+
+                                                            <button type="button" class="btn btn-outline-success btn-sm btn-make-main" style="display:@(img.IsMain ? "none" : "block")" onclick="setMainImage('@img.Id', '@Model.Id', this)">
+                                                                <i class="icofont icofont-star"></i> Ana Resim
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-12 text-center py-5 text-muted bg-light rounded" id="no-image-msg">
+                                            <i class="icofont icofont-image icofont-4x"></i>
+                                            <p class="m-t-10">Henüz bir görsel yüklenmemiş.</p>
+                                        </div>
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style>
+    .wizard-tabs .nav-link {
+        padding: 20px 10px !important;
+        text-align: center;
+        border: none !important;
+        color: #95a5a6 !important;
+        background: transparent !important;
+        position: relative;
+    }
+
+        .wizard-tabs .nav-link.active {
+            color: #3498db !important;
+            font-weight: bold;
+        }
+
+    .wizard-tabs .step-number {
+        display: block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background: #ecf0f1;
+        color: #7f8c8d;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-tabs .nav-link.active .step-number {
+        background: #3498db;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .wizard-tabs .nav-link.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #dfe6e9;
+        padding: 10px 15px;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+    <script>
+        function validateField(input, rules) {
+            var val = $(input).val() ? $(input).val().trim() : '';
+            var $parent = $(input).closest('.form-group, div');
+            var $error = $parent.find('.validation-error-msg');
+            if ($error.length === 0) {
+                $error = $('<small class="text-danger validation-error-msg" style="display:none; font-weight:600; margin-top:4px; width:100%;"></small>');
+                $parent.append($error);
+            }
+            $error.hide().text('');
+
+            if (rules.required && !val) {
+                $error.text(rules.fieldName + ' alanı boş geçilemez.').show();
+                return false;
+            }
+            if (rules.lettersOnly && val) {
+                var letterRegex = /^[a-zA-ZçĞıÖŞÜÇğİöşü\s]+$/;
+                if (!letterRegex.test(val)) {
+                    $error.text('Lütfen sadece harf giriniz.').show();
+                    return false;
+                }
+            }
+            if (rules.numbersOnly && val) {
+                var numberRegex = /^\d+$/;
+                if (!numberRegex.test(val)) {
+                    $error.text('Lütfen sadece sayı giriniz.').show();
+                    return false;
+                                                        @{
+                                                            var currencies = ViewBag.Currencies as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+                                                            var currencyName = currencies?.FirstOrDefault(c => string.Equals(c.Value, p.CurrencyId.ToString(), StringComparison.OrdinalIgnoreCase))?.Text ?? p.CurrencyId.ToString();
+                                                        }
+                                                        <td>@currencyName</td>
+                                                        <td>@(p.ValidFrom?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                        <td>@(p.ValidTo?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 4. Tab : Resim İşlemleri -->
+                            <div class="tab-pane" id="images" role="tabpanel">
+
+                                <div class="card bg-light border-0">
+                                    <div class="card-block">
+                                        <form id="imageForm" enctype="multipart/form-data">
+                                            <input type="hidden" name="productId" id="imageProductId" value="@Model.Id" />
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Dosya Seçin</strong></label>
+                                                        <input type="file" name="file" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Alt Metin (SEO)</strong></label>
+                                                        <input type="text" name="altText" class="form-control" placeholder="Ürün görsel açıklaması" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <div class="checkbox-fade fade-in-primary" style="margin-top:32px;">
+                                                        <label>
+                                                            <input type="checkbox" name="isMain" value="true">
+                                                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                            <span class="f-w-600"><strong>Ana Resim?</strong></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" id="btnUpload" class="btn btn-success shadow-sm"><i class="icofont icofont-upload-alt"></i> Görseli Yükle</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="text-right m-t-20">
+                                    <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Fiyatlandırmaya Dön</button>
+                                    <a href="/Admin/Product/Index" class="btn btn-primary shadow"><i class="icofont icofont-check-circled"></i> Tamamla ve Listeye Dön</a>
+                                </div>
+
+                                <hr />
+
+                                <div class="row m-b-30" id="imageGallery">
+                                    @if (images != null && images.Count > 0)
+                                    {
+                                        @foreach (var img in images.OrderByDescending(x => x.IsMain))
+                                        {
+                                            <div class="col-md-3 col-sm-6 mb-4 image-card-container">
+                                                <div class="card h-100 shadow-sm border overflow-hidden">
+                                                    <img src="@img.ImageUrl" class="card-img-top" style="height: 180px; object-fit: cover;" alt="@img.AltText">
+                                                    <div class="card-body p-2 text-center bg-white">
+                                                        <span class="badge @(img.IsMain ? "badge-success" : "badge-secondary") m-b-5 main-badge">@(img.IsMain ? "Ana Resim" : "Ek Resim")</span>
+                                                        <div class="m-t-5 btn-group w-100" role="group">
+                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteImage('@img.Id', this)"><i class="icofont icofont-ui-delete"></i> Sil</button>
+
+                                                            <button type="button" class="btn btn-outline-success btn-sm btn-make-main" style="display:@(img.IsMain ? "none" : "block")" onclick="setMainImage('@img.Id', '@Model.Id', this)">
+                                                                <i class="icofont icofont-star"></i> Ana Resim
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-12 text-center py-5 text-muted bg-light rounded" id="no-image-msg">
+                                            <i class="icofont icofont-image icofont-4x"></i>
+                                            <p class="m-t-10">Henüz bir görsel yüklenmemiş.</p>
+                                        </div>
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style>
+    .wizard-tabs .nav-link {
+        padding: 20px 10px !important;
+        text-align: center;
+        border: none !important;
+        color: #95a5a6 !important;
+        background: transparent !important;
+        position: relative;
+    }
+
+        .wizard-tabs .nav-link.active {
+            color: #3498db !important;
+            font-weight: bold;
+        }
+
+    .wizard-tabs .step-number {
+        display: block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background: #ecf0f1;
+        color: #7f8c8d;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-tabs .nav-link.active .step-number {
+        background: #3498db;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .wizard-tabs .nav-link.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #dfe6e9;
+        padding: 10px 15px;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+    <script>
+        function validateField(input, rules) {
+            var val = $(input).val() ? $(input).val().trim() : '';
+            var $parent = $(input).closest('.form-group, div');
+            var $error = $parent.find('.validation-error-msg');
+            if ($error.length === 0) {
+                $error = $('<small class="text-danger validation-error-msg" style="display:none; font-weight:600; margin-top:4px; width:100%;"></small>');
+                $parent.append($error);
+            }
+            $error.hide().text('');
+
+            if (rules.required && !val) {
+                $error.text(rules.fieldName + ' alanı boş geçilemez.').show();
+                return false;
+            }
+            if (rules.lettersOnly && val) {
+                var letterRegex = /^[a-zA-ZçĞıÖŞÜÇğİöşü\s]+$/;
+                if (!letterRegex.test(val)) {
+                    $error.text('Lütfen sadece harf giriniz.').show();
+                    return false;
+                }
+            }
+            if (rules.numbersOnly && val) {
+                var numberRegex = /^\d+$/;
+                if (!numberRegex.test(val)) {
+                    $error.text('Lütfen sadece sayı giriniz.').show();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        $(document).ready(function() {
+
+            // FORM HANDLERS EN ÜSTE ALINDI (Hata Toleransı İçin)
+            $('#generalForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                
+                // Form geçerlilik kontrolü
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var btn = form.find('button[type="submit"]');
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            var productId = r.id || $('#productId').val();
+                            $('#productId, #detailProductId, #priceProductId, #imageProductId').val(productId);
+
+                            Swal.fire({
+                                icon: 'success', title: 'Başarılı', text: 'Genel bilgiler kaydedildi!',
+                                timer: 1500, showConfirmButton: false
+                            }).then(() => {
+                                enableNextTab('#tab-detay-link'); // Detay tabına geç
+                            });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                        }
+                        btn.prop('disabled', false);
+                    },
+                    error: function() {
+                        Swal.fire({ icon: 'error', title: 'Sistem Hatası', text: 'İşlem gerçekleştirilemedi.' });
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // 2. ADIM: DETAYLAR FORMU
+            $('#detailForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+
+                // HTML5 validation check (BrandId, Description, Notes)
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                // Tagify validation check (Tags) - balloon logic
+                var $tagInput = form.find('input[name="Tag"]');
+                var tagEl = $tagInput[0];
+                if (tagEl) {
+                    var tagVal = $tagInput.val();
+                    var isEmpty = !tagVal || tagVal.trim() === "" || tagVal === "[]";
+                    if (!isEmpty) {
+                        try {
+                            var parsed = JSON.parse(tagVal);
+                            if (parsed.length === 0) isEmpty = true;
+                        } catch(e) {}
+                    }
+                    if (isEmpty) {
+                        var oldStyle = $tagInput.attr('style') || '';
+                        $tagInput.css({
+                            display: 'block',
+                            position: 'absolute',
+                            width: '1px',
+                            height: '1px',
+                            opacity: '0',
+                            border: 'none',
+                            padding: '0',
+                            margin: '0'
+                        });
+                        tagEl.setCustomValidity("En az bir adet etiket girilmelidir.");
+                        tagEl.reportValidity();
+                        setTimeout(function() {
+                            $tagInput.attr('style', oldStyle);
+                        }, 100);
+                        return false;
+                    } else {
+                        tagEl.setCustomValidity("");
+                    }
+                }
+
+                var btn = form.find('button[type="submit"]');
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Başarılı', text: 'Detaylar kaydedildi!', timer: 1500, showConfirmButton: false })
+                                .then(() => {
+                                    enableNextTab('#tab-fiyat-link'); // Fiyat tabına geç
+                                });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                        }
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // 3. ADIM: FİYATLANDIRMA FORMU
+            $('#priceForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+
+                var priceTypeVal = $('select[name="PriceType"]').val();
+                var amountVal = $('input[name="Amount"]').val();
+                var currencyVal = $('select[name="CurrencyId"]').val();
+                var startVal = $('input[name="ValidFrom"]').val();
+                var endVal = $('input[name="ValidTo"]').val();
+
+                var priceTypeInput = $('select[name="PriceType"]')[0];
+                var amountInput = $('input[name="Amount"]')[0];
+                var currencyInput = $('select[name="CurrencyId"]')[0];
+                var startInput = $('input[name="ValidFrom"]')[0];
+                var endInput = $('input[name="ValidTo"]')[0];
+
+                if (priceTypeInput) priceTypeInput.setCustomValidity("");
+                if (amountInput) amountInput.setCustomValidity("");
+                if (currencyInput) currencyInput.setCustomValidity("");
+                if (startInput) startInput.setCustomValidity("");
+                if (endInput) endInput.setCustomValidity("");
+
+                if (!priceTypeVal) {
+                    if (priceTypeInput) {
+                        priceTypeInput.setCustomValidity("Lütfen bir fiyat tipi seçiniz!.....");
+                        priceTypeInput.reportValidity();
+                    }
+                    return false;
+                }
+
+                if (priceTypeVal) {
+                    if (!amountVal) {
+                        if (amountInput) {
+                            amountInput.setCustomValidity("Tutar alanı boş geçilemez.");
+                            amountInput.reportValidity();
+                        }
+                        return false;
+                    }
+                    if (!currencyVal) {
+                        if (currencyInput) {
+                            currencyInput.setCustomValidity("Para birimi alanı boş geçilemez.");
+                            currencyInput.reportValidity();
+                        }
+                        return false;
+                    }
+                    if (!startVal) {
+                        if (startInput) {
+                            startInput.setCustomValidity("Başlangıç tarihi alanı boş geçilemez.");
+                            startInput.reportValidity();
+                        }
+                        return false;
+                    }
+                }
+
+                if (startVal && endVal) {
+                    var startDate = new Date(startVal.replace(' ', 'T'));
+                    var endDate = new Date(endVal.replace(' ', 'T'));
+                    
+                    if (endDate < startDate) {
+                        if (endInput) {
+                            endInput.setCustomValidity("Bitiş tarihi başlangıç tarihinden önce olamaz.");
+                            endInput.reportValidity();
+                        }
+                        return false;
+                    }
+                }
+
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var btn = form.find('button[type="submit"]');
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Fiyat Eklendi', timer: 1500, showConfirmButton: false });
+
+                            var pid = $('#priceProductId').val();
+                        }
+                    }
+                });
+            });
+
+            // Tagify Entegrasyonu
+            var tagInput = document.querySelector('input[name="Tag"]');
+            if (tagInput) {
+                try { var tagify = new Tagify(tagInput); tagify.on('change', function() { tagInput.setCustomValidity(""); }); } catch(err) { console.error("Tagify error:", err); }
+                
+            }
+
+            // Sekmeler arası geçişi sağlayan yardımcı fonksiyon
+            function enableNextTab(tabId) {
+                var nextTab = $(tabId);
+                nextTab.removeClass('disabled').attr('data-toggle', 'tab');
+                nextTab.tab('show');
+            }
+
+            var $pCodeInput = $('#generalForm [name="ProductCode"]');
+            var $pNameInput = $('#generalForm [name="Name"]');
+
+            $pCodeInput.on('input', function() { this.setCustomValidity(''); });
+            $pNameInput.on('input', function() { this.setCustomValidity(''); });
+
+            // Barcode input restriction & validation
+            var $barcodeInput = $('#generalForm [name="Barcode"]');
+            $barcodeInput.on('keypress', function(e) {
+                if (e.which < 48 || e.which > 57) {
+                    e.preventDefault();
+                }
+            });
+            $barcodeInput.on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                var val = this.value;
+                
+                if (val.length > 0) {
+                    if (val.length !== 13) {
+                        this.setCustomValidity("Barkod tam olarak 13 rakamdan oluşmalıdır.");
+                    } else if (!val.startsWith("868") && !val.startsWith("869")) {
+                        this.setCustomValidity("Barkod 868 veya 869 ile başlamalıdır.");
+                    } else {
+                        this.setCustomValidity("");
+                    }
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+            $barcodeInput.on('blur', function() {
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                }
+            });
+
+            // Flatpickr Datetime pickers initialization
+            var startPicker = flatpickr('input[name="ValidFrom"]', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                locale: "tr",
+                onChange: function(selectedDates, dateStr, instance) {
+                    endPicker.set('minDate', dateStr);
+                    var endInput = $('input[name="ValidTo"]')[0];
+                    if (endInput) endInput.setCustomValidity("");
+                    var startInput = $('input[name="ValidFrom"]')[0];
+                    if (startInput) startInput.setCustomValidity("");
+                }
+            });
+            var endPicker = flatpickr('input[name="ValidTo"]', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                locale: "tr",
+                onChange: function(selectedDates, dateStr, instance) {
+                    startPicker.set('maxDate', dateStr);
+                    var endInput = $('input[name="ValidTo"]')[0];
+                    if (endInput) endInput.setCustomValidity("");
+                }
+            });
+
+            // Input changes to clear validation errors dynamically
+            $('select[name="PriceType"]').on('change', function() {
+                this.setCustomValidity("");
+            });
+            $('input[name="Amount"]').on('input', function() {
+                this.setCustomValidity("");
+            });
+            $('select[name="CurrencyId"]').on('change', function() {
+                this.setCustomValidity("");
+            });
+
+        });
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // 2. ADIM: DETAYLAR FORMU
+            $('#detailForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+
+                // HTML5 validation check (BrandId, Description, Notes)
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                // Tagify validation check (Tags) - balloon logic
+                var $tagInput = form.find('input[name="Tag"]');
+                var tagEl = $tagInput[0];
+                if (tagEl) {
+                    var tagVal = $tagInput.val();
+                    var isEmpty = !tagVal || tagVal.trim() === "" || tagVal === "[]";
+                    if (!isEmpty) {
+                        try {
+                            var parsed = JSON.parse(tagVal);
+                            if (parsed.length === 0) isEmpty = true;
+                        } catch(e) {}
+                    }
+                    if (isEmpty) {
+                        var oldStyle = $tagInput.attr('style') || '';
+                        $tagInput.css({
+                            display: 'block',
+                            position: 'absolute',
+                            width: '1px',
+                            height: '1px',
+                            opacity: '0',
+                            border: 'none',
+                            padding: '0',
+                            margin: '0'
+                        });
+                        tagEl.setCustomValidity("En az bir adet etiket girilmelidir.");
+                        tagEl.reportValidity();
+                        setTimeout(function() {
+                            $tagInput.attr('style', oldStyle);
+                        }, 100);
+                        return false;
+                    } else {
+                        tagEl.setCustomValidity("");
+                    }
+                }
+
+                var btn = form.find('button[type="submit"]');
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Başarılı', text: 'Detaylar kaydedildi!', timer: 1500, showConfirmButton: false })
+                                .then(() => {
+                                    enableNextTab('#tab-fiyat-link'); // Fiyat tabına geç
+                                });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                        }
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // Flatpickr Datetime pickers initialization
+            var startPicker = flatpickr('input[name="ValidFrom"]', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                locale: "tr",
+                onChange: function(selectedDates, dateStr, instance) {
+                    endPicker.set('minDate', dateStr);
+                    var endInput = $('input[name="ValidTo"]')[0];
+                    if (endInput) endInput.setCustomValidity("");
+                    var startInput = $('input[name="ValidFrom"]')[0];
+                    if (startInput) startInput.setCustomValidity("");
+                }
+            });
+            var endPicker = flatpickr('input[name="ValidTo"]', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                locale: "tr",
+                onChange: function(selectedDates, dateStr, instance) {
+                    startPicker.set('maxDate', dateStr);
+                    var endInput = $('input[name="ValidTo"]')[0];
+                    if (endInput) endInput.setCustomValidity("");
+                }
+            });
+
+            // Input changes to clear validation errors dynamically
+            $('select[name="PriceType"]').on('change', function() {
+                this.setCustomValidity("");
+            });
+            $('input[name="Amount"]').on('input', function() {
+                this.setCustomValidity("");
+            });
+            $('select[name="CurrencyId"]').on('change', function() {
+                this.setCustomValidity("");
+            });
+
+            // 3. ADIM: FİYATLANDIRMA FORMU
+            $('#priceForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+
+                var priceTypeVal = $('select[name="PriceType"]').val();
+                var amountVal = $('input[name="Amount"]').val();
+                var currencyVal = $('select[name="CurrencyId"]').val();
+                var startVal = $('input[name="ValidFrom"]').val();
+                var endVal = $('input[name="ValidTo"]').val();
+
+                var priceTypeInput = $('select[name="PriceType"]')[0];
+                var amountInput = $('input[name="Amount"]')[0];
+                var currencyInput = $('select[name="CurrencyId"]')[0];
+                var startInput = $('input[name="ValidFrom"]')[0];
+                var endInput = $('input[name="ValidTo"]')[0];
+
+                if (priceTypeInput) priceTypeInput.setCustomValidity("");
+                if (amountInput) amountInput.setCustomValidity("");
+                if (currencyInput) currencyInput.setCustomValidity("");
+                if (startInput) startInput.setCustomValidity("");
+                if (endInput) endInput.setCustomValidity("");
+
+                if (!priceTypeVal) {
+                    if (priceTypeInput) {
+                        priceTypeInput.setCustomValidity("Lütfen bir fiyat tipi seçiniz!.....");
+                        priceTypeInput.reportValidity();
+                    }
+                    return false;
+                }
+
+                if (priceTypeVal) {
+                    if (!amountVal) {
+                        if (amountInput) {
+                            amountInput.setCustomValidity("Tutar alanı boş geçilemez.");
+                            amountInput.reportValidity();
+                        }
+                        return false;
+                    }
+                    if (!currencyVal) {
+                        if (currencyInput) {
+                            currencyInput.setCustomValidity("Para birimi alanı boş geçilemez.");
+                            currencyInput.reportValidity();
+                        }
+                        return false;
+                    }
+                    if (!startVal) {
+                        if (startInput) {
+                            startInput.setCustomValidity("Başlangıç tarihi alanı boş geçilemez.");
+                            startInput.reportValidity();
+                        }
+                        return false;
+                    }
+                }
+
+                if (startVal && endVal) {
+                    var startDate = new Date(startVal.replace(' ', 'T'));
+                    var endDate = new Date(endVal.replace(' ', 'T'));
+                    
+                    if (endDate < startDate) {
+                        if (endInput) {
+                            endInput.setCustomValidity("Bitiş tarihi başlangıç tarihinden önce olamaz.");
+                            endInput.reportValidity();
+                        }
+                        return false;
+                    }
+                }
+
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var btn = form.find('button[type="submit"]');
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Fiyat Eklendi', timer: 1500, showConfirmButton: false });
+
+                            var pid = $('#priceProductId').val();
+
+                            // API'den taze veriyi çekip tabloyu yenile (pasife alınan önceki kayıt da güncel görünür)
+                            reloadPriceTable(pid);
+
+                            // Formu temizle ama ProductId'yi koru
+                            form[0].reset();
+                            $('#priceProductId').val(pid);
+                            startPicker.clear();
+                            endPicker.clear();
+                            startPicker.set('maxDate', null);
+                            endPicker.set('minDate', null);
+
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                        }
+                        btn.prop('disabled', false);
+                    },
+                    error: function() {
+                        Swal.fire({ icon: 'error', title: 'Hata', text: 'Fiyat eklenirken bir hata oluştu.' });
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // 4. ADIM: GÖRSEL YÜKLEME
+            $('#btnUpload').on('click', function() {
+                var form = $('#imageForm');
+                var formData = new FormData(form[0]);
+                var btn = $(this);
+                btn.prop('disabled', true);
+
+                $.ajax({
+                    url: '/Admin/Product/UploadImage',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Görsel Yüklendi!', timer: 1500, showConfirmButton: false });
+
+                            var isMain = form.find('input[name="isMain"]').is(':checked');
+                            var badge = isMain ? '<span class="badge badge-success m-b-5">Ana Resim</span>' : '<span class="badge badge-secondary m-b-5">Ek Resim</span>';
+
+                            var newImg = `<div class="col-md-3 col-sm-6 mb-4">
+                                                <div class="card h-100 shadow-sm border overflow-hidden">
+                                                    <img src="${r.url}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                                                    <div class="card-body p-2 text-center bg-white">
+                                                        ${badge}
+                                                        <div class="m-t-5">
+                                                            <button class="btn btn-secondary btn-sm" disabled>Yeni</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+                            $('#no-image-msg').remove();
+                            $('#imageGallery').append(newImg);
+
+                            var pid = $('#imageProductId').val();
+                            form[0].reset();
+                            $('#imageProductId').val(pid);
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                        }
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // İLERİ BUTONLARI İÇİN MANTIK (HATANIN ÇÖZÜLDÜÄÜ YER)
+            $('.btn-wizard-next').on('click', function(e) {
+                if ($(this).attr('type') !== 'submit') {
+                    var target = $(this).closest('.tab-pane').next().attr('id');
+                    if (target) {
+                        // Kilitli (disabled) olan sekmenin kilidini aç ve geçiş yap
+                        var tabLink = $('.wizard-tabs a[href="#' + target + '"]');
+                        tabLink.removeClass('disabled').attr('data-toggle', 'tab');
+                        tabLink.tab('show');
+                    }
+                }
+            });
+
+            // GERİ BUTONLARI İÇİN MANTIK
+            $('.btn-wizard-prev').on('click', function() {
+                var target = $(this).closest('.tab-pane').prev().attr('id');
+                if (target) {
+                    $('.wizard-tabs a[href="#' + target + '"]').tab('show');
+                }
+            });
+
+            // Fiyatlar sekmesi görünür hale gelince DataTables başlat
+            $('a[href="#prices"]').on('shown.bs.tab', function () {
+                if (!$.fn.DataTable.isDataTable('#priceTable')) {
+                    initPriceDataTable();
+                }
+            });
+        });
+
+        // ==========================================
+        // FİYAT TABLOSU â€” DataTables & Yenileme
+        // ==========================================
+        function reloadPriceTable(productId) {
+            $.getJSON('/Admin/Product/GetPricesForProduct?productId=' + productId, function (prices) {
+                if ($.fn.DataTable.isDataTable('#priceTable')) {
+                    $('#priceTable').DataTable().destroy();
+                }
+                var tbody = $('#priceTableBody');
+                tbody.empty();
+                if (prices && prices.length > 0) {
+                    prices.forEach(function (p) {
+                        var statusBadge = p.isActive ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Pasif</span>';
+                        var badgeClass = p.priceType === 1 ? 'badge-info' : 'badge-warning';
+                        var priceTypeName = p.priceType === 1 ? 'Satış' : 'Kiralama';
+                        var row = '<tr>' +
+                            '<td>' + statusBadge + '</td>' +
+                            '<td>' + p.startDate + '</td>' +
+                            '<td>' + p.endDate + '</td>' +
+                            '<td><span class="badge ' + badgeClass + '">' + priceTypeName + '</span></td>' +
+                            '<td class="font-weight-bold text-dark">' + p.amount + '</td>' +
+                            '<td>' + p.currencyName + '</td>' +
+                            '<td>' +
+                            '<button type="button" class="btn btn-outline-danger btn-sm btn-delete-price" data-id="'+p.id+'"><i class="icofont icofont-ui-delete"></i> Sil</button>' +
+                            '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                }
+                initPriceDataTable();
+            });
+        }
+
+        // ==========================================
+        // FİYAT SİLME İŞLEMİ
+        // ==========================================
+        $(document).on('click', '.btn-delete-price', function() {
+            var id = $(this).data('id');
+            var productId = $('#priceProductId').val();
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu fiyat tanımı silinecektir!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3498db',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Admin/Product/DeletePrice',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function(r) {
+                            if (r.success) {
+                                Swal.fire({ icon: 'success', title: 'Silindi!', timer: 1000, showConfirmButton: false });
+                                reloadPriceTable(productId);
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function initPriceDataTable() {
+            if ($.fn.DataTable.isDataTable('#priceTable')) {
+                $('#priceTable').DataTable().destroy();
+            }
+            $('#priceTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                order: [],
+                language: {
+                    processing:   'İşleniyor...',
+                    search:       'Ara:',
+                    lengthMenu:   'Sayfada _MENU_ kayıt göster',
+                    info:         'Gösterilen _START_ - _END_ arası, toplamda _TOTAL_ toplam kayıtlar',
+                    infoEmpty:    'Kayıt bulunamadı',
+                    infoFiltered: '(_MAX_ kayıt içinden filtrelendi)',
+                    paginate: { first: 'İlk', previous: 'Önceki', next: 'Sonraki', last: 'Son' },
+                    zeroRecords:  'Kayıt bulunamadı',
+                    emptyTable:   'Tabloda herhangi bir veri mevcut değil'
+                }
+            });
+        }
+
+
+        // ==========================================
+        // RESİM SİLME İŞLEMİ
+        // ==========================================
+        function deleteImage(id, btnElement) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu görsel kalıcı olarak silinecektir!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3498db',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Admin/Product/DeleteImage',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function(r) {
+                            if (r.success) {
+                                // Tıklanan kartı bul ve animasyonla yavaşça sil
+                                $(btnElement).closest('.image-card-container').fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                                Swal.fire({ icon: 'success', title: 'Silindi!', timer: 1000, showConfirmButton: false });
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // ==========================================
+        // ANA RESİM YAPMA İŞLEMİ (İLKE TAŞIMA EFEKTİ İLE)
+        // ==========================================
+        function setMainImage(imageId, productId, btnElement) {
+            // Butonu tıklanma anında pasifleştir ki çift tıklanmasın
+            var btn = $(btnElement);
+            btn.prop('disabled', true);
+
+            $.ajax({
+                url: '/Admin/Product/SetMainImage',
+                type: 'POST',
+                data: { imageId: imageId, productId: productId },
+                success: function(r) {
+                    if (r.success) {
+                        var cardContainer = btn.closest('.image-card-container');
+
+                        // 1. Ekrandaki tüm rozetleri "Ek Resim" yap ve tüm "Ana Resim" butonlarını görünür kıl
+                        $('.main-badge').removeClass('badge-success').addClass('badge-secondary').text('Ek Resim');
+                        $('.btn-make-main').show();
+
+                        // 2. Tıklanan resmin rozetini "Ana Resim" yap ve onun butonunu gizle
+                        cardContainer.find('.main-badge').removeClass('badge-secondary').addClass('badge-success').text('Ana Resim');
+                        btn.hide();
+
+                        // 3. JQUERY ANİMASYONU: Kartı bulunduğu yerden gizle, en başa (prepend) al ve tekrar göster
+                        cardContainer.slideUp(300, function() {
+                            $('#imageGallery').prepend(cardContainer);
+                            cardContainer.slideDown(300);
+                        });
+
+                        Swal.fire({ icon: 'success', title: 'Harika!', text: 'Ana resim güncellendi.', timer: 1500, showConfirmButton: false });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Hata', html: r.message });
+                    }
+                    btn.prop('disabled', false);
+                },
+                error: function() {
+                    Swal.fire({ icon: 'error', title: 'Sistem Hatası', text: 'İşlem gerçekleştirilemedi.' });
+                    btn.prop('disabled', false);
+                }
+            });
+        }
+    </script>
+}
+
+
+
+
+
+
+
+

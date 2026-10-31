@@ -1,0 +1,94 @@
+@model Store.WebUI.Models.QuickViewViewModel
+
+<style>
+    /* Temanın varsayılan, dışarıda duran X butonlarını gizleyip, kendi turkuaz alanımızdakini kullanıyoruz. */
+    .popup-quick-view > [data-js-popup-close],
+    .mfp-content > .mfp-close {
+        display: none !important;
+    }
+</style>
+
+<div class="row m-0">
+    <!-- Sol Taraf: Görsel (Etrafında boşluk olması için p-4 kullanıldı, siyah zemin içeriye alındı) -->
+    <div class="col-md-6 p-4">
+        <div class="d-flex flex-column h-100" style="background-color: #000; border-radius: 8px;">
+            <div class="flex-grow-1 position-relative" style="min-height: 400px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px;">
+                <img src="@Model.MainImageUrl" alt="@Model.Name" class="img-fluid" style="max-height: 100%; width: auto; object-fit: contain;" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf: Detaylar -->
+    <div class="col-md-6 d-flex flex-column p-0">
+        <!-- Cyan Header (Sağ ve üste tam yaslanıyor) -->
+        <div style="background-color: #61E0ED; padding: 20px 30px; width: 100%; position: relative;">
+            <h4 class="mb-0" style="text-transform: uppercase; font-weight: 600; color: #ffffff; margin: 0; padding-right: 40px;">@Model.Name</h4>
+            
+            <!-- Turkuaz alanın dikey ortasına yerleştirilmiş X (Kapatma) Butonu -->
+            <button type="button" class="js-popup-close" data-js-popup-close 
+                    style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 32px; color: #ffffff; cursor: pointer; line-height: 1; padding: 0;">
+                &times;
+            </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="d-flex flex-column flex-grow-1" style="padding: 15px 30px 30px 30px;">
+            <h6 class="text-muted mb-4" style="font-weight: 500;">@Model.ProductCode</h6>
+
+            <h6 style="font-weight: bold; margin-bottom: 10px;">Ürün Açıklaması</h6>
+            <div style="font-size: 0.9rem; color: #555; margin-bottom: 15px; line-height: 1.5;">
+                <p style="margin-bottom: 2px;"><strong>Ürün Özellikleri:</strong></p>
+                @if (Model.Attributes != null && Model.Attributes.Any())
+                {
+                    <ul class="list-unstyled" style="margin-left: 10px; margin-bottom: 0;">
+                        @foreach (var attr in Model.Attributes)
+                        {
+                            <li>@attr.Key: @attr.Value</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span class="text-muted">Ek özellik belirtilmemiş.</span>
+                }
+            </div>
+
+            <h6 style="font-weight: bold; margin-bottom: 10px;">Öne Çıkan Özellikler</h6>
+            <div style="font-size: 0.9rem; color: #333; margin-bottom: 15px; line-height: 1.5;">
+                @if(!string.IsNullOrEmpty(Model.Description))
+                {
+                    @Html.Raw(Model.Description)
+                }
+                else
+                {
+                    <span class="text-muted">Açıklama bulunmuyor.</span>
+                }
+            </div>
+
+            <h6 style="font-weight: bold; margin-bottom: 10px;">Boyut Bilgileri</h6>
+            <div style="font-size: 0.9rem; margin-bottom: 25px;">
+                <div class="d-flex mb-1"><div style="width: 120px;">Yükseklik (cm)</div><div>: @(Model.Height?.ToString() ?? "-") cm</div></div>
+                <div class="d-flex mb-1"><div style="width: 120px;">Genişlik (cm)</div><div>: @(Model.Width?.ToString() ?? "-") cm</div></div>
+                <div class="d-flex mb-1"><div style="width: 120px;">Derinlik (cm)</div><div>: @(Model.Depth?.ToString() ?? "-") cm</div></div>
+            </div>
+
+            <!-- Fiyat ve Buton -->
+            <div class="mt-auto">
+                <div class="d-flex align-items-center mb-2" style="font-size: 1.4rem;">
+                    @if (Model.OldPrice > 0 && Model.OldPrice > Model.RetailPrice)
+                    {
+                        <span class="text-danger mr-3" style="text-decoration: line-through;">@Model.OldPrice.ToString("N0") TL.</span>
+                        <span class="mr-2" style="color: #ccc;">-</span>
+                    }
+                    <span style="color: #00B4D8; font-weight: 500;">@Model.RetailPrice.ToString("N0") TL.</span>
+                </div>
+                
+                <p style="font-size: 0.8rem; color: #777; margin-bottom: 15px;">
+                    Bu ürüne ait detayları, fotoğrafları ve varyasyon seçeneklerini görmek için aşağıdaki butona tıklayın.
+                </p>
+                
+                <a href="/Product/Detail/@Model.Slug" class="btn btn-outline-dark w-100 text-uppercase" style="border-radius: 4px; letter-spacing: 0.5px; font-weight: 500; padding: 10px 0;">Tüm Detayları Gör</a>
+            </div>
+        </div>
+    </div>
+</div>

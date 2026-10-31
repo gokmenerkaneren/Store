@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  store_identity_db:
+    image: postgres:15-alpine
+    container_name: store_identity_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: "Seza43/55.58"
+      POSTGRES_DB: StoreIdentityDB
+    ports:
+      - "5434:5432"
+    volumes:
+      - store_identity_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  store_location_db:
+    image: postgres:15-alpine
+    container_name: store_location_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: "Seza43/55.58"
+      POSTGRES_DB: StoreLocationDB
+    ports:
+      - "5435:5432"
+    volumes:
+      - store_location_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  store_identity_data:
+  store_location_data:

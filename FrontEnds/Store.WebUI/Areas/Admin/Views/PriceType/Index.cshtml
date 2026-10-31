@@ -1,0 +1,411 @@
+@model List<Store.DtoLayer.CatalogDtos.PriceTypeDtos.ResultPriceTypeDto>
+
+@{
+    ViewData["Title"] = "Fiyat Tipi Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-list" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        FİYAT TİPİ İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Fiyat Tipi Listesi ve İşlemleri</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+    <div class="card-block">
+        <div class="dt-responsive table-responsive">
+            <table id="pricetype-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Fiyat Tipi Adı</th>
+                        <th>Kodu</th>
+                        <th>Durum</th>
+                        <th>Ekleyen</th>
+                        <th>Ekleme Tarihi</th>
+                        <th>Güncelleyen</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th>Silen</th>
+                        <th>Silinme Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr style="@(item.IsDeleted ? "background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;" : (!item.IsActive ? "opacity:0.5;background-color:#f8d7da;" : ""))">
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.Name</td>
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.Code</td>
+                                <td>
+                                    @if (item.IsDeleted)
+                                    {
+                                        <span class="label" style="background:#7b241c; color:#fff;">Silindi</span>
+                                    }
+                                    else if (item.IsActive)
+                                    {
+                                        <span class="label label-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td>@item.InsertUserId</td>
+                                <td>@(item.InsertDate.Year > 2000 ? item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss") : "-")</td>
+                                <td>@item.UpdateUserId</td>
+                                <td>@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>@item.DeleteUserId</td>
+                                <td>@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <!-- Detay Butonu -->
+                                        <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none; margin: 5px;"
+                                                data-toggle="modal" data-target="#detailsPriceTypeModal"
+                                                data-id="@item.Id" data-name="@item.Name" data-code="@item.Code"
+                                                data-insuser="@item.InsertUserId" data-insdate="@(item.InsertDate.Year > 2000 ? item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss") : "-")"
+                                                data-upduser="@item.UpdateUserId" data-upddate="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-deluser="@item.DeleteUserId" data-deldate="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-active="@item.IsActive" data-notes="@item.Notes">
+                                            <i class="icofont icofont-file-text"></i>
+                                        </button>
+
+                                        @if (item.IsDeleted)
+                                        {
+                                            <!-- Recovery (Geri Alma) Butonu - Silinmiş kayıtlar için -->
+                                            <a href="/Admin/PriceType/RestorePriceType/@item.Id" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">
+                                                <i class="feather icon-rotate-ccw"></i> Geri Al
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <!-- Güncelle Butonu -->
+                                            <button type="button" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px;"
+                                                    data-toggle="modal" data-target="#editPriceTypeModal"
+                                                    data-id="@item.Id" data-name="@item.Name" data-code="@item.Code"
+                                                    data-active="@item.IsActive" data-notes="@item.Notes">
+                                                <span class="icofont icofont-ui-edit"></span>
+                                            </button>
+
+                                            <!-- Sil Butonu -->
+                                            <a href="/Admin/PriceType/DeletePriceType/@item.Id" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                                <span class="feather icon-trash"></span>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <button type="button" class="tabledit-edit-button btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px;" data-toggle="modal" data-target="#createPriceTypeModal">
+                <span class="feather icon-plus"> Yeni Fiyat Tipi</span>
+            </button>
+
+            @if (ViewBag.ShowDeleted == true)
+            {
+                <a href="/Admin/PriceType/Index?showDeleted=false" class="btn btn-grd-warning waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                </a>
+            }
+            else
+            {
+                <a href="/Admin/PriceType/Index?showDeleted=true" class="btn btn-grd-inverse waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye"> Silinenleri Göster</span>
+                </a>
+            }
+
+        </div>
+    </div>
+</div>
+
+<!-- Create PriceType Modal -->
+<div id="createPriceTypeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/PriceType/CreatePriceType" class="md-float-material" id="createPriceTypeForm">
+                <div class="card m-t-15">
+                    <div class="auth-box card-block">
+                        <label class="btn btn-inverse btn-block p-t-15 p-b-15">Yeni Fiyat Tipi</label>
+                        <div id="create-error-msg" class="alert alert-danger" style="display:none;"></div>
+                        <br />
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Fiyat Tipi Adı</strong></label>
+                            <input type="text" name="Name" class="form-control" placeholder="Fiyat Tipi Adı" required minlength="2" title="Fiyat Tipi Adı en az 2 karakter olmalıdır.">
+                        </div>
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Kodu</strong></label>
+                            <input type="text" name="Code" class="form-control" placeholder="Kodu (Örn: B2B)" required minlength="2" title="Kodu en az 2 karakter olmalıdır.">
+                        </div>
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" class="form-control" placeholder="Notlar" rows="3"></textarea>
+                        </div>
+
+                        <input type="hidden" name="InsertUserId" value="00000000-0000-0000-0000-000000000000">
+
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block"><i class="icofont icofont-check-circled"></i>Kaydet</button>
+                            </div>
+                            <div class="col-md-4"> </div>
+
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block"><i class="icofont icofont-ui-close"></i> Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit PriceType Modal -->
+<div id="editPriceTypeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/PriceType/UpdatePriceType" class="md-float-material" id="editPriceTypeForm">
+                <div class="card m-t-15">
+                    <div class="modal-header text-white" style="background-color: #34495e; border-radius: 5px 5px 0 0;">
+                        <h5 class="modal-title"><i class="feather icon-info"></i> Fiyat Tipi Güncelleme</h5>
+                    </div>
+                    <div class="auth-box card-block">
+                        <div id="edit-error-msg" class="alert alert-danger" style="display:none;"></div>
+                        <input type="hidden" name="Id" id="edit-id">
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Fiyat Tipi Adı</strong></label>
+                            <input type="text" name="Name" id="edit-name" class="form-control" required minlength="2" title="Fiyat Tipi Adı en az 2 karakter olmalıdır.">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Kodu</strong></label>
+                            <input type="text" name="Code" id="edit-code" class="form-control" required minlength="2" title="Kodu en az 2 karakter olmalıdır.">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" id="edit-isactive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" id="edit-notes" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block"><i class="icofont icofont-check-circled"></i>Güncelle</button>
+                            </div>
+                            <div class="col-md-4"> </div>
+
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block"><i class="icofont icofont-ui-close"></i> Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Details PriceType Modal -->
+<div class="modal fade" id="detailsPriceTypeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">
+                <h5 class="modal-title"><i class="feather icon-info"></i> Fiyat Tipi Detayları</h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>ID:</strong> <p id="det-id" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Fiyat Tipi Adı:</strong> <p id="det-name" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Kodu:</strong> <p id="det-code" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Durum:</strong> <p id="det-active" class="text-muted"></p></div>
+                </div>
+                <hr>
+                <div class="row m-b-10">
+                    <div class="col-md-12"><strong>Notlar:</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Ekleyen:</strong> <p id="det-insuser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Ekleme Tarihi:</strong> <p id="det-insdate" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Güncelleyen:</strong> <p id="det-upduser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Güncelleme Tarihi:</strong> <p id="det-upddate" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Silen:</strong> <p id="det-deluser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silinme Tarihi:</strong> <p id="det-deldate" class="text-muted"></p></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: white;"> <i class="icofont icofont-ui-close"></i> Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#pricetype-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                order: [],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Turkish.json"
+                }
+            });
+
+            $('#createPriceTypeModal').on('show.bs.modal', function() {
+                var modal = $(this);
+                modal.find('form')[0].reset();
+                modal.find('#create-error-msg').hide();
+                modal.find('button[type="submit"]').prop('disabled', false);
+            });
+
+            $('#detailsPriceTypeModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                modal.find('#det-id').text(button.data('id'));
+                modal.find('#det-name').text(button.data('name'));
+                modal.find('#det-code').text(button.data('code'));
+                modal.find('#det-insuser').text(button.data('insuser'));
+                modal.find('#det-insdate').text(button.data('insdate'));
+                modal.find('#det-upduser').text(button.data('upduser') || '-');
+                modal.find('#det-upddate').text(button.data('upddate') || '-');
+                modal.find('#det-deluser').text(button.data('deluser') || '-');
+                modal.find('#det-deldate').text(button.data('deldate') || '-');
+                modal.find('#det-active').text((button.data('active') && button.data('active').toString().toLowerCase() === 'true') ? 'Aktif' : 'Pasif');
+                modal.find('#det-notes').text(button.data('notes') || '-');
+            });
+
+            $('#editPriceTypeModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                modal.find('#edit-id').val(button.data('id'));
+                modal.find('#edit-name').val(button.data('name'));
+                modal.find('#edit-code').val(button.data('code'));
+                modal.find('#edit-notes').val(button.data('notes'));
+                modal.find('#edit-isactive').val(button.data('active').toString().toLowerCase());
+            });
+
+            $('#createPriceTypeForm').on('submit', function(e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var errorDiv = $('#create-error-msg');
+                var submitBtn = form.find('button[type="submit"]');
+                errorDiv.hide();
+                submitBtn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            showToastAlert(response.message, 'inverse', '', 'animated flipInY', 'animated flipOutY');
+                            submitBtn.prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errMsg = "Sunucuya bağlanırken bir hata oluştu.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errMsg = xhr.responseJSON.message;
+                        } else if (xhr.responseText) {
+                            errMsg = xhr.responseText;
+                        }
+                        showToastAlert(errMsg, 'inverse', '', 'animated flipInY', 'animated flipOutY');
+                        submitBtn.prop('disabled', false);
+                    }
+                });
+            });
+
+            $('#editPriceTypeForm').on('submit', function(e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var errorDiv = $('#edit-error-msg');
+                var submitBtn = form.find('button[type="submit"]');
+                errorDiv.hide();
+                submitBtn.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            showToastAlert(response.message, 'inverse', '', 'animated flipInY', 'animated flipOutY');
+                            submitBtn.prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errMsg = "Sunucuya bağlanırken bir hata oluştu.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errMsg = xhr.responseJSON.message;
+                        } else if (xhr.responseText) {
+                            errMsg = xhr.responseText;
+                        }
+                        showToastAlert(errMsg, 'inverse', '', 'animated flipInY', 'animated flipOutY');
+                        submitBtn.prop('disabled', false);
+                    }
+                });
+            });
+
+            $('#createPriceTypeModal').on('hidden.bs.modal', function () {
+                $('#create-error-msg').hide().text('');
+            });
+            $('#editPriceTypeModal').on('hidden.bs.modal', function () {
+                $('#edit-error-msg').hide().text('');
+            });
+        });
+    </script>
+}

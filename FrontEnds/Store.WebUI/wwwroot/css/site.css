@@ -1,0 +1,211 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+/* Wishlist Button Styling */
+.custom-heart-icon {
+    fill: white;
+    stroke: black;
+    stroke-width: 2px;
+    transition: all 0.2s ease;
+}
+.button-wishlist:hover .custom-heart-icon {
+    fill: red !important;
+    stroke: red !important;
+}
+.button-wishlist.active .custom-heart-icon,
+.button-wishlist[data-button-status="added"] .custom-heart-icon {
+    fill: red !important;
+    stroke: red !important;
+}
+
+/* Favori eklendiyse, �st kapsayici her zaman g�r�n�r olsun */
+.product-image:not(:hover) .product-image__overlay-top-right:has(.button-wishlist.active),
+.product-image:not(:hover) .product-image__overlay-top-right:has(.button-wishlist[data-button-status="added"]) {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+}
+
+/* Overlay g�r�n�r kalsa bile, diger butonlar gizlensin */
+.product-image:not(:hover) .product-image__overlay-top-right:has(.button-wishlist.active) > *:not(.button-wishlist),
+.product-image:not(:hover) .product-image__overlay-top-right:has(.button-wishlist[data-button-status="added"]) > *:not(.button-wishlist) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ==========================================================================
+   Instagram 468x585 Image Container & 5-Thumbnail Layout
+   ========================================================================== */
+.product-page-gallery {
+    max-width: 580px !important;
+}
+.product-page-gallery .d-flex.align-items-start {
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
+}
+
+/* 1 no: Main Image Container */
+.product-page-gallery__main {
+    width: 468px !important;
+    min-width: 468px !important;
+    max-width: 468px !important;
+    height: 585px !important;
+    min-height: 585px !important;
+    max-height: 585px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+.product-page-gallery__main > .position-relative {
+    width: 468px !important;
+    height: 585px !important;
+    position: relative !important;
+}
+.product-page-gallery__main .fotorama,
+.product-page-gallery__main .fotorama__wrap,
+.product-page-gallery__main .fotorama__stage {
+    width: 468px !important;
+    max-width: 468px !important;
+    height: 585px !important;
+    background-color: #ffffff !important;
+    max-height: 585px !important;
+}
+.product-page-gallery__main .fotorama__stage__shaft,
+.product-page-gallery__main .fotorama__stage__frame {
+    width: 468px !important;
+    height: 585px !important;
+    background-color: #ffffff !important;
+}
+.product-page-gallery__main .fotorama__img {
+    top: 0 !important;
+    left: 0 !important;
+    width: 468px !important;
+    height: 585px !important;
+    max-width: 468px !important;
+    max-height: 585px !important;
+    object-fit: contain !important;
+    object-position: center top !important;
+    background-color: #ffffff !important;
+}
+
+/* 1 & 2 no: Zoom Container */
+.product-page-gallery .zoomContainer,
+.product-page-gallery [data-js-product-gallery-zoom] .zoomContainer {
+    width: 468px !important;
+    height: 585px !important;
+    max-width: 468px !important;
+    max-height: 585px !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    position: absolute !important;
+}
+.product-page-gallery .zoomContainer .zoomWindowContainer,
+.product-page-gallery .zoomContainer .zoomWindow {
+    width: 468px !important;
+    height: 585px !important;
+}
+
+/* 3 no: Vertical 5-Thumbnails Preview */
+.product-page-gallery__preview {
+    width: 86px !important;
+    min-width: 86px !important;
+    max-width: 86px !important;
+    height: 585px !important;
+    min-height: 585px !important;
+    max-height: 585px !important;
+    overflow: hidden !important;
+    margin-right: 10px !important;
+}
+.product-page-gallery__preview [data-js-product-gallery-preview] {
+    height: 585px !important;
+}
+.product-page-gallery__preview .slick-list {
+    height: 585px !important;
+    max-height: 585px !important;
+}
+.product-page-gallery__preview .slick-track {
+    height: auto !important;
+}
+.product-page-gallery__preview [data-js-product-gallery-preview-image] {
+    width: 86px !important;
+    height: 107px !important;
+    margin-bottom: 10px !important;
+    outline: none !important;
+    cursor: pointer;
+}
+.product-page-gallery__preview [data-js-product-gallery-preview-image] .rimage {
+    width: 86px !important;
+    height: 107px !important;
+    padding-top: 0 !important;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.product-page-gallery__preview [data-js-product-gallery-preview-image] .rimage__img {
+    width: 86px !important;
+    height: 107px !important;
+    position: relative !important;
+    object-fit: cover !important;
+}
+.product-page-gallery__preview [data-js-product-gallery-preview-image].current {
+    border: 2px solid #141414 !important;
+}
+
+
+/* ==========================================================================
+   Tüm Projede Resimleri Dikey Olarak Yukarı Yaslama (Top-Aligned Images)
+   ========================================================================== */
+.rimage {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+}
+
+.rimage__img,
+.rimage__img--contain,
+.rimage__img--cover {
+    object-position: center top !important;
+}
+
+.rimage__img--stretch-by-width {
+    top: 0 !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+}
+
+/* Tüm Fotorama & Galeri Resimleri */
+.fotorama__img {
+    object-position: center top !important;
+    top: 0 !important;
+}
+
+/* Ürün Kartları, Koleksiyonlar ve Sepet Resimleri */
+.product-collection__image img,
+.product-image img,
+.product-cart__image img,
+.product-cart img,
+.product-item img,
+[data-js-product-image] img {
+    object-position: center top !important;
+    vertical-align: top !important;
+}

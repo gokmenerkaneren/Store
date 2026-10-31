@@ -1,0 +1,25 @@
+# Visual Studio & Build Outputs
+.vs/
+bin/
+obj/
+publish/
+*.user
+*.suo
+
+# Security & Secrets
+**/tempkey.jwk
+appsettings.Production.json
+**/PassWords.txt
+Requirements/PassWords.txt
+*.pfx
+*.cer
+*.key
+
+# Tools
+.tools/
+
+# OS & Logs
+*.log
+dart_test.log
+.DS_Store
+Thumbs.db

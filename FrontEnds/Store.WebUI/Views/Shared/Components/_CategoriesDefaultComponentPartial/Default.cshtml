@@ -1,0 +1,73 @@
+<div data-section-id="1537197792650" data-section-type="home-builder" class="container">
+    <h3 class="carousel__title mb-35 text-center"> Ürün Kategorilerimiz </h3>
+    <div class="overflow-x-hidden">
+        <div class="row mt-0 mb-40 justify-content-start align-items-start">
+            @using Store.WebUI.ViewComponents.UILayoutViewComponents
+            @model List<CategoryPromoViewModel>
+            <!-- Veritabanından gelen dinamik kategori içerikleri (Ana Menüler ve Alt Menüler) -->
+            @if (Model != null && Model.Any())
+            {
+                foreach (var promo in Model.Take(1)) // Şu anki tasarımda 1 blok var, şimdilik ilk 1'ini listeliyoruz
+                {
+                    <div class="col-12 col-md-12 mt-0 mb-10 mb-sm-15 mb-md-15 mb-lg-15 mb-xl-15">
+                        <div class="promobox promobox--type-05 image-animation-trigger position-relative d-flex flex-column align-items-center text-center">
+                            <a href="#" class="w-100">
+                                <div class="image-animation image-animation--from-default image-animation--to-center image-animation--to-opacity">
+                                    <div class="rimage" style="padding-top:72.97297297297297%;">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                             class="rimage__img rimage__img--fade-in lazyload"
+                                             data-master="@(!string.IsNullOrEmpty(promo.Parent.ImageUrl) ? promo.Parent.ImageUrl : "/Images/Default/placeholder.jpg")"
+                                             data-aspect-ratio="1.3703703703703705"
+                                             data-srcset="@(!string.IsNullOrEmpty(promo.Parent.ImageUrl) ? promo.Parent.ImageUrl : "/Images/Default/placeholder.jpg") 1x, @(!string.IsNullOrEmpty(promo.Parent.ImageUrl) ? promo.Parent.ImageUrl : "/Images/Default/placeholder.jpg") 2x"
+                                             data-scale-perspective="1.1"
+                                             alt="@promo.Parent.Name">
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="promobox__plate promobox__plate--hovered position-absolute d-flex flex-column flex-center px-10 py-7 pointer-events-none">
+                                <a href="#" class="pointer-events-all">
+                                    <p class="promobox__text-line-01 h5 position-relative m-0" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">@promo.Parent.Name.ToUpper()</p>
+                                </a>
+                            </div>
+                            <div class="promobox__content-scale position-absolute d-none d-lg-flex flex-column flex-center px-15 py-7 pointer-events-none" style="background: rgba(255,255,255,0.9); border-radius: 10px; min-width: 60%;">
+                                <a href="#" class="pointer-events-all">
+                                    <p class="promobox__text-line-01 h5 position-relative m-0" style="color: #222;">@promo.Parent.Name.ToUpper()</p>
+                                </a>
+                                @if (promo.Children != null && promo.Children.Any())
+                                {
+                                    <ul class="promobox__list list-unstyled position-relative mt-5 overflow-hidden pointer-events-all">
+                                        @foreach (var child in promo.Children.Take(5)) // Çok fazla alt menü varsa taşmayı önlemek için ilk 5'ini gösteriyoruz
+                                        {
+                                            <li><a href="#" style="color: #555;">@child.Name</a></li>
+                                        }
+                                        @if (promo.Children.Count > 5)
+                                        {
+                                            <li><a href="#" style="color: #000; font-weight: bold;">Tümünü Gör</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center p-5">
+                    <h4>HENÜZ KATEGORİ EKLENMEDİ</h4>
+                    <p>Yönetim panelinden üst ve alt kategori eklediğinizde burada görünecektir.</p>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    Loader.require({
+        type: "script",
+        name: "home_builder"
+    });
+</script>
+
+<!-- Bir sontaki seciton 1537197205856 -->

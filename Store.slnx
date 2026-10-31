@@ -1,0 +1,93 @@
+<Solution>
+  <Folder Name="/FrontEnds/">
+    <Project Path="FrontEnds/Store.WebUI/Store.WebUI.csproj" Id="bff8122c-1842-4391-8456-67c540b1f1dd" />
+  </Folder>
+  <Folder Name="/Libraries/">
+    <Project Path="Libraries/Store.Shared/Store.Shared.csproj" />
+    <Project Path="Store.DtoLayer/Store.DtoLayer.csproj" Id="ac4740bf-31a0-4f99-91d4-5a10e81c465d" />
+  </Folder>
+  <Folder Name="/GeciciDosyalar/">
+    <File Path="GeciciDosyalar/dart_test.log" />
+  </Folder>
+  <Folder Name="/IdentityServer/">
+    <Project Path="IdentityServer/Store.IdentityServer/Store.IdentityServer.csproj" />
+  </Folder>
+  <Folder Name="/Requirements/">
+    <File Path="Requirements/IdentityServerVersionErrorSolution.txt" />
+    <File Path="Requirements/PassWords.txt" />
+    <File Path="Requirements/PortainerCmd.txt" />
+    <File Path="Requirements/PortNumbers.txt" />
+  </Folder>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/B2B/" />
+  <Folder Name="/Services/B2B/Core/">
+    <Project Path="Services/B2B/Core/Store.B2B.Application/Store.B2B.Application.csproj" />
+    <Project Path="Services/B2B/Core/Store.B2B.Domain/Store.B2B.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Services/B2B/Infrastructure/">
+    <Project Path="Services/B2B/Infrastructure/Store.B2B.Persistence/Store.B2B.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Services/B2B/Presentation/">
+    <Project Path="Services/B2B/Presentation/Store.B2B.WebApi/Store.B2B.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Services/Basket/">
+    <Project Path="Services/Basket/Store.Basket/Store.Basket.csproj" Id="138a55db-71aa-413a-bd3d-6a5442da1ef4" />
+  </Folder>
+  <Folder Name="/Services/Catalog/">
+    <Project Path="Services/Catalog/Store.Catalog/Store.Catalog.csproj" />
+  </Folder>
+  <Folder Name="/Services/Discount/">
+    <Project Path="Services/Discount/Store.Discount/Store.Discount.csproj" Id="21c92a03-a650-47a5-80e5-6ea589cdc718" />
+  </Folder>
+  <Folder Name="/Services/Favorite/" />
+  <Folder Name="/Services/Favorite/Core/">
+    <Project Path="Services/Favorite/Core/Store.Favorite.Application/Store.Favorite.Application.csproj" />
+    <Project Path="Services/Favorite/Core/Store.Favorite.Domain/Store.Favorite.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Services/Favorite/Infrastructure/">
+    <Project Path="Services/Favorite/Infrastructure/Store.Favorite.Infrastructure/Store.Favorite.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Favorite/Presentation/">
+    <Project Path="Services/Favorite/Presentation/Store.Favorite.WebApi/Store.Favorite.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Services/Location/" />
+  <Folder Name="/Services/Location/Core/">
+    <Project Path="Services/Location/Core/Store.Location.Application/Store.Location.Application.csproj" Id="985379ab-f7e5-4bf2-adcc-e816ed65af53" />
+    <Project Path="Services/Location/Core/Store.Location.Domain/Store.Location.Domain.csproj" Id="8eae1e77-80c9-42e1-b64a-c68425bd5c02" />
+  </Folder>
+  <Folder Name="/Services/Location/Infrastructure/">
+    <Project Path="Services/Location/Infrastructure/Store.Location.Persistence/Store.Location.Persistence.csproj" Id="9b8242b9-e1ff-4dbd-aa61-ca2f2c81f8ea" />
+  </Folder>
+  <Folder Name="/Services/Location/Presentation/">
+    <Project Path="Services/Location/Presentation/Store.Location.WebApi/Store.Location.WebApi.csproj" Id="8c2e1962-915a-4339-a335-13081225545d" />
+  </Folder>
+  <Folder Name="/Services/Location/Tests/">
+    <Project Path="Services/Location/Tests/Store.Location.Tests/Store.Location.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Services/Order/" />
+  <Folder Name="/Services/Order/Core/">
+    <Project Path="Services/Order/Core/Store.Order.Application/Store.Order.Application.csproj" Id="a4dea58a-c0fd-4ce9-a24c-4031cf08525f" />
+    <Project Path="Services/Order/Core/Store.Order.Domain/Store.Order.Domain.csproj" Id="afdbc238-30ee-4b08-8f9c-f1e0a71e7274" />
+  </Folder>
+  <Folder Name="/Services/Order/Infrastructure/">
+    <Project Path="Services/Order/Core/Infrastructure/Store.Order.Persistence/Store.Order.Persistence.csproj" Id="ac70dfd9-e3fb-4404-a532-ef9dbd52be2d" />
+  </Folder>
+  <Folder Name="/Services/Order/Presentation/">
+    <Project Path="Services/Order/Presentation/Store.Order.WebApi/Store.Order.WebApi.csproj" Id="94c353ac-6261-4230-aa7e-d3d805dfda44" />
+  </Folder>
+  <Folder Name="/Services/Order/Tests/" />
+  <Folder Name="/Services/Order/Tests/Store.Order.Tests/">
+    <Project Path="Services/Order/Tests/Store.Order.Tests/Store.Order.Tests/Store.Order.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Services/Rental/" />
+  <Folder Name="/Services/Rental/Core/">
+    <Project Path="Services/Rental/Core/Store.Rental.Application/Store.Rental.Application.csproj" />
+    <Project Path="Services/Rental/Core/Store.Rental.Domain/Store.Rental.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Services/Rental/Infrastructure/">
+    <Project Path="Services/Rental/Infrastructure/Store.Rental.Persistence/Store.Rental.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Services/Rental/Presentation/">
+    <Project Path="Services/Rental/Presentation/Store.Rental.WebApi/Store.Rental.WebApi.csproj" />
+  </Folder>
+</Solution>

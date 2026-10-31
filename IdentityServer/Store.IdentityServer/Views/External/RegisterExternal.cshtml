@@ -1,0 +1,50 @@
+@model IdentityServerHost.Quickstart.UI.ExternalRegisterViewModel
+
+<div class="external-register-page">
+    <div class="page-header">
+        <h1>Kayıt Tamamlama</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lütfen eksik bilgilerinizi tamamlayın</h3>
+                </div>
+                <div class="panel-body">
+                    <form asp-route="RegisterExternal">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input type="hidden" asp-for="ReturnUrl" />
+                        <input type="hidden" asp-for="Email" />
+
+                        <div class="form-group">
+                            <label asp-for="FirstName">Ad</label>
+                            <input class="form-control" placeholder="Adınız" asp-for="FirstName" autofocus />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LastName">Soyad</label>
+                            <input class="form-control" placeholder="Soyadınız" asp-for="LastName" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber">Telefon Numarası</label>
+                            <input class="form-control" placeholder="Telefon Numaranız" asp-for="PhoneNumber" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TCKimlik">TC Kimlik</label>
+                            <input class="form-control" placeholder="TC Kimlik Numaranız" asp-for="TCKimlik" />
+                            <span asp-validation-for="TCKimlik" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" name="button" value="register">Kaydı Tamamla</button>
+                            <button class="btn btn-default" name="button" value="cancel">İptal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

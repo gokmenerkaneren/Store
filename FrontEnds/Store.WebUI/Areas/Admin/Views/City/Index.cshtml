@@ -1,0 +1,415 @@
+@model List<Store.DtoLayer.LocationDtos.CityDtos.ResultCityDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Şehir Listesi";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        ŞEHİR İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Şehir Listesi ve İşlemleri</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="card-block">
+        <div class="dt-responsive table-responsive">
+            <table id="city-table" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>Ülke</th>
+                        <th>Şehir Adı</th>
+                        <th>Plaka Kodu</th>
+                        <th>Notlar</th>
+                        <th>Durum</th>
+                        <th>Ekleyen</th>
+                        <th>Ekleme Tarihi</th>
+                        <th>Güncelleyen</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th>Silen</th>
+                        <th>Silinme Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr style="@(item.IsDeleted ? "background-color:#c0392b; color:#fff; border-left:4px solid #922b21; font-weight:600;" : (!item.IsActive ? "opacity:0.5;background-color:#f8d7da;" : ""))">
+                                @{
+                                    var countries = ViewBag.Countries as List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto>;
+                                    var countryName = countries?.FirstOrDefault(c => c.Id == item.CountryId)?.CountryName ?? item.CountryId.ToString();
+                                }
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@countryName</td>
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.CityName</td>
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.PlateCode</td>
+                                <td style="@(item.IsDeleted ? "text-decoration:line-through;" : "")">@item.Notes</td>
+                                <td>
+                                    @if (item.IsDeleted)
+                                    {
+                                        <span class="label" style="background:#7b241c; color:#fff;">Silindi</span>
+                                    }
+                                    else if (item.IsActive)
+                                    {
+                                        <span class="label label-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td>@item.InsertUserId</td>
+                                <td>@item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@item.UpdateUserId</td>
+                                <td>@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                                <td>@item.DeleteUserId</td>
+                                <td>@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <!-- Detay Butonu -->
+                                        <button type="button" class="btn btn-grd-success waves-effect waves-light" style="float: none;margin: 5px;"
+                                                data-toggle="modal" data-target="#detailsCityModal"
+                                                data-id="@item.Id" data-name="@item.CityName" data-plate="@item.PlateCode"
+                                                data-countryid="@item.CountryId" data-countryname="@countryName" data-active="@item.IsActive"
+                                                data-insuser="@item.InsertUserId" data-insdate="@(item.InsertDate.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-upduser="@item.UpdateUserId" data-upddate="@(item.UpdateDate?.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-deluser="@item.DeleteUserId" data-deldate="@(item.DeleteDate?.ToString("dd.MM.yyyy HH:mm:ss"))"
+                                                data-notes="@item.Notes">
+                                            <i class="icofont icofont-file-text"></i>
+                                        </button>
+
+                                        @if (item.IsDeleted)
+                                        {
+                                            <!-- Recovery (Geri Alma) Butonu - Silinmiş kayıtlar için -->
+                                            <a href="/Admin/City/RestoreCity/@item.Id" class="btn btn-grd-warning waves-effect waves-light btn-restore-confirm" style="float: none; margin: 5px; min-width: 70px; padding: 6px 16px;">
+                                                <i class="feather icon-rotate-ccw"></i> Geri Al
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <!-- Güncelle Butonu -->
+                                            <button type="button" class="btn btn-grd-primary waves-effect waves-light" style="float: none;margin: 5px;"
+                                                    data-toggle="modal" data-target="#editCityModal"
+                                                    data-id="@item.Id" data-name="@item.CityName" data-plate="@item.PlateCode"
+                                                    data-countryid="@item.CountryId" data-active="@item.IsActive" data-notes="@item.Notes">
+                                                <span class="icofont icofont-ui-edit"></span>
+                                            </button>
+
+                                            <!-- Sil Butonu -->
+                                            <a href="/Admin/City/DeleteCity/@item.Id" class="btn btn-grd-danger waves-effect waves-light btn-delete-confirm" style="float: none;margin: 5px;">
+                                                <span class="feather icon-trash"></span>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <button type="button" class="tabledit-edit-button btn btn-grd-primary waves-effect waves-light"
+                    data-toggle="modal" data-target="#createCityModal">
+                <i class="feather icon-plus"></i> Yeni Şehir
+            </button>
+
+            <!-- Silinenleri Göster Butonu -->
+            @if (ViewBag.ShowDeleted == true)
+            {
+                <a href="/Admin/City/Index?showDeleted=false" class="btn btn-grd-warning waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye-off"> Silinenleri Gizle</span>
+                </a>
+            }
+            else
+            {
+                <a href="/Admin/City/Index?showDeleted=true" class="btn btn-grd-inverse waves-effect waves-light" style="float: none;margin: 5px;">
+                    <span class="feather icon-eye"> Silinenleri Göster</span>
+                </a>
+            }
+            <br />
+
+        </div>
+    </div>
+</div>
+
+<!-- Create City Modal -->
+<div id="createCityModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/City/Create" class="md-float-material" id="createCityForm">
+                <div class="card m-t-15">
+                    <div class="auth-box card-block">
+                        <label class="btn btn-inverse btn-block p-t-15 p-b-15">Yeni Şehir</label>
+                        <div id="create-error-msg" class="alert alert-danger" style="display:none;"></div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Ülke</strong></label>
+                            <select name="CountryId" class="form-control" required>
+                                <option value="">-- Ülke Seçiniz --</option>
+                                @if (ViewBag.Countries != null)
+                                {
+                                    foreach (var country in (List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto>)ViewBag.Countries)
+                                    {
+                                        <option value="@country.Id">@country.CountryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Şehir Adı</strong></label>
+                            <input type="text" name="CityName" class="form-control" placeholder="Şehir Adı" required minlength="3" />
+                        </div>
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Plaka Kodu</strong></label>
+                            <input type="text" name="PlateCode" class="form-control" required pattern="\d{2}" maxlength="2" title="Lütfen 2 haneli bir plaka kodu giriniz (ör: 01, 34)." placeholder="Plaka Kodu" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                        </div>
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group m-b-10">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" class="form-control" placeholder="Notlar" rows="5"></textarea>
+                        </div>
+                        <input type="hidden" name="InsertUserId" value="00000000-0000-0000-0000-000000000000" />
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block">
+                                    <i class="icofont icofont-check-circled"></i> Kaydet
+                                </button>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block">
+                                    <i class="icofont icofont-ui-close"></i> Vazgeç
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit City Modal -->
+<div id="editCityModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <form method="post" action="/Admin/City/Edit" class="md-float-material" id="editCityForm">
+                <div class="card m-t-15">
+                    <div class="modal-header text-white" style="background-color: #34495e; border-radius: 5px 5px 0 0;">                    
+                        <h5 class="modal-title"><i class="feather icon-info"></i> Şehir Güncelleme</h5>
+                    </div>
+                    <div class="auth-box card-block">
+                        <div id="edit-error-msg" class="alert alert-danger" style="display:none;"></div>
+                        <input type="hidden" name="Id" id="edit-id" />
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Ülke</strong></label>
+                            <select name="CountryId" id="edit-country" class="form-control" required>
+                                <option value="">-- Ülke Seçiniz --</option>
+                                @if (ViewBag.Countries != null)
+                                {
+                                    foreach (var country in (List<Store.DtoLayer.LocationDtos.CountryDtos.ResultCountryDto>)ViewBag.Countries)
+                                    {
+                                        <option value="@country.Id">@country.CountryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Şehir Adı</strong></label>
+                            <input type="text" name="CityName" id="edit-name" class="form-control" required minlength="3" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Plaka Kodu</strong></label>
+                            <input type="text" name="PlateCode" id="edit-plate" class="form-control" required pattern="\d{2}" maxlength="2" title="Lütfen 2 haneli bir plaka kodu giriniz (ör: 01, 34)." placeholder="Plaka Kodu" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><strong>Durum</strong></label>
+                            <select name="IsActive" id="edit-isactive" class="form-control">
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><strong>Notlar</strong></label>
+                            <textarea name="Notes" id="edit-notes" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="row m-t-15">
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-success btn-md btn-block">
+                                    <i class="icofont icofont-check-circled"></i> Güncelle
+                                </button>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 text-right">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger btn-md btn-block">
+                                    <i class="icofont icofont-ui-close"></i> Vazgeç
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Details City Modal -->
+<div class="modal fade" id="detailsCityModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #00bcd4; border-radius: 5px 5px 0 0;">
+                <h5 class="modal-title"><i class="feather icon-info"></i> Şehir Detayları</h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>ID:</strong> <p id="det-id" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Şehir Adı:</strong> <p id="det-name" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Plaka Kodu:</strong> <p id="det-plate" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Ülke:</strong> <p id="det-country" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-md-12"><strong>Notlar:</strong> <p id="det-notes" class="text-muted" style="white-space: pre-line;"></p></div>
+                </div>
+                <hr/>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Ekleyen:</strong> <p id="det-insuser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Ekleme Tarihi:</strong> <p id="det-insdate" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Güncelleyen:</strong> <p id="det-upduser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Güncelleme Tarihi:</strong> <p id="det-upddate" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Silen:</strong> <p id="det-deluser" class="text-muted"></p></div>
+                    <div class="col-sm-6"><strong>Silinme Tarihi:</strong> <p id="det-deldate" class="text-muted"></p></div>
+                </div>
+                <div class="row m-b-10">
+                    <div class="col-sm-6"><strong>Durum:</strong> <p id="det-active" class="text-muted"></p></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="color: white;"> <i class="icofont icofont-ui-close"></i> Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#city-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                order: []
+            });
+
+            $('#createCityModal').on('show.bs.modal', function() {
+                var modal = $(this);
+                modal.find('form')[0].reset();
+                modal.find('#create-error-msg').hide();
+                modal.find('button[type="submit"]').prop('disabled', false);
+            });
+
+            $('#editCityModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                modal.find('#edit-id').val(button.data('id'));
+                modal.find('#edit-country').val(button.data('countryid'));
+                modal.find('#edit-name').val(button.data('name'));
+                modal.find('#edit-plate').val(button.data('plate'));
+                modal.find('#edit-isactive').val(button.data('active').toString().toLowerCase());
+                modal.find('#edit-notes').val(button.data('notes'));
+            });
+
+            $('#detailsCityModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                modal.find('#det-id').text(button.data('id'));
+                modal.find('#det-name').text(button.data('name'));
+                modal.find('#det-plate').text(button.data('plate'));
+                modal.find('#det-country').text(button.data('countryname'));
+                modal.find('#det-insuser').text(button.data('insuser'));
+                modal.find('#det-insdate').text(button.data('insdate'));
+                modal.find('#det-upduser').text(button.data('upduser') || '-');
+                modal.find('#det-upddate').text(button.data('upddate') || '-');
+                modal.find('#det-deluser').text(button.data('deluser') || '-');
+                modal.find('#det-deldate').text(button.data('deldate') || '-');
+                modal.find('#det-active').text(button.data('active').toString().toLowerCase() === 'true' ? 'Aktif' : 'Pasif');
+                modal.find('#det-notes').text(button.data('notes') || '-');
+            });
+
+            $('#createCityForm').on('submit', function(e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var err = $('#create-error-msg');
+                var btn = form.find('button[type="submit"]');
+                err.hide(); btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(r) { if (r.success) location.reload(); else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); } },
+                    error: function() { showToastAlert('Sunucuya bağlanırken hata oluştu.', 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                });
+            });
+
+            $('#editCityForm').on('submit', function(e) {
+                e.preventDefault();
+                if (!this.checkValidity()) {
+                    this.reportValidity();
+                    return false;
+                }
+
+                var form = $(this);
+                var err = $('#edit-error-msg');
+                var btn = form.find('button[type="submit"]');
+                err.hide(); btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(r) { if (r.success) location.reload(); else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); } },
+                    error: function() { showToastAlert('Sunucuya bağlanırken hata oluştu.', 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                });
+            });
+        });
+    </script>
+}

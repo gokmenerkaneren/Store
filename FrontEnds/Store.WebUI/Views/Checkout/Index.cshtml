@@ -1,0 +1,510 @@
+@model Store.WebUI.Models.CheckoutViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Ödeme & Sipariş Tamamlama";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+}
+
+<style>
+    .checkout-page-container {
+        padding: 30px 0 60px 0;
+        font-family: inherit;
+    }
+    .checkout-section-title {
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #111;
+        letter-spacing: -0.2px;
+    }
+    .checkout-form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+    .checkout-input {
+        height: 48px;
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        font-size: 14px;
+        padding: 10px 14px;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .checkout-input:focus {
+        border-color: #111;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+        outline: none;
+    }
+    .checkout-summary-box {
+        background-color: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 24px;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 20px;
+    }
+    .checkout-item-thumb {
+        position: relative;
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .checkout-item-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 7px;
+    }
+    .checkout-item-qty {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #333;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .shipping-option-card {
+        border: 2px solid #2b78e4;
+        background: #f7faff;
+        border-radius: 6px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+    .payment-option-card {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        transition: border-color .2s;
+    }
+    .payment-option-card.active {
+        border-color: #111;
+    }
+    .payment-header {
+        padding: 14px 18px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+    }
+    .payment-body {
+        padding: 18px;
+        background: #fdfdfd;
+        border-top: 1px solid #eee;
+    }
+    .btn-pay-now {
+        height: 52px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        border: none;
+        width: 100%;
+        transition: background .2s;
+    }
+    .btn-pay-now:hover {
+        background: #2b2b2b;
+        color: #fff;
+    }
+    .custom-control-label::before {
+        border-radius: 4px;
+    }
+</style>
+
+<div class="checkout-page-container">
+    <div class="container">
+        <form asp-controller="Checkout" asp-action="Index" method="post" id="checkoutForm">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <!-- SOL KOLON: Form Bilgileri (~58%) -->
+                <div class="col-lg-7 pr-lg-4 mb-40 mb-lg-0">
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger mb-25" role="alert">
+                            <i class="fa fa-exclamation-triangle mr-2"></i> Lütfen formu kontrol edin ve eksik bilgileri doldurun.
+                            <div asp-validation-summary="All" class="text-danger small mt-2 mb-0"></div>
+                        </div>
+                    }
+
+                    <!-- 1. İLETİŞİM (CONTACT) -->
+                    <div class="mb-35">
+                        <div class="d-flex justify-content-between align-items-center mb-15">
+                            <h2 class="checkout-section-title mb-0">İletişim</h2>
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <span class="small text-muted">Giriş Yapıldı: <strong>@User.Identity.Name</strong></span>
+                            }
+                            else
+                            {
+                                <a href="/Uyelik/Index?returnUrl=/Checkout/Index" class="small text-primary font-weight-bold">Giriş Yap</a>
+                            }
+                        </div>
+
+                        <div class="form-group mb-10">
+                            <input asp-for="EmailOrPhone" class="form-control checkout-input" placeholder="E-posta veya cep telefonu numarası" required />
+                            <span asp-validation-for="EmailOrPhone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="custom-control custom-checkbox mt-10">
+                            <input asp-for="AcceptMarketing" type="checkbox" class="custom-control-input" id="acceptMarketingCheck">
+                            <label class="custom-control-label small text-muted" for="acceptMarketingCheck">
+                                Kampanyalar, indirimler ve yeni ürünler hakkında e-posta almak istiyorum.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. TESLİMAT ADRESİ (DELIVERY) -->
+                    <div class="mb-35">
+                        <h2 class="checkout-section-title">Teslimat Adresi</h2>
+
+                        <div class="form-row mb-15">
+                            <div class="col-md-6 mb-15 mb-md-0">
+                                <label class="checkout-form-label">Ad (isteğe bağlı)</label>
+                                <input asp-for="FirstName" class="form-control checkout-input" placeholder="Adınız" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="checkout-form-label">Soyad <span class="text-danger">*</span></label>
+                                <input asp-for="LastName" class="form-control checkout-input" placeholder="Soyadınız" required />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-15">
+                            <label class="checkout-form-label">Ülke / Bölge</label>
+                            <select asp-for="Country" class="form-control checkout-input">
+                                <option value="Türkiye" selected>Türkiye</option>
+                                <option value="Kuzey Kıbrıs">Kuzey Kıbrıs</option>
+                                <option value="Almanya">Almanya</option>
+                                <option value="Azerbaycan">Azerbaycan</option>
+                            </select>
+                        </div>
+                       
+                        <div class="form-row mb-15">
+                            <div class="col-md-6 mb-15 mb-md-0">
+                                <label class="checkout-form-label">Şehir / İl <span class="text-danger">*</span></label>
+                                <input asp-for="City" class="form-control checkout-input" placeholder="Örn: İstanbul, Ankara, İzmir" required />
+                                <span asp-validation-for="City" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="checkout-form-label">İlçe <span class="text-danger">*</span></label>
+                                <input asp-for="District" class="form-control checkout-input" placeholder="Örn: Kadıköy, Çankaya" required />
+                                <span asp-validation-for="District" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row mb-15">
+                            <div class="col-md-6 mb-15 mb-md-0">
+                                <label class="checkout-form-label">Posta Kodu (isteğe bağlı)</label>
+                                <input asp-for="PostalCode" class="form-control checkout-input" placeholder="Posta Kodu" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="checkout-form-label">İletişim Telefonu</label>
+                                <input asp-for="Phone" class="form-control checkout-input" placeholder="05XX XXX XX XX" />
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-15">
+                            <label class="checkout-form-label">Açık Adres <span class="text-danger">*</span></label>
+                            <input asp-for="AddressLine" class="form-control checkout-input" placeholder="Cadde, sokak, mahalle, bina ve kapı no" required />
+                            <span asp-validation-for="AddressLine" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group mb-15">
+                            <label class="checkout-form-label">Daire, Süit, Kat vb. (isteğe bağlı)</label>
+                            <input asp-for="Apartment" class="form-control checkout-input" placeholder="Daire, kat, blok (isteğe bağlı)" />
+                        </div>
+
+                        <div class="custom-control custom-checkbox mt-10">
+                            <input asp-for="SaveAddressForNextTime" type="checkbox" class="custom-control-input" id="saveAddressCheck">
+                            <label class="custom-control-label small text-muted" for="saveAddressCheck">
+                                Bu teslimat adresini sonraki siparişlerim için profilime kaydet.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 3. KARGO YÖNTEMİ (SHIPPING METHOD) -->
+                    <div class="mb-35">
+                        <h2 class="checkout-section-title">Kargo Yöntemi</h2>
+                        <div class="shipping-option-card">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" checked disabled class="mr-12" style="accent-color: #2b78e4;" />
+                                <div>
+                                    <span class="font-weight-bold d-block text-dark" style="font-size: 14px;">Standart Kargo Teslimatı</span>
+                                    <span class="small text-muted">1 - 3 İş günü içerisinde adrese teslimat</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge badge-success px-2 py-1 font-weight-bold" style="font-size: 12px;">ÜCRETSİZ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. ÖDEME (PAYMENT) -->
+                    <div class="mb-35">
+                        <div class="d-flex justify-content-between align-items-center mb-10">
+                            <h2 class="checkout-section-title mb-0">Ödeme Yöntemi</h2>
+                        </div>
+                        <p class="small text-muted mb-15">
+                            <svg aria-hidden="true" focusable="false" role="presentation" style="width: 14px; height: 14px; vertical-align: -2px; fill: #28a745;" viewBox="0 0 24 24">
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                            </svg>
+                            Tüm işlemler 256-bit SSL güvenlik sertifikası ile şifrelenir ve korunur.
+                        </p>
+
+                        <!-- Kredi Kartı Seçeneği -->
+                        <div class="payment-option-card active" id="cardOptionWrapper" onclick="togglePaymentTab('CreditCard')">
+                            <label class="payment-header mb-0" for="payMethodCard" onclick="togglePaymentTab('CreditCard'); event.stopPropagation();">
+                                <input type="radio" asp-for="PaymentMethod" value="CreditCard" id="payMethodCard" checked class="mr-12" onchange="togglePaymentTab('CreditCard')" />
+                                <span class="font-weight-bold" style="font-size: 14px;">Kredi / Banka Kartı</span>
+                                <span class="ml-auto small text-muted">
+                                    <i class="fa fa-cc-visa fa-lg mr-1 text-primary"></i>
+                                    <i class="fa fa-cc-mastercard fa-lg mr-1 text-danger"></i>
+                                    <i class="fa fa-credit-card fa-lg text-secondary"></i>
+                                </span>
+                            </label>
+
+                            <div class="payment-body" id="creditCardBody" onclick="event.stopPropagation()">
+                                <div class="form-group mb-15">
+                                    <label class="checkout-form-label">Kart Numarası</label>
+                                    <input asp-for="CardNumber" class="form-control checkout-input" placeholder="•••• •••• •••• ••••" maxlength="19" />
+                                </div>
+                                <div class="form-group mb-15">
+                                    <label class="checkout-form-label">Kart Üzerindeki İsim</label>
+                                    <input asp-for="CardHolderName" class="form-control checkout-input" placeholder="Ad Soyad" />
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <label class="checkout-form-label">Son Kullanma (AA/YY)</label>
+                                        <div class="d-flex">
+                                            <input asp-for="ExpireMonth" class="form-control checkout-input text-center mr-2" placeholder="AA" maxlength="2" />
+                                            <input asp-for="ExpireYear" class="form-control checkout-input text-center" placeholder="YY" maxlength="2" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="checkout-form-label">Güvenlik Kodu (CVV)</label>
+                                        <input asp-for="Cvv" class="form-control checkout-input text-center" placeholder="CVV" maxlength="4" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Havale / EFT Seçeneği -->
+                        <div class="payment-option-card" id="bankOptionWrapper" onclick="togglePaymentTab('BankTransfer')">
+                            <label class="payment-header mb-0" for="payMethodBank" onclick="togglePaymentTab('BankTransfer'); event.stopPropagation();">
+                                <input type="radio" asp-for="PaymentMethod" value="BankTransfer" id="payMethodBank" class="mr-12" onchange="togglePaymentTab('BankTransfer')" />
+                                <span class="font-weight-bold" style="font-size: 14px;">Banka Havalesi / EFT</span>
+                            </label>
+                            <div class="payment-body" id="bankTransferBody" style="display: none;" onclick="event.stopPropagation()">
+                                <div class="p-3 bg-white rounded border mb-15">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted small">Banka:</span>
+                                        <strong class="text-dark small">Ziraat Bankası</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted small">Hesap Sahibi:</span>
+                                        <strong class="text-dark small">Sezadan Dış Ticaret Ltd. Şti.</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-muted small">IBAN:</span>
+                                        <strong class="text-primary small" style="letter-spacing: 0.5px;">TR33 0001 0012 3456 7890 1234 56</strong>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-0">
+                                    <i class="fa fa-info-circle mr-1 text-primary"></i> Siparişinizi tamamladıktan sonra sipariş kodunuz ekranda gösterilecek ve e-postanıza iletilecektir. Lütfen havale açıklamasına <strong>Sipariş Kodunuzu</strong> yazınız.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Kapıda Ödeme Seçeneği -->
+@*                         <div class="payment-option-card" id="cashOptionWrapper">
+                            <label class="payment-header mb-0" for="payMethodCash">
+                                <input type="radio" asp-for="PaymentMethod" value="CashOnDelivery" id="payMethodCash" class="mr-12" onchange="togglePaymentTab('CashOnDelivery')" />
+                                <span class="font-weight-bold" style="font-size: 14px;">Kapıda Ödeme (Nakit / Kredi Kartı)</span>
+                            </label>
+                            <div class="payment-body" id="cashOnDeliveryBody" style="display: none;">
+                                <p class="small text-muted mb-0">
+                                    Siparişiniz kargo görevlisi tarafından adresinize getirildiğinde kapıda nakit veya kredi kartı ile güvenle ödeme yapabilirsiniz.
+                                </p>
+                            </div>
+                        </div> *@
+
+                    </div>
+
+                    <!-- 5. SİPARİŞİ TAMAMLA BUTONU -->
+                    <div class="mt-30">
+                        <button type="submit" class="btn btn-pay-now shadow-sm">
+                            Siparişi Tamamla &bull; @Model.GrandTotal.ToString("N2") TL
+                        </button>
+                        <div class="text-center mt-15">
+                            <a href="/Sepetim/Index" class="small text-muted font-weight-bold">&larr; Sepete Geri Dön</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SAĞ KOLON: Sipariş Özeti (~42%) -->
+                <div class="col-lg-5">
+                    <div class="checkout-summary-box shadow-sm">
+                        <h3 class="checkout-section-title pb-10 border-bottom mb-20" style="font-size: 17px;">
+                            Sipariş Özeti (@(Model.Items?.Sum(x => x.Quantity) ?? 0) Ürün)
+                        </h3>
+
+                        <!-- Kalem Listesi -->
+                        <div class="checkout-items-list mb-20" style="max-height: 380px; overflow-y: auto;">
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <div class="d-flex align-items-center mb-15">
+                                        <div class="checkout-item-thumb mr-15">
+                                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.ProductName" />
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-shopping-bag text-muted"></i>
+                                            }
+                                            <span class="checkout-item-qty">@item.Quantity</span>
+                                        </div>
+                                        <div class="flex-grow-1 mr-10" style="min-width: 0;">
+                                            <h4 class="mb-2 text-truncate font-weight-bold text-dark" style="font-size: 13px;" title="@item.ProductName">
+                                                @item.ProductName
+                                            </h4>
+                                            <span class="small text-muted">@item.Quantity Adet &times; @item.Price.ToString("N2") TL</span>
+                                        </div>
+                                        <div class="text-right flex-shrink-0">
+                                            <span class="font-weight-bold text-dark" style="font-size: 14px;">@item.TotalPrice.ToString("N2") TL</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- İndirim / Kupon Kodu Girişi (Tam Uzatılmış Buton) -->
+                        <div class="pt-15 pb-15 border-top border-bottom mb-20">
+                            <div class="mb-10">
+                                <input asp-for="DiscountCode" type="text" class="form-control checkout-input w-100" placeholder="İndirim kupon kodu" style="height: 42px;" />
+                            </div>
+                            <button type="button" class="btn btn-secondary w-100 font-weight-bold text-uppercase" style="height: 42px; font-size: 13px; letter-spacing: 0.5px; border-radius: 6px;" onclick="applyCoupon()">
+                                UYGULA
+                            </button>
+                            <div id="couponMessage" class="small mt-2 font-weight-bold" style="display: none;"></div>
+                        </div>
+
+                        <!-- Fiyat Dökümü -->
+                        <div class="mb-15">
+                            <div class="d-flex justify-content-between align-items-center mb-10">
+                                <span class="text-muted" style="font-size: 14px;">Ara Toplam</span>
+                                <span class="font-weight-bold text-dark" style="font-size: 14px;">@Model.SubTotal.ToString("N2") TL</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-10">
+                                <span class="text-muted" style="font-size: 14px;">Kargo</span>
+                                <span class="text-success font-weight-bold" style="font-size: 14px;">ÜCRETSİZ</span>
+                            </div>
+                            @if (Model.DiscountAmount > 0)
+                            {
+                                <div class="d-flex justify-content-between align-items-center mb-10">
+                                    <span class="text-muted" style="font-size: 14px;">İndirim</span>
+                                    <span class="text-danger font-weight-bold" style="font-size: 14px;">-@Model.DiscountAmount.ToString("N2") TL</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Genel Toplam -->
+                        <div class="pt-15 border-top">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <div>
+                                    <span class="font-weight-bold text-dark d-block" style="font-size: 16px;">Toplam</span>
+                                    <span class="small text-muted">KDV Dahildir</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-weight-bold text-dark" style="font-size: 22px;">@Model.GrandTotal.ToString("N2") TL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function togglePaymentTab(method) {
+        document.querySelectorAll('.payment-option-card').forEach(el => el.classList.remove('active'));
+        
+        var cardBody = document.getElementById('creditCardBody');
+        var bankBody = document.getElementById('bankTransferBody');
+        var payMethodCard = document.getElementById('payMethodCard');
+        var payMethodBank = document.getElementById('payMethodBank');
+        
+        if (cardBody) cardBody.style.display = 'none';
+        if (bankBody) bankBody.style.display = 'none';
+
+        if (method === 'CreditCard') {
+            var wrapper = document.getElementById('cardOptionWrapper');
+            if (wrapper) wrapper.classList.add('active');
+            if (cardBody) cardBody.style.display = 'block';
+            if (payMethodCard) payMethodCard.checked = true;
+        } else if (method === 'BankTransfer') {
+            var wrapper = document.getElementById('bankOptionWrapper');
+            if (wrapper) wrapper.classList.add('active');
+            if (bankBody) bankBody.style.display = 'block';
+            if (payMethodBank) payMethodBank.checked = true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        togglePaymentTab('@(Model?.PaymentMethod ?? "CreditCard")');
+    });
+
+    function applyCoupon() {
+        var input = document.getElementById('DiscountCode');
+        var msg = document.getElementById('couponMessage');
+        if (!input.value || !input.value.trim()) {
+            msg.className = 'small mt-2 font-weight-bold text-danger';
+            msg.innerText = 'Lütfen bir kupon kodu giriniz.';
+            msg.style.display = 'block';
+            return;
+        }
+
+        // Demo kupon doğrulaması
+        msg.className = 'small mt-2 font-weight-bold text-info';
+        msg.innerText = 'Kupon kodu kontrol ediliyor...';
+        msg.style.display = 'block';
+
+        setTimeout(function() {
+            msg.className = 'small mt-2 font-weight-bold text-danger';
+            msg.innerText = 'Girilen indirim kuponu geçerli veya aktif değil.';
+        }, 600);
+    }
+</script>
+}
+

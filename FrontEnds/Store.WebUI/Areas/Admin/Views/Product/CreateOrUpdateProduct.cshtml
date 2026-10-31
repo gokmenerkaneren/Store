@@ -1,0 +1,977 @@
+@model Store.DtoLayer.CatalogDtos.ProductDtos.UpdateProductDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+
+@{
+    ViewData["Title"] = ViewBag.IsUpdate ? "Ürün Güncelleme" : "Yeni Ürün";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var isUpdate = ViewBag.IsUpdate;
+    var prices = ViewBag.ProductPrices as List<Store.DtoLayer.CatalogDtos.ProductPriceDtos.ResultProductPriceDto>;
+    var images = ViewBag.ProductImages as List<Store.DtoLayer.CatalogDtos.ProductImageDtos.ResultProductImageDto>;
+}
+
+<div class="card">
+    <div class="card-header bg-c-blue text-white" style="background-color: #00bcd4 !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+        <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <div class="d-flex align-items-center">
+                <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                <div style="margin-left: 10px;">
+                    <h3 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                        ÜRÜN İŞLEMLERİ
+                    </h3>
+                    <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">Firma Listesi</div>
+                </div>
+            </div>
+            <div class="card-header-right" style="position: relative; right: auto; top: auto; float: none; padding: 0;">
+                <ul class="list-unstyled card-option" style="margin: 0;">
+                    <li><i class="feather icon-maximize full-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-minus minimize-card" style="color: #ffffff !important;"></i></li>
+                    <li><i class="feather icon-trash-2 close-card" style="color: #ffffff !important;"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="card-block">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-block tab-icon">
+                        <ul class="nav nav-tabs md-tabs wizard-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-genel-link" data-toggle="tab" href="#general" role="tab">
+                                    <span class="step-number">1</span>
+                                    <i class="icofont icofont-info-square"></i> Genel Bilgiler
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-detay-link" data-toggle="@(isUpdate ? "tab" : "")" href="#detail" role="tab">
+                                    <span class="step-number">2</span>
+                                    <i class="icofont icofont-listine-dots"></i> Detaylar
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-fiyat-link" data-toggle="@(isUpdate ? "tab" : "")" href="#prices" role="tab">
+                                    <span class="step-number">3</span>
+                                    <i class="icofont icofont-money-bag"></i> Fiyatlandırma
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isUpdate ? "" : "disabled")" id="tab-resim-link" data-toggle="@(isUpdate ? "tab" : "")" href="#images" role="tab">
+                                    <span class="step-number">4</span>
+                                    <i class="icofont icofont-image"></i> Görseller
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content card-block p-t-30">
+
+                            <!-- 1. Tab : Genel Bilgiler -->
+                            <div class="tab-pane active" id="general" role="tabpanel">
+                                <form id="generalForm" action="@(isUpdate ? "/Admin/Product/UpdateGeneral" : "/Admin/Product/CreateProduct")" method="post">
+                                    <input type="hidden" name="Id" id="productId" value="@Model.Id" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Ürün Kodu</strong> <span class="text-danger">*</span></label>
+                                                <input type="text" name="ProductCode" value="@Model.ProductCode" class="form-control" placeholder="Örn: 101" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <div class="checkbox-fade fade-in-primary" style="margin-top:32px;">
+                                                <label>
+                                                    <input type="hidden" name="Satis" value="false" />
+                                                    <input type="checkbox" name="Satis" value="true" @(Model.Satis ? "checked" : "")>
+                                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                    <span class="f-w-600"><strong>Satış</strong></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <div class="checkbox-fade fade-in-primary" style="margin-top:32px;">
+                                                <label>
+                                                    <input type="hidden" name="Kiralama" value="false" />
+                                                    <input type="checkbox" name="Kiralama" value="true" @(Model.Kiralama ? "checked" : "")>
+                                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                    <span class="f-w-600"><strong>Kiralama</strong></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Barkod</strong></label>
+                                                <input type="text" name="Barcode" value="@Model.Barcode" class="form-control" placeholder="EAN-13 Barkodu" minlength="13" maxlength="13" pattern="^(868|869).*$" title="Barkod 13 haneli olmalı ve 868 veya 869 ile başlamalıdır." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Ürün Adı</strong> <span class="text-danger">*</span></label>
+                                        <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Ürün Başlığı" required />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Kategori</strong></label>
+                                                <select name="CategoryId" class="form-control" required>
+                                                    <option value="">Seçiniz...</option>
+                                                    @if (ViewBag.Categories != null)
+                                                    {
+                                                        foreach (var item in (List<SelectListItem>)ViewBag.Categories)
+                                                        {
+                                                            <option value="@item.Value" selected="@(Model.CategoryId.ToString() == item.Value)">@item.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Ölçü Birimi</strong></label>
+                                                <select name="MeasurementId" class="form-control" required>
+                                                    <option value="">Seçiniz...</option>
+                                                    @if (ViewBag.Measurements != null)
+                                                    {
+                                                        foreach (var item in (List<SelectListItem>)ViewBag.Measurements)
+                                                        {
+                                                            <option value="@item.Value" selected="@(Model.MeasurementId.ToString() == item.Value)">@item.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Vergi Oranı (%)</strong></label>
+                                                <input type="number" name="TaxRate" value="@Model.TaxRate" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Ağırlık (kg)</strong></label>
+                                                <input type="number" step="0.01" name="Weight" value="@Model.Weight" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Desi</strong></label>
+                                                <input type="number" step="0.01" name="Desi" value="@Model.Desi" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Kısa Açıklama</strong></label>
+                                        <textarea name="ShortDescription" class="form-control" rows="3" placeholder="Ürün liste ekranında görünecek kısa metin">@Model.ShortDescription</textarea>
+                                    </div>
+
+                                    <hr />
+                                    <div class="text-right">
+                                        <a href="/Admin/Product/Index" class="btn btn-inverse m-r-10"><i class="icofont icofont-arrow-left"></i> Listeye Dön</a>
+                                        <button type="submit" class="btn btn-primary btn-wizard-next">
+                                            <i class="icofont icofont-save"></i> @(isUpdate ? "Güncelle ve Devam Et" : "Kaydet ve Detaylara Geç") <i class="icofont icofont-arrow-right"></i>
+                                        </button>
+                                    </div>
+
+                                    <input type="hidden" name="InsertUserId" value="1" />
+                                    <input type="hidden" name="IsActive" value="true" />
+                                    <input type="hidden" name="IsPublished" value="true" />
+                                    <input type="hidden" name="IsRentalEnabled" value="true" />
+                                    <input type="hidden" name="IsSaleEnabled" value="true" />
+                                    <input type="hidden" name="Slug" value="@(string.IsNullOrEmpty(Model.Slug) ? "temp-slug" : Model.Slug)" />
+                                </form>
+                            </div>
+
+                            <!-- 4. Tab : Detaylar -->
+                            <div class="tab-pane" id="detail" role="tabpanel">
+                                <form id="detailForm" action="/Admin/Product/UpdateDetail" method="post">
+                                    <input type="hidden" name="ProductId" id="detailProductId" value="@Model.Id" />
+                                    <input type="hidden" name="InsertUserId" value="1" />
+                                    <input type="hidden" name="IsActive" value="true" />
+                                    <input type="hidden" name="IsPublished" value="true" />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Marka</strong> <span class="text-danger">*</span></label>
+                                                <select name="BrandId" class="form-control" required>
+                                                    <option value="">Seçiniz...</option>
+                                                    @if (ViewBag.Brands != null)
+                                                    {
+                                                        foreach (var item in (List<SelectListItem>)ViewBag.Brands)
+                                                        {
+                                                            <option value="@item.Value" selected="@(Model.BrandId?.ToString() == item.Value)">@item.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group" style="position: relative;">
+                                                <label class="f-w-600"><strong>Etiketler</strong> <span class="text-danger">*</span></label>
+                                                <input type="text" name="Tag" value="@(Model.Tags != null ? string.Join(", ", Model.Tags) : "")" class="form-control" placeholder="Etiket girip Enter'a basın" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="f-w-600"><strong>Genişletilmiş Ürün Açıklaması</strong> <span class="text-danger">*</span></label>
+                                        <textarea name="Description" class="form-control" rows="6" placeholder="Ürün sayfasında görünecek detaylı teknik bilgiler ve açıklamalar..." required>@Model.Description</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="f-w-600"><strong>Öne Çıkan Özellikler</strong> <span class="text-danger">*</span></label>
+                                                <textarea name="Notes" class="form-control" rows="3" required>@Model.Notes</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <label class="f-w-600"><strong>Boyut Bilgileri Yükseklik (cm)</strong></label>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="f-w-600"><strong>Genişlik (cm)</strong></label>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="f-w-600"><strong>Derinlik (cm)</strong></label>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Height" value="@Model.Height" class="form-control" placeholder="Boy" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Width" value="@Model.Width" class="form-control" placeholder="En" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" step="0.01" name="Depth" value="@Model.Depth" class="form-control" placeholder="Derinlik" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Genel Bilgilere Dön</button>
+                                        <button type="submit" class="btn btn-success btn-wizard-next">
+                                            <i class="icofont icofont-save"></i> Detayları Kaydet ve Fiyatlara Geç <i class="icofont icofont-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 4. Tab : Fiyatlar -->
+                            <div class="tab-pane" id="prices" role="tabpanel">
+
+                                <div class="card bg-light border-0">
+                                    <div class="card-block">
+                                        <h5 class="m-b-20 f-w-700 text-secondary"><i class="icofont icofont-plus-circle"></i> Yeni Fiyat Tanımı Ekle</h5>
+                                        <form id="priceForm" action="/Admin/Product/AddPrice" method="post">
+                                            <input type="hidden" name="ProductId" id="priceProductId" value="@Model.Id" />
+                                            <input type="hidden" name="InsertUserId" value="1" />
+                                            <input type="hidden" name="IsActive" value="true" />
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Fiyat Tipi</strong></label>
+                                                        <select name="PriceTypeId" class="form-control" required>
+                                                            <option value="">Bir Fiyat Tipi seçiniz!...</option>
+                                                            @{
+                                                                var priceTypes = ViewBag.PriceTypes as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+                                                                if (priceTypes != null)
+                                                                {
+                                                                    foreach (var item in priceTypes)
+                                                                    {
+                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Tutar</strong></label>
+                                                        <input type="number" step="0.01" min="0.01" name="Amount" class="form-control" placeholder="0.00" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Para Birimi</strong></label>
+                                                        <select name="CurrencyId" class="form-control" required>
+                                                            <option value="">Seçiniz...</option>
+                                                            @if (ViewBag.Currencies != null)
+                                                            {
+                                                                foreach (var item in (List<SelectListItem>)ViewBag.Currencies)
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Başlangıç Tarihi</strong></label>
+                                                        <input type="text" name="ValidFrom" class="form-control" placeholder="Seçiniz..." readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Bitiş Tarihi</strong></label>
+                                                        <input type="text" name="ValidTo" class="form-control" placeholder="Seçiniz..." readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-info shadow-sm"><i class="icofont icofont-plus"></i> Listeye Ekle</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="text-right m-t-20">
+                                    <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Detaya Dön</button>
+                                    <button type="button" class="btn btn-info btn-wizard-next">
+                                        Fiyatları Kaydet ve Resimlere Geç <i class="icofont icofont-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <hr />
+                                <div class="table-responsive m-b-30">
+                                    <table id="priceTable" class="table table-hover table-bordered shadow-sm">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <th><i class="icofont icofont-ui-check"></i> Durum</th>
+                                                <th><i class="icofont icofont-calendar"></i> Başlangıç Tarihi</th>
+                                                <th><i class="icofont icofont-calendar"></i> Bitiş Tarihi</th>
+                                                <th><i class="icofont icofont-tag"></i> Fiyat Tipi</th>
+                                                <th><i class="icofont icofont-money"></i> Tutar</th>
+                                                <th><i class="icofont icofont-world"></i> Para Birimi</th>
+                                                <th><i class="icofont icofont-settings"></i> İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="priceTableBody">
+                                            @if (prices != null && prices.Count > 0)
+                                            {
+                                                @foreach (var p in prices)
+                                                {
+                                                    var isPast = p.ValidTo.HasValue && p.ValidTo.Value < DateTime.Now;
+                                                    var isFuture = p.ValidFrom.HasValue && p.ValidFrom.Value > DateTime.Now;
+                                                    var isActive = p.IsActive && !isPast && !isFuture;
+                                                    var statusBadge = !p.IsActive ? "<span class='badge badge-danger'>Pasif</span>" :
+                                                        (isPast ? "<span class='badge badge-secondary'>Süresi Doldu</span>" :
+                                                        (isFuture ? "<span class='badge badge-info'>İleri Tarihli</span>" :
+                                                        "<span class='badge badge-success'>Aktif</span>"));
+
+                                                    <tr>
+                                                        <td>@Html.Raw(statusBadge)</td>
+                                                        <td>@(p.ValidFrom?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                        <td>@(p.ValidTo?.ToString("dd.MM.yyyy - HH:mm:ss") ?? "-")</td>
+                                                        @{
+                                                            var priceTypeList = ViewBag.AllPriceTypes as List<Store.DtoLayer.CatalogDtos.PriceTypeDtos.ResultPriceTypeDto>;
+                                                            var priceType = priceTypeList?.FirstOrDefault(x => x.Id == p.PriceTypeId);
+                                                            var ptName = priceType?.Name ?? p.PriceTypeId.ToString();
+                                                            var rawPtName = ptName;
+
+                                                            if (priceType != null) {
+                                                                if (priceType.IsDeleted) {
+                                                                    rawPtName = $"<strong class=\"text-danger\">(SİLİNMİŞ)</strong> - {ptName}";
+                                                                } else if (!priceType.IsActive) {
+                                                                    rawPtName = $"<strong class=\"text-warning\">(PASİF)</strong> - {ptName}";
+                                                                }
+                                                            }
+                                                        }
+                                                        <td>@Html.Raw(rawPtName)</td>
+                                                        <td class="font-weight-bold text-dark">@p.Amount.ToString("N2")</td>
+                                                        @{
+                                                            var currencyList = ViewBag.AllCurrencies as List<Store.DtoLayer.CatalogDtos.CurrencyDtos.ResultCurrencyDto>;
+                                                            var currency = currencyList?.FirstOrDefault(c => c.Id == p.CurrencyId);
+                                                            var currencyName = currency?.Name ?? p.CurrencyId.ToString();
+                                                            var rawCurrencyName = currencyName;
+
+                                                            if (currency != null) {
+                                                                if (currency.IsDeleted) {
+                                                                    rawCurrencyName = $"<strong class=\"text-danger\">(SİLİNMİŞ)</strong> - {currencyName}";
+                                                                } else if (!currency.IsActive) {
+                                                                    rawCurrencyName = $"<strong class=\"text-warning\">(PASİF)</strong> - {currencyName}";
+                                                                }
+                                                            }
+                                                        }
+                                                        <td>@Html.Raw(rawCurrencyName)</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete-price" data-id="@p.Id"><i class="icofont icofont-ui-delete"></i> Sil</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 4. Tab : Resim İşlemleri -->
+                            <div class="tab-pane" id="images" role="tabpanel">
+
+                                <div class="card bg-light border-0">
+                                    <div class="card-block">
+                                        <form id="imageForm" enctype="multipart/form-data">
+                                            <input type="hidden" name="productId" id="imageProductId" value="@Model.Id" />
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Dosya Seçin</strong></label>
+                                                        <input type="file" name="file" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="f-w-600"><strong>Alt Metin (SEO)</strong></label>
+                                                        <input type="text" name="altText" class="form-control" placeholder="Ürün görsel açıklaması" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <div class="checkbox-fade fade-in-primary" style="margin-top:32px;">
+                                                        <label>
+                                                            <input type="checkbox" name="isMain" value="true">
+                                                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                                            <span class="f-w-600"><strong>Vitrin Resmi</strong></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" id="btnUpload" class="btn btn-success shadow-sm"><i class="icofont icofont-upload-alt"></i> Görseli Yükle</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="text-right m-t-20">
+                                    <button type="button" class="btn btn-inverse btn-wizard-prev m-r-10"><i class="icofont icofont-arrow-left"></i> Fiyatlandırmaya Dön</button>
+                                    <a href="/Admin/Product/Index" class="btn btn-primary shadow"><i class="icofont icofont-check-circled"></i> Tamamla ve Listeye Dön</a>
+                                </div>
+
+                                <hr />
+
+                                <div class="row m-b-30" id="imageGallery">
+                                    @if (images != null && images.Count > 0)
+                                    {
+                                        @foreach (var img in images.OrderByDescending(x => x.IsMain))
+                                        {
+                                            <div class="col-md-3 col-sm-6 mb-4 image-card-container">
+                                                <div class="card h-100 shadow-sm border overflow-hidden" style="position: relative; padding: 0; min-height: 220px; background: #f8f9fa;">
+                                                    <img src="@img.ImageUrl" class="card-img-top" style="height: 100%; width: 100%; object-fit: contain; position: absolute; top:0; left:0; z-index: 1; padding: 10px;" alt="@img.AltText">
+                                                    
+                                                    <span class="badge badge-success main-badge shadow-sm" style="position: absolute; top: 10px; right: 10px; z-index: 2; display: @(img.IsMain ? "inline-block" : "none") !important; padding: 6px 12px; font-size: 13px;">
+                                                        <i class="icofont icofont-star"></i> Vitrin Resmi
+                                                    </span>
+
+                                                    <div class="d-flex align-items-center shadow-sm image-controls" style="position: absolute; bottom: 10px; right: 10px; z-index: 2; background: rgba(255, 255, 255, 0.95); border-radius: 6px; overflow: hidden; border: 1px solid #28a745;">
+                                                        <button type="button" class="btn btn-sm m-0" onclick="deleteImage('@img.Id', this)" style="background: transparent; color: #dc3545; border: none; font-weight: 600; padding: 6px 12px; cursor: pointer; border-radius: 0;">
+                                                            <i class="icofont icofont-ui-delete"></i> Sil
+                                                        </button>
+                                                        <div style="width: 1px; height: 24px; background: #28a745;" class="btn-make-main-separator @(img.IsMain ? "d-none" : "")"></div>
+                                                        <button type="button" class="btn btn-sm btn-make-main m-0 @(img.IsMain ? "d-none" : "")" style="background: transparent; color: #28a745; border: none; font-weight: 600; padding: 6px 12px; cursor: pointer; border-radius: 0;" onclick="setMainImage('@img.Id', '@Model.Id', this)">
+                                                            <i class="icofont icofont-star"></i> Vitrin Resmi
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-12 text-center py-5 text-muted bg-light rounded" id="no-image-msg">
+                                            <i class="icofont icofont-image icofont-4x"></i>
+                                            <p class="m-t-10">Henüz bir görsel yüklenmemiş.</p>
+                                        </div>
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style>
+    .wizard-tabs .nav-link {
+        padding: 20px 10px !important;
+        text-align: center;
+        border: none !important;
+        color: #95a5a6 !important;
+        background: transparent !important;
+        position: relative;
+    }
+
+        .wizard-tabs .nav-link.active {
+            color: #3498db !important;
+            font-weight: bold;
+        }
+
+    .wizard-tabs .step-number {
+        display: block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background: #ecf0f1;
+        color: #7f8c8d;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-tabs .nav-link.active .step-number {
+        background: #3498db;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .wizard-tabs .nav-link.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #dfe6e9;
+        padding: 10px 15px;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+
+    /* Tagify native validation hack */
+    tags ~ input[name="Tag"], tags ~ input[name="altText"] {
+        display: block !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none;
+    }
+</style>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+
+    <script>
+        function validateField(input, rules) {
+            var val = $(input).val() ? $(input).val().trim() : '';
+            return true;
+        }
+
+        function reloadPriceTable(productId) {
+            $.get('/Admin/Product/GetPricesForProduct?productId=' + productId, function(data) {
+                var tbody = $('#priceTableBody');
+                tbody.empty();
+                if (data && data.length > 0) {
+                    data.forEach(function(p) {
+                        var isPast = p.isPast;
+                        var isFuture = p.isFuture;
+                        var isActive = p.isActive;
+
+                        var statusBadge = !p.isActive ? "<span class='badge badge-danger'>Pasif</span>" :
+                            (isPast ? "<span class='badge badge-secondary'>Süresi Doldu</span>" :
+                                (isFuture ? "<span class='badge badge-info'>İleri Tarihli</span>" :
+                                    "<span class='badge badge-success'>Aktif</span>"));
+
+                        var badgeClass = 'badge-info';
+                        var html = "<tr>" +
+                            "<td>" + statusBadge + "</td>" +
+                            "<td>" + (p.startDate || "-") + "</td>" +
+                            "<td>" + (p.endDate || "-") + "</td>" +
+                            "<td>" + p.priceTypeName + "</td>" +
+                            "<td class='font-weight-bold text-dark'>" + p.amount + "</td>" +
+                            "<td>" + p.currencyName + "</td>" +
+                            "<td><button type='button' class='btn btn-outline-danger btn-sm btn-delete-price' data-id='" + p.id + "'><i class='icofont icofont-ui-delete'></i> Sil</button></td>" +
+                            "</tr>";
+                        tbody.append(html);
+                    });
+                } else {
+                    tbody.append('<tr><td colspan="7" class="text-center text-muted">Kayıtlı fiyat bulunamadı.</td></tr>');
+                }
+            }).fail(function() {
+                console.error("Fiyat listesi yüklenirken hata oluştu.");
+            });
+        }
+
+        $(document).on('click', '.btn-delete-price', function() {
+            var id = $(this).data('id');
+            var pid = $('#priceProductId').val();
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Fiyat kaydı silinecektir!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/Product/DeletePrice', { id: id }, function(res) {
+                        if (res.success) {
+                            Swal.fire({ icon: 'success', title: 'Silindi', timer: 1000, showConfirmButton: false });
+                            reloadPriceTable(pid);
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', html: res.message });
+                        }
+                    });
+                }
+            });
+        });
+
+        function initPriceDataTable() {
+            if ($.fn.DataTable.isDataTable('#priceTable')) {
+                $('#priceTable').DataTable().destroy();
+            }
+            $('#priceTable').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": { "emptyTable": "Kayıtlı fiyat bulunamadı." }
+            });
+        }
+
+        function deleteImage(id, btnElement) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu resim kalıcı olarak silinecek!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/Product/DeleteImage', { id: id }, function(r) {
+                        if (r.success) {
+                            var isMain = $(btnElement).closest('.card').find('.main-badge').css('display') !== 'none';
+                            $(btnElement).closest('.image-card-container').fadeOut(300, function() { 
+                                $(this).remove(); 
+                                if (isMain) {
+                                    window.location.reload();
+                                }
+                            });
+                            if (!isMain) {
+                                Swal.fire({ icon: 'success', title: 'Silindi!', showConfirmButton: false, timer: 1000 });
+                            }
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', text: r.message });
+                        }
+                    });
+                }
+            });
+        }
+
+        function setMainImage(imageId, productId, btnElement) {
+            $.post('/Admin/Product/SetMainImage', { imageId: imageId, productId: productId }, function(r) {
+                if (r.success) {
+                    $('.main-badge').attr('style', 'position: absolute; top: 10px; right: 10px; z-index: 2; display: none !important; padding: 6px 12px; font-size: 13px;');
+                    $('.btn-make-main').removeClass('d-none');
+                    $('.btn-make-main-separator').removeClass('d-none');
+
+                    var card = $(btnElement).closest('.card');
+                    card.find('.main-badge').attr('style', 'position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-block !important; padding: 6px 12px; font-size: 13px;');
+                    $(btnElement).addClass('d-none');
+                    card.find('.btn-make-main-separator').addClass('d-none');
+
+                    // Vitrin resmi yapılan öğeyi DOM'da en başa taşı (Sıralama)
+                    var cardContainer = $(btnElement).closest('.image-card-container');
+                    $('#imageGallery').prepend(cardContainer);
+
+                    Swal.fire({ icon: 'success', title: 'Vitrin Resmi Güncellendi', showConfirmButton: false, timer: 1000 });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Hata', text: r.message });
+                }
+            });
+        }
+
+        function enableNextTab(tabId) {
+            var nextTab = $(tabId);
+            nextTab.removeClass('disabled').attr('data-toggle', 'tab');
+            nextTab.tab('show');
+        }
+
+        $(document).ready(function() {
+            if (window.location.hash) {
+                var tabLink = $('.wizard-tabs a[href="' + window.location.hash + '"]');
+                if (tabLink.length > 0) {
+                    tabLink.removeClass('disabled').attr('data-toggle', 'tab').tab('show');
+                }
+            }
+
+            // Tab validation hook
+            $('.wizard-tabs a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                var currentTabId = $(e.relatedTarget).attr('href');
+                if (currentTabId === '#general') {
+                    if (!$('#generalForm')[0].checkValidity()) {
+                        $('#generalForm')[0].reportValidity();
+                        return false;
+                    }
+                } else if (currentTabId === '#detail') {
+                    if (!$('#detailForm')[0].checkValidity()) {
+                        $('#detailForm')[0].reportValidity();
+                        return false;
+                    }
+                }
+            });
+
+            // Form submit AJAX handlers
+            $('#generalForm, #detailForm, #priceForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var btn = form.find('button[type="submit"]');
+                var formId = form.attr('id');
+                if (formId === 'generalForm') submitGeneralForm(form, btn);
+                else if (formId === 'detailForm') submitDetailForm(form, btn);
+                else if (formId === 'priceForm') submitPriceForm(form, btn);
+            });
+
+            function submitGeneralForm(form, btn) {
+                if (!form[0].checkValidity()) { form[0].reportValidity(); return false; }
+                
+                var isSatisChecked = form.find('input[name="Satis"][type="checkbox"]').is(':checked');
+                var isKiralamaChecked = form.find('input[name="Kiralama"][type="checkbox"]').is(':checked');
+                if (!isSatisChecked && !isKiralamaChecked) {
+                    Swal.fire({ icon: 'warning', title: 'Uyarı', text: 'Satış veya Kiralama seçeneklerinden en az biri seçilmelidir.' });
+                    return false;
+                }
+
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'), type: 'POST', data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            var productId = r.id || $('#productId').val();
+                            $('#productId, #detailProductId, #priceProductId, #imageProductId').val(productId);
+                            
+                            var currentUrl = window.location.href;
+                            if (!currentUrl.includes(productId)) {
+                                var baseUrl = currentUrl.split('#')[0];
+                                if (!baseUrl.endsWith('/' + productId)) {
+                                    baseUrl = baseUrl.replace(/\/$/, "");
+                                    history.replaceState(null, '', baseUrl + '/' + productId + '#general');
+                                }
+                            }
+                            
+                            Swal.fire({ icon: 'success', title: 'Başarılı', text: 'Genel bilgiler kaydedildi!', timer: 1500, showConfirmButton: false }).then(() => { enableNextTab('#tab-detay-link'); });
+                        } else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); }
+                        btn.prop('disabled', false);
+                    },
+                    error: function() { showToastAlert('Sistem Hatası', 'danger', '', 'animated flipInY', 'animated flipOutY'); btn.prop('disabled', false); }
+                });
+            }
+
+            function submitDetailForm(form, btn) {
+                if (!form[0].checkValidity()) { form[0].reportValidity(); return false; }
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: form.attr('action'), type: 'POST', data: form.serialize(),
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Başarılı', text: 'Detaylar kaydedildi!', timer: 1500, showConfirmButton: false }).then(() => { enableNextTab('#tab-fiyat-link'); });
+                        } else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); }
+                        btn.prop('disabled', false);
+                    }
+                });
+            }
+
+            function submitPriceForm(form, btn) {
+                if (!form[0].checkValidity()) { form[0].reportValidity(); return false; }
+
+                var startVal = $('input[name="ValidFrom"]').val();
+                var endVal = $('input[name="ValidTo"]').val();
+                if (startVal && endVal) {
+                    var startDate = new Date(startVal.replace(' ', 'T'));
+                    var endDate = new Date(endVal.replace(' ', 'T'));
+                    if (endDate <= startDate) {
+                        Swal.fire({ icon: 'warning', title: 'Uyarı', text: 'Bitiş tarihi, başlangıç tarihinden büyük olmalıdır.' });
+                        return false;
+                    }
+                }
+
+                btn.prop('disabled', true);
+                var formData = form.serialize();
+                formData = formData.replace(/(&Amount=)([^&]+)/, function(match, p1, p2) {
+                    return p1 + p2.replace('.', '%2C');
+                });
+
+                $.ajax({
+                    url: form.attr('action'), type: 'POST', data: formData,
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Fiyat Eklendi', timer: 1500, showConfirmButton: false });
+                            reloadPriceTable($('#priceProductId').val());
+                            form[0].reset();
+                            if (typeof startPicker !== 'undefined') startPicker.clear();
+                            if (typeof endPicker !== 'undefined') endPicker.clear();
+                        } else { showToastAlert(r.message, 'danger', '', 'animated flipInY', 'animated flipOutY'); }
+                        btn.prop('disabled', false);
+                    }
+                });
+            }
+
+            $('input[name="file"]').on('change', function() {
+                var existingImagesCount = $('.image-card-container').length;
+                if (existingImagesCount === 0 && this.files.length > 0) {
+                    $('input[name="isMain"]').prop('checked', true);
+                }
+            });
+
+            $('#btnUpload').on('click', function() {
+                var fileInput = $('input[name="file"]')[0];
+                if (fileInput.files.length === 0) {
+                    return; // Rule 1: Görsel seçilmezse kayıt işlemi yapma, uyarı da verme
+                }
+
+                // Rule 2: Resim seçilmişse Alt Metin zorunludur. HTML5 validasyonu ile baloncuk göster.
+                var altTextInput = $('input[name="altText"]')[0];
+                altTextInput.required = true;
+
+                var form = $('#imageForm')[0];
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                var pid = $('#imageProductId').val();
+                if (!pid || pid === '0' || pid === '') {
+                    Swal.fire('Uyarı', 'Önce genel ürün bilgilerini kaydedin.', 'warning');
+                    return;
+                }
+
+                var formData = new FormData(form);
+
+                $(this).prop('disabled', true).html('<i class="icofont icofont-spinner icofont-spin"></i> Yükleniyor...');
+
+                $.ajax({
+                    url: '/Admin/Product/UploadImage',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(r) {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Resim Yüklendi', timer: 1500, showConfirmButton: false }).then(() => {
+                                window.location.hash = 'images';
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Hata', text: r.message });
+                        }
+                        $('#btnUpload').prop('disabled', false).html('<i class="icofont icofont-upload-alt"></i> Görseli Yükle');
+                    },
+                    error: function() {
+                        Swal.fire({ icon: 'error', title: 'Hata', text: 'Resim yüklenemedi.' });
+                        $('#btnUpload').prop('disabled', false).html('<i class="icofont icofont-upload-alt"></i> Görseli Yükle');
+                    }
+                });
+            });
+
+            $('.btn-wizard-next:not([type="submit"])').on('click', function(e) {
+                var target = $(this).closest('.tab-pane').next().attr('id');
+                if (target) {
+                    var tabLink = $('.wizard-tabs a[href="#' + target + '"]');
+                    tabLink.removeClass('disabled').attr('data-toggle', 'tab');
+                    tabLink.tab('show');
+                }
+            });
+
+            $('.btn-wizard-prev').on('click', function(e) {
+                var target = $(this).closest('.tab-pane').prev().attr('id');
+                if (target) {
+                    $('.wizard-tabs a[href="#' + target + '"]').tab('show');
+                }
+            });
+
+            if (typeof flatpickr !== 'undefined') {
+                var startPicker = flatpickr("input[name='ValidFrom']", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    time_24hr: true,
+                    locale: "tr",
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if (typeof endPicker !== 'undefined') {
+                            endPicker.set('minDate', dateStr);
+                        }
+                    }
+                });
+                var endPicker = flatpickr("input[name='ValidTo']", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    time_24hr: true,
+                    locale: "tr",
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if (typeof startPicker !== 'undefined') {
+                            startPicker.set('maxDate', dateStr);
+                        }
+                    }
+                });
+            }
+
+            var tagInput = document.querySelector('input[name="Tag"]');
+            if (tagInput) {
+                try {
+                    var tagify = new Tagify(tagInput);
+                    tagify.on('change', function() { tagInput.setCustomValidity(""); });
+                } catch (err) { console.error("Tagify error:", err); }
+            }
+            
+            var altTextInputField = document.querySelector('input[name="altText"]');
+            if (altTextInputField) {
+                try {
+                    var altTagify = new Tagify(altTextInputField);
+                    altTagify.on('change', function() { altTextInputField.setCustomValidity(""); });
+                } catch (err) { console.error("Tagify error:", err); }
+            }
+        });
+    </script>
+}
+
+
+

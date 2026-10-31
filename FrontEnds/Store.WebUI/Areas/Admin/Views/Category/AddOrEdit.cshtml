@@ -1,0 +1,180 @@
+@model Store.DtoLayer.CatalogDtos.CategoryDtos.UpdateCategoryDto
+@{
+    bool isEdit = Model != null && Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Kategori Güncelle" : "Yeni Kategori Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="card-block">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white" style="background-color: #34495e !important; border-radius: 5px 5px 0 0; margin-bottom: 0; padding: 15px 25px;">
+                    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                        <div class="d-flex align-items-center">
+                            <i class="feather icon-download-cloud" style="font-size: 45px; color: #ffffff !important;"></i>
+                            <div style="margin-left: 10px;">
+                                <h4 class="m-b-0" style="font-weight: 600; font-size: 28px; line-height: 1; color: #ffffff !important;">
+                                    @(isEdit ? "Kategori Güncelleme" : "Yeni Kategori Ekle")
+                                </h4>
+                                <div class="m-t-5" style="font-size: 14px; color: rgba(255,255,255,0.9); padding-left: 0;">
+                                    Aşağıdaki form üzerinden kategori bilgilerini kaydedebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-block">
+                    <form method="post" action="@(isEdit ? "/Admin/Category/UpdateCategory" : "/Admin/Category/AddorEdit")" enctype="multipart/form-data" id="categoryForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="ImageUrl" />
+                        }
+
+                        <div class="row">
+                            <!-- Sol Sütun: Form Alanları -->
+                            <div class="col-sm-9">
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Üst Kategori</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="ParentId">
+                                            <option value="">-- Üst Kategori Yok --</option>
+                                            @if (ViewBag.Categories != null)
+                                            {
+                                                foreach (var item in ViewBag.Categories as List<Store.DtoLayer.CatalogDtos.CategoryDtos.ResultCategoryDto>)
+                                                {
+                                                    if (Model != null && Model.Id == item.Id) continue;
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Kategori Adı</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Name" placeholder="Kategori Adı" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Kategori Kodu</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" asp-for="Code" placeholder="Kategori Kodu" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Durum</strong></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" asp-for="IsActive">
+                                            <option value="true">Aktif</option>
+                                            <option value="false">Pasif</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="font-weight: 600;"><strong>Notlar</strong></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" asp-for="Notes" rows="3" placeholder="Notlarım"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sağ Sütun: Kategori Resmi -->
+                            <div class="col-sm-3">
+                                <div style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff; min-height: 200px;" class="d-flex flex-column align-items-center justify-content-center">
+                                    <h6 class="mb-3" style="font-weight: 600;"><strong>Kategori Resmi</strong></h6>
+
+                                    <img id="imagePreview"
+                                         src="@(string.IsNullOrEmpty(Model?.ImageUrl) ? "" : Model.ImageUrl)"
+                                         alt="Kategori Resmi"
+                                         style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 15px; border: 1px solid #eee; padding: 5px; background: white; display: @(string.IsNullOrEmpty(Model?.ImageUrl) ? "none" : "block");" />
+
+                                    <div id="noImageIcon" style="font-size: 50px; color: #ccc; margin-bottom: 10px; display: @(string.IsNullOrEmpty(Model?.ImageUrl) ? "block" : "none");"><i class="feather icon-image"></i></div>
+                                    <p id="noImageText" class="text-muted" style="font-size: 12px; text-align: center; display: @(string.IsNullOrEmpty(Model?.ImageUrl) ? "block" : "none");">Henüz resim yüklenmedi.</p>
+
+                                    <input type="file" id="imageFileInput" name="imageFile" class="form-control-file mt-2" style="font-size: 12px;" accept="image/*" />
+                                    <p class="text-muted mt-3" style="font-size: 11px; text-align: center;">Resmi değiştirmek için yeni bir görsel seçin.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-4">
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-success" style="background-color: #00bcd4; border-color: #00bcd4; min-width: 100px;"><i class="icofont icofont-check-circled"></i>@(isEdit ? "Güncelle" : "Kaydet")</button>
+                                        <a href="/Admin/Category/Index" class="btn btn-danger ml-2" style="background-color: #ff5370; border-color: #ff5370; min-width: 100px;"><i class="icofont icofont-ui-close"></i>Vazgeç</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Anlık resim önizleme
+            $('#imageFileInput').on('change', function(e) {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imagePreview').attr('src', e.target.result).show();
+                        $('#noImageIcon').hide();
+                        $('#noImageText').hide();
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Form validasyonu
+            var $nameInput = $('#categoryForm [name="Name"]');
+            var $codeInput = $('#categoryForm [name="Code"]');
+
+            $nameInput.on('input', function() { this.setCustomValidity(''); });
+            $codeInput.on('input', function() { this.setCustomValidity(''); });
+
+            $('#categoryForm').on('submit', function(e) {
+                var nameEl = $nameInput[0];
+                var codeEl = $codeInput[0];
+
+                if (nameEl) nameEl.setCustomValidity('');
+                if (codeEl) codeEl.setCustomValidity('');
+
+                var nameVal = nameEl ? nameEl.value.trim() : '';
+                var codeVal = codeEl ? codeEl.value.trim() : '';
+
+                if (!nameVal) {
+                    if (nameEl) {
+                        nameEl.setCustomValidity('Lütfen bu alanı doldurun.');
+                        nameEl.reportValidity();
+                    }
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (!codeVal) {
+                    if (codeEl) {
+                        codeEl.setCustomValidity('Lütfen bu alanı doldurun.');
+                        codeEl.reportValidity();
+                    }
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}
