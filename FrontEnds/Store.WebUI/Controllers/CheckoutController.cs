@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Store.DtoLayer.B2BDtos;
 using Store.DtoLayer.BasketDtos;
 using Store.DtoLayer.DiscountDtos;
 using Store.DtoLayer.OrderDtos;
@@ -25,6 +26,7 @@ namespace Store.WebUI.Controllers
         private readonly IOrderApiService _orderApiService;
         private readonly ILocationApiService _locationApiService;
         private readonly IDiscountApiService _discountApiService;
+        private readonly IB2BApiService _b2bApiService;
         private readonly ILogger<CheckoutController> _logger;
 
         public CheckoutController(
@@ -33,6 +35,7 @@ namespace Store.WebUI.Controllers
             IOrderApiService orderApiService,
             ILocationApiService locationApiService,
             IDiscountApiService discountApiService,
+            IB2BApiService b2bApiService,
             ILogger<CheckoutController> logger)
         {
             _basketApiService = basketApiService;
@@ -40,6 +43,7 @@ namespace Store.WebUI.Controllers
             _orderApiService = orderApiService;
             _locationApiService = locationApiService;
             _discountApiService = discountApiService;
+            _b2bApiService = b2bApiService;
             _logger = logger;
         }
 
@@ -196,7 +200,51 @@ namespace Store.WebUI.Controllers
             var subTotal = items.Sum(x => x.TotalPrice);
             model.DiscountAmount = 0.00m;
 
-            if (!string.IsNullOrWhiteSpace(model.DiscountCode))
+            var isDealer = User.IsInRole("Dealer") || User.IsInRole("Bayi") || User.Claims.Any(c => (c.Type == ClaimTypes.Role || c.Type == "role") && (c.Value.Equals("Dealer", StringComparison.OrdinalIgnoreCase) || c.Value.Equals("Bayi", StringComparison.OrdinalIgnoreCase)));
+            decimal? dealerNetTotal = null;
+
+            if (isDealer)
+            {
+                // Bayiler kupon kullanamaz; iskonto yalnızca bayi finansal kaydından gelir
+                model.DiscountCode = null;
+
+                ResultDealerFinancialDto? dealerFinancial = null;
+                try
+                {
+                    dealerFinancial = await _b2bApiService.GetDealerFinancialByDealerIdAsync(userId);
+                }
+                catch (Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    // Aşağıdaki kontrol null kaydı "bulunamadı" olarak ele alır
+                }
+                catch (Exception ex)
+                {
+                    // Kredi limiti doğrulanamadan bayi siparişi oluşturulmaz
+                    _logger.LogError(ex, "Bayi finansal kaydı B2B servisinden alınamadı. Kullanıcı: {UserId}", userId);
+                    TempData["CartWarning"] = "Bayi kredi limitiniz şu anda doğrulanamıyor. Lütfen daha sonra tekrar deneyiniz.";
+                    return View(model);
+                }
+
+                if (dealerFinancial == null)
+                {
+                    TempData["CartWarning"] = "Bayi finansal kaydınız bulunamadı. Lütfen yöneticinizle iletişime geçiniz.";
+                    return View(model);
+                }
+
+                model.DiscountAmount = DealerPricing.CalculateDiscount(subTotal, dealerFinancial.DiscountRate);
+                var netTotal = DealerPricing.CalculateNetTotal(subTotal, model.DiscountAmount);
+                var creditCheck = DealerPricing.ValidateCredit(dealerFinancial.CreditLimit, dealerFinancial.CurrentBalance, netTotal);
+
+                if (creditCheck == DealerCreditValidationResult.InsufficientCredit)
+                {
+                    var available = DealerPricing.CalculateAvailableCredit(dealerFinancial.CreditLimit, dealerFinancial.CurrentBalance);
+                    TempData["CartWarning"] = $"Yetersiz Kredi Limiti! Kullanılabilir limitiniz: {available:N2} TL, Sipariş tutarı: {netTotal:N2} TL.";
+                    return View(model);
+                }
+
+                dealerNetTotal = netTotal;
+            }
+            else if (!string.IsNullOrWhiteSpace(model.DiscountCode))
             {
                 var couponCode = model.DiscountCode.Trim();
                 ResultCouponDto? coupon = null;
@@ -260,6 +308,11 @@ namespace Store.WebUI.Controllers
                     TotalPrice = i.Price * i.Quantity
                 }).ToList()
             };
+
+            if (dealerNetTotal.HasValue)
+            {
+                orderDto.TotalPrice = dealerNetTotal.Value;
+            }
 
             try
             {

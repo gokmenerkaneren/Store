@@ -34,13 +34,13 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
 
 | Olay Adı | Yayınlayan | Dinleyen | Alanlar | Amacı |
 |:---|:---|:---|:---|:---|
-| `OrderCreatedIntegrationEvent` | `Store.Order` | `Store.Catalog` | OrderId, UserId, TotalPrice, OrderDate, Items[] | Siparişin kaydedildiğini bildirir, stok düşümünü tetikler |
+| `OrderCreatedIntegrationEvent` | `Store.Order` | `Store.Catalog`, `Store.B2B` | OrderId, UserId, TotalPrice, OrderDate, Items[] | Siparişin kaydedildiğini bildirir; stok düşümünü ve bayi bakiye artırımını tetikler |
 | `StockReservedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, TotalPrice, ReservedDate, Items[] | Stok başarıyla rezerve edildi, sipariş durumunu `Processing` yapar |
 | `StockReservationFailedIntegrationEvent` | `Store.Catalog` | `Store.Order` | OrderId, Reason, FailedDate, Items[] | Yetersiz stok; siparişi `Cancelled` yapar ve telafi notu düşer |
 
 ## 4. GÜVENLİK VE ROL STANDARTLARI
-- **Yönetimsel Uçlar:** Tüm Create/Update/Delete ve admin paneli veri işlemleri `[Authorize(Roles = "Admin")]` ile korunur (Catalog, Location, Discount).
-- **Katalog & Lokasyon & Kupon Doğrulama Genel Okuma:** Şehir, ilçe, mahalle ve ürün listeleme GET uçları ile `GET /api/Discounts/GetByCode/{code}` vitrin uçları `[AllowAnonymous]` ile açıktır.
+- **Yönetimsel Uçlar:** Tüm Create/Update/Delete ve admin paneli veri işlemleri `[Authorize(Roles = "Admin")]` ile korunur (Catalog, Location, Discount, B2B).
+- **Katalog & Lokasyon & Kupon Doğrulama Genel Okuma:** Şehir, ilçe, mahalle ve ürün listeleme GET uçları ile `GET /api/Discounts/GetByCode/{code}`, `GET /api/DealerFinancials/GetByDealerId/{dealerId}` vitrin uçları `[AllowAnonymous]` ile açıktır.
 - **IDOR Koruması:** `UserAddressController`, `FavoritesController` ve `OrderingsController` müşteri kimliğini kesinlikle istemci gövdesinden almaz; JWT `sub` / `ClaimTypes.NameIdentifier` üzerinden çözümler.
 
 ## 5. DISCOUNT SERVİS SÖZLEŞMELERİ
@@ -50,3 +50,10 @@ Tüm servisler için varsayılan CRUD rotaları şu formatı izlemelidir:
   - 404 Not Found: `{ message: "Kupon bulunamadı." }`
 - `POST /api/Discounts`, `PUT /api/Discounts`, `DELETE /api/Discounts/{id}` (`[Authorize(Roles = "Admin")]`).
 - `IDiscountApiService` (WebUI Refit İstemcisi): `GetDiscountCouponByCodeAsync(string code)` ile güvenli çağrı.
+
+## 6. B2B SERVİS SÖZLEŞMELERİ
+- `GET /api/DealerFinancials/GetByDealerId/{dealerId}`:
+  - 200 OK: `{ id, dealerId, taxNumber, taxOffice, discountRate, creditLimit, currentBalance }`
+  - 404 Not Found
+- `IB2BApiService` (WebUI Refit İstemcisi): `GetDealerFinancialByDealerIdAsync(Guid dealerId)` ile bayi finansal bilgilerini ve limitlerini sorgular.
+- `OrderCreatedB2BConsumer`: `OrderCreatedIntegrationEvent`'i dinleyerek sipariş tutarını bayinin cari borç bakiyesine ekler.

@@ -13,6 +13,7 @@ namespace Store.B2B.WebApi.Controllers
     {
         private readonly GetAllDealerFinancialQueryHandler _getAllHandler;
         private readonly GetDealerFinancialByIdQueryHandler _getByIdHandler;
+        private readonly GetDealerFinancialByDealerIdQueryHandler _getByDealerIdHandler;
         private readonly CreateDealerFinancialCommandHandler _createHandler;
         private readonly UpdateDealerFinancialCommandHandler _updateHandler;
         private readonly RemoveDealerFinancialCommandHandler _removeHandler;
@@ -20,12 +21,14 @@ namespace Store.B2B.WebApi.Controllers
         public DealerFinancialsController(
             GetAllDealerFinancialQueryHandler getAllHandler,
             GetDealerFinancialByIdQueryHandler getByIdHandler,
+            GetDealerFinancialByDealerIdQueryHandler getByDealerIdHandler,
             CreateDealerFinancialCommandHandler createHandler,
             UpdateDealerFinancialCommandHandler updateHandler,
             RemoveDealerFinancialCommandHandler removeHandler)
         {
             _getAllHandler = getAllHandler;
             _getByIdHandler = getByIdHandler;
+            _getByDealerIdHandler = getByDealerIdHandler;
             _createHandler = createHandler;
             _updateHandler = updateHandler;
             _removeHandler = removeHandler;
@@ -42,6 +45,15 @@ namespace Store.B2B.WebApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var value = await _getByIdHandler.Handle(new GetDealerFinancialByIdQuery(id));
+            if (value is null) return NotFound();
+            return Ok(value);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetByDealerId/{dealerId:guid}")]
+        public async Task<IActionResult> GetByDealerId(Guid dealerId)
+        {
+            var value = await _getByDealerIdHandler.Handle(new GetDealerFinancialByDealerIdQuery(dealerId));
             if (value is null) return NotFound();
             return Ok(value);
         }

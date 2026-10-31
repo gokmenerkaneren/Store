@@ -62,10 +62,11 @@
 - `DealerFinancial` entity'si `Store.B2B` mikroservisinde yönetilir (Bounded Context ayrımı)
 
 ### 3.2 Bayi Finansal
-- `DiscountRate` → Bayiye otomatik uygulanan iskonto oranı (0.00 - 1.00 arası)
-- `CreditLimit` → Açık hesap çalışma limiti
-- `CurrentBalance` → Anlık borç/alacak bakiyesi
-- Bayi, `CreditLimit`'i aşan sipariş veremez (⚠️ Henüz kodlanmadı)
+- `DiscountRate` → Bayiye otomatik uygulanan iskonto oranı (1 veya daha büyükse yüzde örn: 15.0 = %15, 1'den küçükse kesir örn: 0.15 = %15)
+- `CreditLimit` → Açık hesap çalışma limiti (Kullanılabilir toplam kredi)
+- `CurrentBalance` → Anlık borç bakiyesi
+- `Kullanılabilir Kredi Limiti` = `Math.Max(0, CreditLimit - CurrentBalance)`
+- Bayi, `Kullanılabilir Kredi Limiti`'ni aşan sipariş veremez (✅ Paket 8 ile Checkout seviyesinde guard clause entegre edildi)
 
 ---
 
@@ -199,3 +200,10 @@
   - Kuponun son geçerlilik tarihi dolmuşsa (`ValidDate < DateTime.UtcNow`), sipariş engellenir (`CouponValidationResult.Expired`).
   - Kupon geçerliyse: indirim oranı sepet ara toplamına (`SubTotal`) uygulanır (`CouponPricing.CalculateDiscount`), indirim tutarı 2 basamağa yuvarlanır (`Math.Round(subTotal * (coupon.Rate / 100.0m), 2)`), nihai `TotalPrice` sunucuda `Math.Max(0, subTotal - discountAmount)` formülüyle hesaplanır ve Order servisine güvenli olarak gönderilir.
   - İndirim servisine ulaşılamazsa sipariş askıya alınır ve kullanıcıya bilgilendirme uyarısı gösterilir (`CartWarning`). Kupon doğrulanamadan indirimli sipariş oluşturulmasına izin verilmez.
+
+### 4.7 B2B Bayi İskontosu ve Kredi Limiti Koruması (Server-Side B2B Checkout)
+- **Bayi Rol Tespiti:** Kullanıcının `Dealer` veya `Bayi` rolüne sahip olup olmadığı token üzerinden kontrol edilir.
+- **Kupon Ezme Kuralı:** Kullanıcı bir bayi ise B2C indirim kuponları geçersizdir ve formdaki kupon kodu dikkate alınmaz.
+- **İskonto Motoru:** `Store.B2B` servisinden bayinin finansal kaydı (`DealerFinancial`) çekilir ve kayıtlı `DiscountRate` oranı uygulanır (`DealerPricing.CalculateDiscount`).
+- **Kredi Limiti Guard Clause:** Bayinin kullanılabilir limiti `CreditLimit - CurrentBalance` olarak hesaplanır. Sipariş net toplamı (`dealerNetTotal`) kullanılabilir limiti aşıyorsa sipariş verilmesi engellenir ve "Yetersiz Kredi Limiti" uyarısı dönülür.
+- **Dağıtık Limit Düşümü (Eventual Consistency):** Sipariş başarıyla veritabanına yazıldığında fırlatılan `OrderCreatedIntegrationEvent`'i `Store.B2B` mikroservisindeki `OrderCreatedB2BConsumer` dinler ve sipariş tutarını bayinin cari borç bakiyesine (`CurrentBalance`) ekler. Eşzamanlı siparişlerde bakiye bütünlüğü EF Core `UpdateDate` concurrency token ile korunur.

@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Store.B2B.Application.Features.CQRS.Handlers.DealerFinancialHandlers;
@@ -5,6 +6,7 @@ using Store.B2B.Application.Interfaces;
 using Store.B2B.Domain.Entities;
 using Store.B2B.Persistence.Context;
 using Store.B2B.Persistence.Repositories;
+using Store.B2B.WebApi.Consumers;
 using Store.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +43,26 @@ builder.Services.AddScoped<GetDealerFinancialByIdQueryHandler>();
 builder.Services.AddScoped<CreateDealerFinancialCommandHandler>();
 builder.Services.AddScoped<UpdateDealerFinancialCommandHandler>();
 builder.Services.AddScoped<RemoveDealerFinancialCommandHandler>();
+builder.Services.AddScoped<GetDealerFinancialByDealerIdQueryHandler>();
+
+// ──────────────────────────────────────────────────
+// MassTransit — RabbitMQ
+// ──────────────────────────────────────────────────
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderCreatedB2BConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 // ──────────────────────────────────────────────────
 // ASP.NET Core

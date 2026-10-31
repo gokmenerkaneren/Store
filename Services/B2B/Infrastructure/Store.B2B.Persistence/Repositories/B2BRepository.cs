@@ -28,6 +28,11 @@ namespace Store.B2B.Persistence.Repositories
             return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
 
+        public async Task<T?> GetFirstOrDefaultAsync(System.Linq.Expressions.Expression<System.Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate);
+        }
+
         public async Task CreateAsync(T entity)
         {
             entity.InsertDate = BaseEntity.GetLocalTime();
@@ -37,8 +42,17 @@ namespace Store.B2B.Persistence.Repositories
 
         public async Task UpdateAsync(T entity)
         {
+            // UpdateDate bir concurrency token'dır. Entity takipsiz geldiği için orijinal değer yeni tarihle
+            // aynı olur ve WHERE koşulu hiçbir satırla eşleşmez; bu yüzden orijinal değer veritabanından alınır.
+            var persistedUpdateDate = await _context.Set<T>()
+                .AsNoTracking()
+                .Where(x => x.Id == entity.Id)
+                .Select(x => x.UpdateDate)
+                .FirstOrDefaultAsync();
+
             entity.UpdateDate = BaseEntity.GetLocalTime();
-            _context.Set<T>().Update(entity);
+            var entry = _context.Set<T>().Update(entity);
+            entry.Property(x => x.UpdateDate).OriginalValue = persistedUpdateDate;
             await _context.SaveChangesAsync();
         }
 

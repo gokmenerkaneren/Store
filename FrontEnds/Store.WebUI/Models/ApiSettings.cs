@@ -10,6 +10,7 @@ namespace Store.WebUI.Models
         public string FavoriteBaseUrl { get; set; }
         public string RentalBaseUrl { get; set; } = string.Empty;
         public string BasketBaseUrl { get; set; } = string.Empty;
+        public string B2BBaseUrl { get; set; } = string.Empty;
     }
 }
 

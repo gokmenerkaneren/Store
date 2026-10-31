@@ -22,6 +22,14 @@
 
 ## [v2.0.0] - 2026-11-01
 ### Added
+- **Paket 8: B2B Bayi İskonto Motoru & Kredi Limiti:**
+  - `Store.DtoLayer` altına `ResultDealerFinancialDto` eklendi.
+  - `Store.WebUI` modellerine `ApiSettings.B2BBaseUrl` eklendi.
+  - `Store.Shared` içerisine `DealerPricing` (`CalculateDiscount`, `CalculateNetTotal`, `CalculateAvailableCredit`, `ValidateCredit`) kuralları eklendi.
+  - `Store.B2B` servisine `GetFirstOrDefaultAsync` generic repository metodu, `GetDealerFinancialByDealerIdQuery` ve handler'ı, `[HttpGet("GetByDealerId/{dealerId}")]` endpoint'i eklendi.
+  - `Store.B2B` servisine MassTransit RabbitMQ entegrasyonu ve sipariş oluşturulduğunda bayinin cari borç bakiyesini artıran `OrderCreatedB2BConsumer` eklendi; EF Core `UpdateDate` concurrency token ile iyimser eşzamanlılık koruması sağlandı.
+  - `Store.WebUI` üzerine Refit tabanlı `IB2BApiService` istemcisi bağlandı; `CheckoutController`'da bayi tespit edilerek standart kuponların ezilmesi, bayi iskontosunun uygulanması ve yetersiz kredi limiti durumunda siparişi durduran guard clause entegre edildi.
+  - `Store.Order.Tests` altına 6 yeni birim testi (`DealerPricingTests.cs`) eklenerek toplam test sayısı 114'e yükseltildi.
 - **Paket 7: Kupon / İndirim Servisi Entegrasyonu ve Sunucu Taraflı Checkout:**
   - `Store.DtoLayer` altına `ResultCouponDto` eklendi.
   - `Store.Discount` servisine `GetByCodeCouponAsync` Dapper sorgusu ve anonim `[HttpGet("GetByCode/{code}")]` uç noktası eklendi; kupon süresi ve varlığı kontrolü sağlandı.

@@ -10,6 +10,7 @@ namespace Store.B2B.Application.Interfaces
     {
         Task<List<T>> GetAllAsync();
         Task<T?> GetByIdAsync(Guid id);
+        Task<T?> GetFirstOrDefaultAsync(System.Linq.Expressions.Expression<System.Func<T, bool>> predicate);
         Task CreateAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(Guid id);

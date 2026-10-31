@@ -22,6 +22,7 @@ namespace Store.B2B.Persistence.Context
                 entity.Property(e => e.DiscountRate).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CreditLimit).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CurrentBalance).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.UpdateDate).IsConcurrencyToken();
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });
         }
