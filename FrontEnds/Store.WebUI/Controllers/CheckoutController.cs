@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Store.DtoLayer.BasketDtos;
+using Store.DtoLayer.DiscountDtos;
 using Store.DtoLayer.OrderDtos;
+using Store.Shared.Pricing;
 using Store.WebUI.Models.CheckoutViewModels;
 using Store.WebUI.Services.Interfaces;
 using System;
@@ -22,6 +24,7 @@ namespace Store.WebUI.Controllers
         private readonly ICatalogApiService _catalogApiService;
         private readonly IOrderApiService _orderApiService;
         private readonly ILocationApiService _locationApiService;
+        private readonly IDiscountApiService _discountApiService;
         private readonly ILogger<CheckoutController> _logger;
 
         public CheckoutController(
@@ -29,12 +32,14 @@ namespace Store.WebUI.Controllers
             ICatalogApiService catalogApiService,
             IOrderApiService orderApiService,
             ILocationApiService locationApiService,
+            IDiscountApiService discountApiService,
             ILogger<CheckoutController> logger)
         {
             _basketApiService = basketApiService;
             _catalogApiService = catalogApiService;
             _orderApiService = orderApiService;
             _locationApiService = locationApiService;
+            _discountApiService = discountApiService;
             _logger = logger;
         }
 
@@ -187,6 +192,57 @@ namespace Store.WebUI.Controllers
                 }
             }
 
+            // Kupon ve toplam tamamen sunucuda hesaplanır; istemciden gelen tutarlara güvenilmez
+            var subTotal = items.Sum(x => x.TotalPrice);
+            model.DiscountAmount = 0.00m;
+
+            if (!string.IsNullOrWhiteSpace(model.DiscountCode))
+            {
+                var couponCode = model.DiscountCode.Trim();
+                ResultCouponDto? coupon = null;
+                try
+                {
+                    coupon = await _discountApiService.GetDiscountCouponByCodeAsync(couponCode);
+                }
+                catch (Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    // Aşağıdaki doğrulama null kuponu "geçersiz" olarak ele alır
+                }
+                catch (Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // Discount servisi süresi dolmuş kuponu 400 ile bildirir
+                    TempData["CartWarning"] = $"'{model.DiscountCode}' indirim kuponunun süresi dolmuştur.";
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    // Kupon doğrulanamadan sipariş oluşturulmaz
+                    _logger.LogError(ex, "Kupon doğrulanırken Discount servisine ulaşılamadı.");
+                    TempData["CartWarning"] = "İndirim kuponu şu anda doğrulanamıyor. Lütfen daha sonra tekrar deneyiniz veya kupon kodunu kaldırınız.";
+                    return View(model);
+                }
+
+                var validation = CouponPricing.Validate(
+                    coupon != null,
+                    coupon?.IsActive ?? false,
+                    coupon?.ValidDate ?? default,
+                    DateTime.UtcNow);
+
+                if (validation == CouponValidationResult.NotFoundOrInactive)
+                {
+                    TempData["CartWarning"] = $"'{model.DiscountCode}' geçerli bir indirim kuponu değildir.";
+                    return View(model);
+                }
+
+                if (validation == CouponValidationResult.Expired)
+                {
+                    TempData["CartWarning"] = $"'{model.DiscountCode}' indirim kuponunun süresi dolmuştur.";
+                    return View(model);
+                }
+
+                model.DiscountAmount = CouponPricing.CalculateDiscount(subTotal, coupon!.Rate);
+            }
+
             // Sipariş kodu oluştur
             var orderCode = $"SZR-{DateTime.Now:yyMMdd}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
 
@@ -194,7 +250,7 @@ namespace Store.WebUI.Controllers
             var orderDto = new CreateOrderingDto
             {
                 UserId = userId,
-                TotalPrice = model.GrandTotal,
+                TotalPrice = CouponPricing.CalculateNetTotal(subTotal, model.DiscountAmount),
                 OrderDate = DateTime.Now,
                 Items = items.Select(i => new CreateOrderItemDto
                 {

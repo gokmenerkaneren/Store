@@ -32,6 +32,25 @@ namespace Store.Discount.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetByCode/{code}")]
+        public async Task<IActionResult> GetByCode(string code)
+        {
+            var coupon = await _discountService.GetByCodeCouponAsync(code);
+            if (coupon == null)
+            {
+                return NotFound(new { message = "Kupon bulunamadı." });
+            }
+
+            if (coupon.ValidDate < DateTime.UtcNow)
+            {
+                return BadRequest(new { message = "Kuponun geçerlilik süresi dolmuş." });
+            }
+
+            return Ok(coupon);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCoupon(CreateCouponDto createCouponDto)
         {
@@ -39,6 +58,7 @@ namespace Store.Discount.Controllers
             return Ok("Coupon created successfully.");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateCoupon(UpdateCouponDto updateCouponDto)
         {            
@@ -46,6 +66,7 @@ namespace Store.Discount.Controllers
             return Ok("Coupon updated successfully.");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscountCoupon(Guid id)
         {

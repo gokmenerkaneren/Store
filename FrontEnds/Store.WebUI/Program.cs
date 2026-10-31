@@ -135,6 +135,7 @@ builder.Services.AddRefitClient<IBasketApiService>().ConfigureHttpClient((sp, c)
 builder.Services.AddScoped<Store.WebUI.Services.IBasketStorageService, Store.WebUI.Services.BasketStorageService>();
 builder.Services.AddSingleton<Store.WebUI.Services.IServiceHealthCheckService, Store.WebUI.Services.ServiceHealthCheckService>();
 builder.Services.AddRefitClient<IOrderApiService>().ConfigureHttpClient((sp, c) => c.BaseAddress = new Uri(sp.GetRequiredService<IOptions<ApiSettings>>().Value.OrderBaseUrl)).AddHttpMessageHandler<Store.WebUI.Handlers.BearerTokenHandler>().ConfigurePrimaryHttpMessageHandler(getBypassHandler);
+builder.Services.AddRefitClient<IDiscountApiService>().ConfigureHttpClient((sp, c) => c.BaseAddress = new Uri(sp.GetRequiredService<IOptions<ApiSettings>>().Value.DiscountBaseUrl)).AddHttpMessageHandler<Store.WebUI.Handlers.BearerTokenHandler>().ConfigurePrimaryHttpMessageHandler(getBypassHandler);
 
 // User and Location (Admin Panel)
 builder.Services.AddRefitClient<IIdentityApiService>().ConfigureHttpClient((sp, c) => c.BaseAddress = new Uri(sp.GetRequiredService<IOptions<ApiSettings>>().Value.IdentityServerUrl)).ConfigurePrimaryHttpMessageHandler(getBypassHandler);

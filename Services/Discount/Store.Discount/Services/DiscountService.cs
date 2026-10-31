@@ -67,6 +67,17 @@ namespace Store.Discount.Services
             }
         }
 
+        public async Task<ResultCouponDto?> GetByCodeCouponAsync(string code)
+        {
+            string query = "SELECT * FROM \"Coupons\" WHERE UPPER(\"Code\") = UPPER(@code) AND \"IsDeleted\" = false AND \"IsActive\" = true";
+            var parameters = new DynamicParameters();
+            parameters.Add("@code", code);
+            using (var connection = _context.CreateConnection())
+            {
+                return await connection.QueryFirstOrDefaultAsync<ResultCouponDto>(query, parameters);
+            }
+        }
+
         public async Task UpdateCouponAsync(UpdateCouponDto updateCouponDto)
         {
             var updateDate = Store.Shared.Entities.BaseEntity.GetLocalTime();

@@ -190,3 +190,12 @@
 
 ### 4.5 Kiralama Çakışma ve GiST EXCLUDE Koruması
 - `Store.Rental` mikroservisinde, aynı ürünün aynı tarih aralığında mükerrer kiralanmasını önlemek için PostgreSQL motoru seviyesinde GiST `EXCLUDE` kısıtı (`btree_gist`) devrededir. Uygulama seviyesindeki race conditions bu kısıt ile %100 engellenir.
+
+### 4.6 Sunucu Taraflı Kupon ve Fiyat Doğrulama (Server-Side Checkout)
+- İstemciden gelen `DiscountAmount` veya indirimli `TotalPrice` değerine asla güvenilmez.
+- Müşteri yalnızca indirim kupon kodunu (`DiscountCode`) gönderir.
+- Checkout esnasında kupon kodu `Store.Discount` servisinden Dapper tabanlı sorgu ile doğrulanır:
+  - Kupon bulunamazsa veya pasifse (`IsActive == false`), sipariş engellenir (`CouponValidationResult.NotFoundOrInactive`).
+  - Kuponun son geçerlilik tarihi dolmuşsa (`ValidDate < DateTime.UtcNow`), sipariş engellenir (`CouponValidationResult.Expired`).
+  - Kupon geçerliyse: indirim oranı sepet ara toplamına (`SubTotal`) uygulanır (`CouponPricing.CalculateDiscount`), indirim tutarı 2 basamağa yuvarlanır (`Math.Round(subTotal * (coupon.Rate / 100.0m), 2)`), nihai `TotalPrice` sunucuda `Math.Max(0, subTotal - discountAmount)` formülüyle hesaplanır ve Order servisine güvenli olarak gönderilir.
+  - İndirim servisine ulaşılamazsa sipariş askıya alınır ve kullanıcıya bilgilendirme uyarısı gösterilir (`CartWarning`). Kupon doğrulanamadan indirimli sipariş oluşturulmasına izin verilmez.

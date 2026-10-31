@@ -22,6 +22,14 @@
 
 ## [v2.0.0] - 2026-11-01
 ### Added
+- **Paket 7: Kupon / İndirim Servisi Entegrasyonu ve Sunucu Taraflı Checkout:**
+  - `Store.DtoLayer` altına `ResultCouponDto` eklendi.
+  - `Store.Discount` servisine `GetByCodeCouponAsync` Dapper sorgusu ve anonim `[HttpGet("GetByCode/{code}")]` uç noktası eklendi; kupon süresi ve varlığı kontrolü sağlandı.
+  - `Store.Discount` servisindeki Create, Update ve Delete uçlarına `[Authorize(Roles = "Admin")]` yetkilendirmesi getirildi.
+  - `Store.Shared` içerisine saf fonksiyonlarla kupon doğrulama ve indirim hesaplama mantığını barındıran `CouponPricing` (`Store.Shared.Pricing`) sınıfı eklendi.
+  - `Store.WebUI` üzerine Refit tabanlı `IDiscountApiService` bağlandı; `CheckoutController`'da istemciden gelen indirim ve fiyat manipülasyonu engellendi, tüm fiyat ve kupon doğrulama sunucu tarafına taşındı.
+  - `Checkout/Index.cshtml` sayfasına `CartWarning` uyarı alanı entegre edilerek kupon geçersizliği ve son kullanma tarihi bildirimleri kullanıcıya açıldı.
+  - `Store.Order.Tests` altına 4 yeni birim testi (`DiscountCalculationTests.cs`) eklenerek toplam test sayısı 108'e yükseltildi.
 - **Paket 6: Koreografi Tabanlı Stok Rezervasyonu ve Dağıtık İşlemler:**
   - `Store.Shared` altında `StockReservedIntegrationEvent` ve `StockReservationFailedIntegrationEvent` sözleşmeleri eklendi.
   - `Store.Catalog` servisi `OrderCreatedConsumer` içine varyant stok düşüm mantığı entegre edildi. Çoklu kalemlerde kısmi hata durumunda stok iadesi (rollback) ve `UpdateDate` ile iyimser eşzamanlılık (Optimistic Concurrency) sağlandı.

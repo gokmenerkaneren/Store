@@ -9,6 +9,6 @@ namespace Store.Discount.Services
         Task UpdateCouponAsync(UpdateCouponDto updateCouponDto);
         Task DeleteCouponAsync(Guid id);
         Task<GetByIdCouponDto> GetByIdCouponAsync(Guid id);
-
+        Task<ResultCouponDto?> GetByCodeCouponAsync(string code);
     }
 }
