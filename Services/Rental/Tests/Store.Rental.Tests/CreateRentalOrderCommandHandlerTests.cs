@@ -171,5 +171,95 @@ namespace Store.Rental.Tests
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(overlappingCommand, CancellationToken.None));
         }
+
+        [Fact]
+        public async Task Handle_Should_Throw_Exception_When_New_Rental_Falls_Completely_Inside_Existing_Rental_Window()
+        {
+            // Arrange: Kiralama aralığı mevcut kiralama penceresinin tamamen içinde (İ4 Çakışma Koruması)
+            using var context = CreateInMemoryDbContext();
+            var productId = Guid.NewGuid().ToString();
+
+            var existingOrder = new RentalOrder
+            {
+                UserId = Guid.NewGuid(),
+                StartDate = new DateTime(2026, 12, 1),
+                EndDate = new DateTime(2026, 12, 10),
+                Status = RentalStatus.Approved
+            };
+            context.RentalOrders.Add(existingOrder);
+            context.RentalOrderItems.Add(new RentalOrderItem
+            {
+                ProductId = productId,
+                Quantity = 1,
+                UnitPrice = 200,
+                RentalOrder = existingOrder,
+                StartDate = existingOrder.StartDate,
+                EndDate = existingOrder.EndDate
+            });
+            await context.SaveChangesAsync();
+
+            var handler = new CreateRentalOrderCommandHandler(context);
+
+            var insideCommand = new CreateRentalOrderCommand
+            {
+                UserId = Guid.NewGuid(),
+                StartDate = new DateTime(2026, 12, 3),
+                EndDate = new DateTime(2026, 12, 7), // Tamamen mevcut aralığın içinde
+                Items = new List<RentalOrderItemDto>
+                {
+                    new RentalOrderItemDto { ProductId = productId, Quantity = 1, UnitPrice = 200 }
+                }
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(insideCommand, CancellationToken.None));
+            ex.Message.Should().Contain("stok çakışması");
+        }
+
+        [Fact]
+        public async Task Handle_Should_Allow_Rental_When_Dates_Do_Not_Overlap()
+        {
+            // Arrange: Tarihler çakışmıyor, ardışık döneme denk geliyor
+            using var context = CreateInMemoryDbContext();
+            var productId = Guid.NewGuid().ToString();
+
+            var existingOrder = new RentalOrder
+            {
+                UserId = Guid.NewGuid(),
+                StartDate = new DateTime(2026, 12, 1),
+                EndDate = new DateTime(2026, 12, 5),
+                Status = RentalStatus.Approved
+            };
+            context.RentalOrders.Add(existingOrder);
+            context.RentalOrderItems.Add(new RentalOrderItem
+            {
+                ProductId = productId,
+                Quantity = 1,
+                UnitPrice = 100,
+                RentalOrder = existingOrder,
+                StartDate = existingOrder.StartDate,
+                EndDate = existingOrder.EndDate
+            });
+            await context.SaveChangesAsync();
+
+            var handler = new CreateRentalOrderCommandHandler(context);
+
+            var afterCommand = new CreateRentalOrderCommand
+            {
+                UserId = Guid.NewGuid(),
+                StartDate = new DateTime(2026, 12, 6), // Çakışmıyor, ertesi gün başlıyor
+                EndDate = new DateTime(2026, 12, 10),
+                Items = new List<RentalOrderItemDto>
+                {
+                    new RentalOrderItemDto { ProductId = productId, Quantity = 1, UnitPrice = 100 }
+                }
+            };
+
+            // Act
+            var newOrderId = await handler.Handle(afterCommand, CancellationToken.None);
+
+            // Assert
+            newOrderId.Should().NotBeEmpty();
+        }
     }
 }

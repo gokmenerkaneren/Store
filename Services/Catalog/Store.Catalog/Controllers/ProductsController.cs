@@ -50,6 +50,28 @@ namespace Store.Catalog.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("CheckStock/{id}")]
+        public async Task<IActionResult> CheckStock(Guid id, [FromQuery] int requestedQuantity = 1)
+        {
+            var result = await _productService.GetByIdProductAsync(id);
+            if (result == null)
+                return NotFound(new { message = "Ürün bulunamadı." });
+
+            int totalStock = result.Variants != null && result.Variants.Any()
+                ? result.Variants.Sum(v => v.StockQuantity)
+                : 0;
+
+            bool isAvailable = totalStock >= requestedQuantity;
+            return Ok(new
+            {
+                productId = id,
+                requestedQuantity,
+                availableStock = totalStock,
+                isAvailable
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductDto createProductDto)
         {

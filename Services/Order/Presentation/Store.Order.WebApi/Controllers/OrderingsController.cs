@@ -98,9 +98,16 @@ namespace Store.Order.WebApi.Controllers
                 return BadRequest("Sipariş toplam tutarı negatif olamaz.");
             }
 
-            // İ2 & İ3: Sipariş kalemleri ve durumu ile birlikte atomik oluşturulup ID'si döndürülür
-            var orderId = await _mediator.Send(command);
-            return Ok(new { OrderId = orderId, Message = "Sipariş başarılı bir şekilde oluşturuldu." });
+            // İ2, İ3 & İ6: Sipariş kalemleri ve stok doğrulaması ile birlikte atomik oluşturulup ID'si döndürülür
+            try
+            {
+                var orderId = await _mediator.Send(command);
+                return Ok(new { OrderId = orderId, Message = "Sipariş başarılı bir şekilde oluşturuldu." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpDelete]

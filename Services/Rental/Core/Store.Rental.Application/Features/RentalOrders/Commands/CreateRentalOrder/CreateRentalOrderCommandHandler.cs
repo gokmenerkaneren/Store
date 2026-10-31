@@ -89,6 +89,8 @@ namespace Store.Rental.Application.Features.RentalOrders.Commands.CreateRentalOr
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice,
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
                     InsertUserId = request.UserId
                 });
             }

@@ -163,6 +163,28 @@ namespace Store.WebUI.Controllers
                 return RedirectToAction("Index", "Login", new { returnUrl = "/Checkout" });
             }
 
+            // İ6: Temel Stok Doğrulama (Catalog & WebUI - Sipariş öncesi stok kontrolü)
+            foreach (var item in items)
+            {
+                try
+                {
+                    var catalogProduct = await _catalogApiService.GetProductByIdAsync(item.ProductId);
+                    if (catalogProduct != null && catalogProduct.Variants != null && catalogProduct.Variants.Any())
+                    {
+                        var totalStock = catalogProduct.Variants.Sum(v => v.StockQuantity);
+                        if (totalStock < item.Quantity)
+                        {
+                            TempData["CartWarning"] = $"'{item.ProductName}' için yeterli stok bulunamadı (Mevcut stok: {totalStock}, İstenen: {item.Quantity}).";
+                            return RedirectToAction("Index", "Sepetim");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Stok kontrolü yapılırken ürün {ProductId} için Catalog servisi uyarısı.", item.ProductId);
+                }
+            }
+
             // Sipariş kodu oluştur
             var orderCode = $"SZR-{DateTime.Now:yyMMdd}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
 

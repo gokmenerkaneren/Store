@@ -12,14 +12,37 @@ namespace Store.Order.Application.Features.Mediator.Handlers.OrderingHandlers
     public class CreateOrderingCommandHandler : IRequestHandler<CreateOrderingCommand, Guid>
     {
         private readonly IRepository<Ordering> _repository;
+        private readonly IStockValidationService? _stockValidationService;
 
-        public CreateOrderingCommandHandler(IRepository<Ordering> repository)
+        public CreateOrderingCommandHandler(IRepository<Ordering> repository, IStockValidationService? stockValidationService = null)
         {
             _repository = repository;
+            _stockValidationService = stockValidationService;
         }
 
         public async Task<Guid> Handle(CreateOrderingCommand request, CancellationToken cancellationToken)
         {
+            // İ6: Stok ve miktar doğrulama (Stock & Quantity Validation)
+            if (request.Items != null && request.Items.Any())
+            {
+                foreach (var item in request.Items)
+                {
+                    if (item.ProductAmount <= 0)
+                    {
+                        throw new InvalidOperationException($"Ürün adedi 0 veya negatif olamaz (ProductId: {item.ProductId}).");
+                    }
+
+                    if (_stockValidationService != null)
+                    {
+                        var hasStock = await _stockValidationService.ValidateStockAsync(item.ProductId, item.ProductAmount, cancellationToken);
+                        if (!hasStock)
+                        {
+                            throw new InvalidOperationException($"Yetersiz stok: {item.ProductId} numaralı ürün için {item.ProductAmount} adet stok mevcut değil.");
+                        }
+                    }
+                }
+            }
+
             var ordering = new Ordering
             {
                 UserId = request.UserId,

@@ -11,5 +11,11 @@ namespace Store.Rental.Domain.Entities
         public string ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
+
+        /// <summary>
+        /// İ4: PostgreSQL EXCLUDE constraint için tarih aralığı alanları
+        /// </summary>
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

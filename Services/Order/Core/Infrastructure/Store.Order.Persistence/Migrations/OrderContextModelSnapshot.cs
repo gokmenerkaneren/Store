@@ -53,7 +53,7 @@ namespace Store.Order.Persistence.Migrations
                     b.Property<DateTimeOffset>("InsertDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("InsertUserId")
+                    b.Property<Guid>("InsertUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -117,7 +117,7 @@ namespace Store.Order.Persistence.Migrations
                     b.Property<DateTimeOffset>("InsertDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("InsertUserId")
+                    b.Property<Guid>("InsertUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -191,7 +191,7 @@ namespace Store.Order.Persistence.Migrations
                     b.Property<DateTimeOffset>("InsertDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("InsertUserId")
+                    b.Property<Guid>("InsertUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -206,6 +206,11 @@ namespace Store.Order.Persistence.Migrations
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
