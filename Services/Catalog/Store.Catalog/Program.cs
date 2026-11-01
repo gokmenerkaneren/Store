@@ -166,7 +166,8 @@ builder.Services.AddHangfire(configuration => configuration
             BackupStrategy = new CollectionMongoBackupStrategy()
         },
         Prefix = "hangfire.mongo",
-        CheckConnection = true
+        CheckConnection = true,
+        CheckQueuedJobsStrategy = Hangfire.Mongo.CheckQueuedJobsStrategy.Poll
     })
 );
 builder.Services.AddHangfireServer();
